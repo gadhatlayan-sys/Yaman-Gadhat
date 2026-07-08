@@ -1,0 +1,3932 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Flip Panic ✦ فليب بانيك</title>
+    <style>
+        /* ===== RESET & BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+        }
+        body {
+            background: #020210;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            font-family: 'Courier New', monospace;
+            touch-action: manipulation;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        #gameWrapper {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            max-width: 1000px;
+            max-height: 600px;
+            background: #030310;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 80px rgba(0, 255, 255, 0.25);
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            touch-action: none;
+            image-rendering: pixelated;
+        }
+        .scanlines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.04) 2px, rgba(0, 0, 0, 0.04) 4px);
+        }
+        /* ===== TOUCH CONTROLS ===== */
+        .touch-controls {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            pointer-events: auto;
+            z-index: 20;
+        }
+        .ctrl-btn {
+            width: 48px;
+            height: 48px;
+            background: rgba(0, 255, 255, 0.08);
+            border: 2px solid rgba(0, 255, 255, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00ffff;
+            font-size: 22px;
+            text-shadow: 0 0 15px #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+            transition: all 0.08s;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            touch-action: none;
+        }
+        .ctrl-btn:active {
+            background: rgba(0, 255, 255, 0.3);
+            transform: scale(0.85);
+            box-shadow: 0 0 40px #00ffff;
+        }
+        .ctrl-btn.jump {
+            width: 58px;
+            height: 58px;
+            border-color: #ff44aa;
+            color: #ff44aa;
+            text-shadow: 0 0 20px #ff44aa;
+            box-shadow: 0 0 30px rgba(255, 68, 170, 0.4);
+            font-size: 28px;
+        }
+        .ctrl-btn.jump:active {
+            background: rgba(255, 68, 170, 0.3);
+            box-shadow: 0 0 50px #ff44aa;
+        }
+        /* ===== UI OVERLAY ===== */
+        #ui-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .hud-coin {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            color: #ffdd00;
+            font-weight: bold;
+            text-shadow: 0 0 12px #ffdd00, 0 0 30px rgba(255, 221, 0, 0.3);
+            pointer-events: none;
+            font-size: 1rem;
+            z-index: 11;
+            transition: transform 0.12s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .hud-coin.bump {
+            transform: scale(1.4);
+        }
+        .hud-diamond {
+            position: absolute;
+            top: 14px;
+            left: 88px;
+            color: #00e5ff;
+            font-weight: bold;
+            text-shadow: 0 0 12px #00e5ff, 0 0 30px rgba(0, 229, 255, 0.3);
+            pointer-events: none;
+            font-size: 0.9rem;
+            z-index: 11;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .level-indicator {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #00ffff;
+            font-weight: bold;
+            text-shadow: 0 0 15px #00ffff;
+            pointer-events: none;
+            font-size: 0.8rem;
+            z-index: 11;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 2px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            white-space: nowrap;
+        }
+        .death-counter {
+            position: absolute;
+            top: 10px;
+            right: 14px;
+            color: #ff0055;
+            font-size: 1rem;
+            font-weight: bold;
+            text-shadow: 0 0 15px #ff0055;
+            pointer-events: none;
+            z-index: 11;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 2px 12px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 0, 85, 0.2);
+        }
+        .combo-display {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ff44aa;
+            font-size: 1.4rem;
+            font-weight: bold;
+            text-shadow: 0 0 30px #ff44aa;
+            pointer-events: none;
+            z-index: 11;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .combo-display.active {
+            opacity: 1;
+        }
+        .menu-btn-small {
+            background: transparent;
+            border: 2px solid rgba(0, 255, 255, 0.5);
+            color: #00ffff;
+            padding: 4px 14px;
+            font-size: 0.7rem;
+            font-family: inherit;
+            cursor: pointer;
+            text-shadow: 0 0 10px #00ffff;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+            transition: all 0.2s;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            pointer-events: auto;
+            z-index: 25;
+            touch-action: manipulation;
+        }
+        .menu-btn-small:active {
+            background: #00ffff;
+            color: #000;
+            transform: scale(0.9);
+        }
+        .menu-btn-small.mute-btn {
+            position: absolute;
+            top: 8px;
+            right: 80px;
+            border-color: rgba(255, 255, 255, 0.3);
+            color: #aaa;
+            font-size: 0.8rem;
+            padding: 4px 12px;
+        }
+        .menu-btn-small.mute-btn.active {
+            border-color: #ff44aa;
+            color: #ff44aa;
+        }
+        .menu-btn-small.skip-btn {
+            position: absolute;
+            top: 8px;
+            right: 140px;
+            border-color: #ffdd00;
+            color: #ffdd00;
+            font-size: 0.7rem;
+            padding: 4px 12px;
+            display: none;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        .menu-btn-small.skip-btn:active {
+            background: #ffdd00;
+            color: #000;
+        }
+        .menu-btn {
+            background: transparent;
+            border: 2px solid #00ffff;
+            color: #00ffff;
+            padding: 10px 35px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            cursor: pointer;
+            text-shadow: 0 0 10px #00ffff;
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.3);
+            transition: all 0.2s;
+            border-radius: 30px;
+            margin: 6px;
+            letter-spacing: 1.5px;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            pointer-events: auto;
+            touch-action: manipulation;
+        }
+        .menu-btn:active {
+            background: #00ffff;
+            color: #000;
+            box-shadow: 0 0 50px #00ffff;
+            transform: scale(0.95);
+        }
+        .menu-btn.shop-btn {
+            border-color: #ff44aa;
+            color: #ff44aa;
+            text-shadow: 0 0 10px #ff44aa;
+            box-shadow: 0 0 25px rgba(255, 68, 170, 0.3);
+        }
+        .menu-btn.shop-btn:active {
+            background: #ff44aa;
+            color: #000;
+            box-shadow: 0 0 50px #ff44aa;
+        }
+        .menu-btn.gold-btn {
+            border-color: #ffdd00;
+            color: #ffdd00;
+            text-shadow: 0 0 10px #ffdd00;
+            box-shadow: 0 0 25px rgba(255, 221, 0, 0.3);
+        }
+        .menu-btn.gold-btn:active {
+            background: #ffdd00;
+            color: #000;
+            box-shadow: 0 0 50px #ffdd00;
+        }
+        .menu-btn.map-btn {
+            border-color: #88ff88;
+            color: #88ff88;
+            text-shadow: 0 0 10px #88ff88;
+            box-shadow: 0 0 25px rgba(136, 255, 136, 0.2);
+        }
+        .menu-btn.map-btn:active {
+            background: #88ff88;
+            color: #000;
+            box-shadow: 0 0 50px #88ff88;
+        }
+        /* ===== MENU SCREEN ===== */
+        .menu-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(2, 2, 16, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            pointer-events: auto;
+            z-index: 30;
+            transition: opacity 0.5s ease;
+        }
+        .menu-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .game-title {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #00ffff;
+            text-shadow: 0 0 30px #00ffff, 0 0 60px #00ffff, 0 0 90px rgba(0, 255, 255, 0.3);
+            margin-bottom: 4px;
+            letter-spacing: 5px;
+            animation: glitch-text 0.4s infinite alternate;
+            text-align: center;
+        }
+        .game-title .flip {
+            color: #ff44aa;
+            text-shadow: 0 0 30px #ff44aa, 0 0 60px #ff44aa;
+        }
+        .sub-title {
+            font-size: 1rem;
+            color: #ff44aa;
+            text-shadow: 0 0 20px #ff44aa;
+            margin-bottom: 18px;
+            letter-spacing: 2px;
+            opacity: 0.9;
+        }
+        .designer-credit {
+            color: #888;
+            margin-top: 4px;
+            font-size: 0.65rem;
+            text-shadow: 0 0 6px #888;
+            letter-spacing: 1px;
+        }
+        .menu-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .menu-buttons .row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .menu-stats {
+            color: #aaa;
+            font-size: 0.7rem;
+            margin-top: 10px;
+            text-align: center;
+            line-height: 1.6;
+            text-shadow: 0 0 6px rgba(255, 255, 255, 0.1);
+        }
+        .menu-stats span {
+            color: #ffdd00;
+        }
+        @keyframes glitch-text {
+            0% { transform: translate(0); text-shadow: 0 0 30px #00ffff, 0 0 60px #00ffff; }
+            25% { transform: translate(-2px, 1px); text-shadow: 0 0 30px #ff44aa, 0 0 60px #ff44aa; }
+            75% { transform: translate(2px, -1px); text-shadow: 0 0 30px #00ffff, 0 0 60px #ff44aa; }
+            100% { transform: translate(0); text-shadow: 0 0 30px #00ffff, 0 0 60px #00ffff; }
+        }
+        /* ===== MAP SCREEN ===== */
+        .map-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(2, 2, 16, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            pointer-events: auto;
+            z-index: 35;
+            transition: opacity 0.4s;
+            padding: 8px 4px;
+            overflow: hidden;
+        }
+        .map-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .map-title {
+            color: #00ffff;
+            font-size: 1.4rem;
+            text-shadow: 0 0 20px #00ffff;
+            margin-bottom: 2px;
+            margin-top: 4px;
+        }
+        .map-scroll {
+            width: 100%;
+            max-width: 700px;
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 4px 6px 6px 6px;
+            scrollbar-width: thin;
+            scrollbar-color: #00ffff rgba(0, 0, 0, 0.3);
+            -webkit-overflow-scrolling: touch;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .map-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .map-scroll::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+        }
+        .map-scroll::-webkit-scrollbar-thumb {
+            background: #00ffff;
+            border-radius: 8px;
+            box-shadow: 0 0 8px #00ffff;
+        }
+        .map-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+            gap: 6px 4px;
+            width: 100%;
+            max-width: 660px;
+            padding: 4px 2px;
+        }
+        .map-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1/1;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            background: rgba(20, 20, 50, 0.5);
+            cursor: pointer;
+            transition: all 0.25s;
+            font-size: 0.55rem;
+            color: #888;
+            text-align: center;
+            padding: 2px;
+            position: relative;
+            min-height: 60px;
+            touch-action: manipulation;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+        .map-node .node-num {
+            font-size: 0.9rem;
+            font-weight: bold;
+            line-height: 1;
+        }
+        .map-node .node-name {
+            font-size: 0.45rem;
+            opacity: 0.7;
+            line-height: 1.1;
+            max-width: 60px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .map-node .node-stars {
+            font-size: 0.5rem;
+            letter-spacing: 1px;
+            margin-top: 1px;
+        }
+        .map-node.unlocked {
+            border-color: rgba(0, 255, 255, 0.4);
+            color: #ccc;
+        }
+        .map-node.unlocked:hover {
+            transform: scale(1.05);
+            border-color: #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+        .map-node.unlocked:active {
+            transform: scale(0.92);
+        }
+        .map-node.current {
+            border-color: #00ffff !important;
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.5), inset 0 0 25px rgba(0, 255, 255, 0.1);
+            background: rgba(0, 255, 255, 0.15);
+            color: #00ffff;
+        }
+        .map-node.completed {
+            border-color: #ffdd00 !important;
+            background: rgba(255, 221, 0, 0.08);
+            color: #ffdd00;
+        }
+        .map-node.completed .node-stars {
+            color: #ffdd00;
+        }
+        .map-node.locked {
+            border-color: rgba(80, 80, 80, 0.3);
+            background: rgba(20, 20, 30, 0.3);
+            color: #555;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+        .map-node .lock-icon {
+            font-size: 0.8rem;
+        }
+        .map-node .boss-icon {
+            font-size: 0.7rem;
+            margin-left: 2px;
+        }
+        .map-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 4px 0 6px 0;
+            width: 100%;
+            max-width: 660px;
+        }
+        .map-actions .menu-btn {
+            font-size: 0.8rem;
+            padding: 5px 18px;
+            margin: 2px;
+        }
+        .map-actions .skip-btn {
+            border-color: #ffdd00;
+            color: #ffdd00;
+            text-shadow: 0 0 10px #ffdd00;
+            box-shadow: 0 0 25px rgba(255, 221, 0, 0.2);
+            background: rgba(255, 221, 0, 0.05);
+        }
+        .map-actions .skip-btn:active {
+            background: #ffdd00;
+            color: #000;
+        }
+        .map-actions .skip-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        /* ===== SHOP SCREEN ===== */
+        .shop-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(2, 2, 16, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            pointer-events: auto;
+            z-index: 35;
+            transition: opacity 0.4s;
+            padding: 10px;
+        }
+        .shop-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .shop-title {
+            color: #00ffff;
+            font-size: 1.8rem;
+            text-shadow: 0 0 20px #00ffff;
+            margin-bottom: 4px;
+        }
+        .shop-currency {
+            color: #ffdd00;
+            font-size: 1rem;
+            margin-bottom: 6px;
+        }
+        .shop-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .shop-tab {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: #888;
+            padding: 4px 14px;
+            font-size: 0.7rem;
+            font-family: inherit;
+            cursor: pointer;
+            border-radius: 16px;
+            transition: all 0.2s;
+            pointer-events: auto;
+            touch-action: manipulation;
+        }
+        .shop-tab.active {
+            border-color: #ff44aa;
+            color: #ff44aa;
+            box-shadow: 0 0 15px rgba(255, 68, 170, 0.3);
+            text-shadow: 0 0 8px #ff44aa;
+        }
+        .shop-tab:active {
+            transform: scale(0.92);
+        }
+        .shop-scroll {
+            max-height: 160px;
+            overflow-y: auto;
+            width: 280px;
+            padding: 4px 2px;
+            margin: 4px 0;
+            scrollbar-width: thin;
+            scrollbar-color: #00ffff rgba(0, 0, 0, 0.3);
+            -webkit-overflow-scrolling: touch;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .shop-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .shop-scroll::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+        }
+        .shop-scroll::-webkit-scrollbar-thumb {
+            background: #00ffff;
+            border-radius: 8px;
+            box-shadow: 0 0 8px #00ffff;
+        }
+        .shop-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 250px;
+            margin: 2px 0;
+            color: #fff;
+            font-size: 0.7rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 5px 10px;
+            border-radius: 16px;
+            pointer-events: auto;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            transition: all 0.25s;
+            gap: 4px;
+        }
+        .shop-item.equipped {
+            border-color: #ffdd00 !important;
+            box-shadow: 0 0 18px rgba(255, 221, 0, 0.4) !important;
+            background: rgba(255, 221, 0, 0.08) !important;
+        }
+        .shop-item button {
+            background: rgba(0, 255, 255, 0.15);
+            border: 1px solid #00ffff;
+            color: #00ffff;
+            padding: 3px 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.6rem;
+            transition: all 0.2s;
+            white-space: nowrap;
+            min-width: 44px;
+            touch-action: manipulation;
+        }
+        .shop-item button:active {
+            background: #00ffff;
+            color: #000;
+            transform: scale(0.9);
+        }
+        .shop-item button:disabled {
+            opacity: 0.3;
+            border-color: #555;
+            color: #555;
+            cursor: not-allowed;
+        }
+        .shop-item button.equip-btn {
+            border-color: #ffdd00;
+            color: #ffdd00;
+            background: rgba(255, 221, 0, 0.1);
+        }
+        .shop-item button.unequip-btn {
+            border-color: #ff8800;
+            color: #ff8800;
+            background: rgba(255, 136, 0, 0.1);
+        }
+        .shop-item.purchased-flash {
+            animation: purchaseGlow 0.5s ease-out;
+        }
+        @keyframes purchaseGlow {
+            0% { box-shadow: 0 0 40px #ffdd00, 0 0 80px #ffdd00; border-color: #ffdd00; background: rgba(255, 221, 0, 0.2); }
+            100% { box-shadow: 0 0 0 transparent; border-color: rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.4); }
+        }
+        /* ===== WHEEL ===== */
+        .wheel-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 40;
+            pointer-events: auto;
+            transition: opacity 0.4s;
+        }
+        .wheel-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .wheel-canvas-wrap {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            margin: 4px 0;
+        }
+        .wheel-canvas-wrap canvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.3);
+        }
+        .wheel-pointer {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 20px solid #ff44aa;
+            filter: drop-shadow(0 0 12px #ff44aa);
+        }
+        .wheel-btn {
+            margin-top: 8px;
+            background: transparent;
+            border: 2px solid #ffdd00;
+            color: #ffdd00;
+            padding: 5px 24px;
+            font-family: inherit;
+            font-size: 0.8rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-shadow: 0 0 10px #ffdd00;
+            box-shadow: 0 0 20px rgba(255, 221, 0, 0.2);
+            touch-action: manipulation;
+        }
+        .wheel-btn:active {
+            background: #ffdd00;
+            color: #000;
+            transform: scale(0.92);
+        }
+        .wheel-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .wheel-result {
+            color: #fff;
+            font-size: 0.9rem;
+            margin-top: 4px;
+            text-shadow: 0 0 15px #ffdd00;
+            min-height: 1.2rem;
+        }
+        /* ===== ACHIEVEMENT TOAST ===== */
+        .achievement-toast {
+            position: absolute;
+            bottom: 130px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 2px solid #ffdd00;
+            border-radius: 16px;
+            padding: 6px 18px;
+            color: #ffdd00;
+            font-size: 0.75rem;
+            text-shadow: 0 0 15px #ffdd00;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0;
+            transition: opacity 0.4s, transform 0.3s;
+            transform: translateX(-50%) translateY(20px);
+            text-align: center;
+            white-space: nowrap;
+        }
+        .achievement-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        .transition-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            pointer-events: none;
+            z-index: 28;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .transition-overlay.active {
+            opacity: 1;
+        }
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            .game-title { font-size: 2rem; }
+            .sub-title { font-size: 0.8rem; }
+            .menu-btn { padding: 6px 20px; font-size: 0.9rem; }
+            .ctrl-btn { width: 40px; height: 40px; font-size: 18px; }
+            .ctrl-btn.jump { width: 50px; height: 50px; font-size: 24px; }
+            .hud-coin { font-size: 0.8rem; top: 8px; left: 8px; }
+            .hud-diamond { font-size: 0.7rem; top: 8px; left: 70px; }
+            .level-indicator { font-size: 0.6rem; padding: 1px 10px; top: 6px; }
+            .death-counter { font-size: 0.7rem; padding: 1px 8px; top: 6px; right: 8px; }
+            .shop-scroll { width: 220px; max-height: 130px; }
+            .shop-item { width: 200px; font-size: 0.6rem; padding: 4px 8px; }
+            .wheel-canvas-wrap { width: 140px; height: 140px; }
+            .menu-btn-small.mute-btn { right: 60px; font-size: 0.6rem; padding: 2px 10px; }
+            .menu-btn-small.skip-btn { right: 120px; font-size: 0.55rem; padding: 2px 8px; }
+            .touch-controls { padding: 0 10px; bottom: 4px; }
+            .map-grid { grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); gap: 4px; }
+            .map-node { min-height: 48px; font-size: 0.45rem; }
+            .map-node .node-num { font-size: 0.7rem; }
+            .map-node .node-name { font-size: 0.35rem; }
+            .map-title { font-size: 1.1rem; }
+            .map-actions .menu-btn { font-size: 0.65rem; padding: 4px 12px; }
+        }
+        @media (orientation: landscape) and (max-height: 500px) {
+            .touch-controls { bottom: 2px; }
+            .ctrl-btn { width: 34px; height: 34px; font-size: 14px; }
+            .ctrl-btn.jump { width: 42px; height: 42px; font-size: 20px; }
+            .hud-coin { font-size: 0.6rem; top: 4px; left: 4px; }
+            .hud-diamond { font-size: 0.55rem; top: 4px; left: 52px; }
+            .level-indicator { font-size: 0.5rem; padding: 0 8px; top: 3px; }
+            .death-counter { font-size: 0.55rem; padding: 0 6px; top: 3px; right: 4px; }
+            .map-grid { grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 3px; }
+            .map-node { min-height: 38px; font-size: 0.35rem; }
+            .map-node .node-num { font-size: 0.55rem; }
+            .map-node .node-name { display: none; }
+            .map-title { font-size: 0.9rem; margin-top: 2px; }
+            .map-actions .menu-btn { font-size: 0.55rem; padding: 2px 10px; }
+            .menu-btn-small.skip-btn { right: 100px; font-size: 0.5rem; padding: 2px 6px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="gameWrapper">
+        <canvas id="gameCanvas"></canvas>
+        <div class="scanlines"></div>
+        <div class="transition-overlay" id="transitionOverlay"></div>
+
+        <!-- ===== UI OVERLAY ===== -->
+        <div id="ui-overlay">
+            <!-- HUD -->
+            <div class="hud-coin" id="hudCoin">💎 <span id="hudCoinVal">0</span></div>
+            <div class="hud-diamond" id="hudDiamond">💠 <span id="hudDiamondVal">0</span></div>
+            <div class="level-indicator" id="levelDisplay">مرحلة 1</div>
+            <div class="death-counter" id="deathDisplay">💀 0</div>
+            <div class="combo-display" id="comboDisplay">🔥 x<span id="comboCount">0</span></div>
+
+            <!-- Mute Button -->
+            <button class="menu-btn-small mute-btn" id="muteBtn">🔊</button>
+
+            <!-- Skip Button (in-game) -->
+            <button class="menu-btn-small skip-btn" id="skipBtn">⏭ تخطي (50💎)</button>
+
+            <!-- Menu Button -->
+            <button class="menu-btn-small" id="menuBtn" style="position:absolute;top:8px;right:200px;display:none;">≡ قائمة</button>
+
+            <!-- Mislead Message -->
+            <div id="misleadMsg" style="position:absolute;bottom:90px;left:50%;transform:translateX(-50%);color:#ffcc00;font-size:0.8rem;text-align:center;opacity:0.95;text-shadow:0 0 12px #ffcc00;pointer-events:none;white-space:nowrap;"></div>
+
+            <!-- Retry / Next -->
+            <button class="menu-btn" id="retryBtn" style="position:absolute;bottom:70px;left:50%;transform:translateX(-50%);display:none;z-index:25;font-size:0.9rem;padding:6px 24px;">إعادة ⚡</button>
+            <button class="menu-btn" id="nextBtn" style="position:absolute;bottom:70px;left:calc(50% + 100px);transform:translateX(-50%);display:none;z-index:25;border-color:#ff44aa;color:#ff44aa;font-size:0.9rem;padding:6px 24px;">التالي ←</button>
+
+            <!-- ===== START MENU ===== -->
+            <div class="menu-screen" id="startScreen">
+                <div class="game-title"><span class="flip">FLIP</span> PANIC</div>
+                <div class="sub-title">✦ لا تثق بالشاشة ✦</div>
+                <div class="menu-buttons">
+                    <div class="row">
+                        <button class="menu-btn" id="playBtn">▶ ابدأ</button>
+                        <button class="menu-btn map-btn" id="mapBtn">🗺️ خريطة</button>
+                        <button class="menu-btn shop-btn" id="shopBtn">✦ متجر</button>
+                        <button class="menu-btn gold-btn" id="wheelBtn">🎡 حظ</button>
+                    </div>
+                    <div class="row">
+                        <button class="menu-btn" id="continueBtn" style="border-color:#88ff88;color:#88ff88;text-shadow:0 0 10px #88ff88;box-shadow:0 0 25px rgba(136,255,136,0.2);display:none;">▶ استمرار</button>
+                    </div>
+                </div>
+                <div class="menu-stats" id="menuStats">
+                    💀 وفيات: <span id="menuDeaths">0</span> &nbsp;|&nbsp; 💎 عملات: <span id="menuCoins">0</span> &nbsp;|&nbsp; 💠 ماسات: <span id="menuDiamonds">0</span>
+                    <br>🏆 إنجازات: <span id="menuAchievements">0</span>
+                </div>
+                <div class="designer-credit">تصميم: Yaman Gadhat</div>
+            </div>
+
+            <!-- ===== MAP SCREEN ===== -->
+            <div class="map-screen hidden" id="mapScreen">
+                <div class="map-title">🗺️ خريطة المراحل</div>
+                <div style="color:#aaa;font-size:0.7rem;margin-bottom:2px;">💎 <span id="mapCoinDisplay">0</span> &nbsp;|&nbsp; ⭐ <span id="mapStarCount">0</span></div>
+                <div class="map-scroll" id="mapScroll">
+                    <div class="map-grid" id="mapGrid"></div>
+                </div>
+                <div class="map-actions">
+                    <button class="menu-btn skip-btn" id="mapSkipBtn">⏭ تخطي المرحلة (50💎)</button>
+                    <button class="menu-btn" id="backFromMap">↩ رجوع</button>
+                </div>
+            </div>
+
+            <!-- ===== SHOP SCREEN ===== -->
+            <div class="shop-screen hidden" id="shopScreen">
+                <div class="shop-title">✦ المتجر ✦</div>
+                <div class="shop-currency" id="shopCurrency">💎 عملات: 0 &nbsp; 💠 ماسات: 0</div>
+                <div class="shop-tabs">
+                    <button class="shop-tab active" id="tabSkins">🎨 أسطح</button>
+                    <button class="shop-tab" id="tabTrails">✨ آثار</button>
+                    <button class="shop-tab" id="tabChars">👤 شخصيات</button>
+                </div>
+                <div class="shop-scroll" id="shopItems"></div>
+                <button class="menu-btn" id="backFromShop" style="font-size:0.8rem;padding:4px 20px;margin-top:4px;">↩ رجوع</button>
+            </div>
+
+            <!-- ===== WHEEL SCREEN ===== -->
+            <div class="wheel-screen hidden" id="wheelScreen">
+                <div style="color:#ffdd00;font-size:1.3rem;text-shadow:0 0 20px #ffdd00;margin-bottom:4px;">🎡 عجلة الحظ</div>
+                <div class="wheel-canvas-wrap">
+                    <canvas id="wheelCanvas" width="400" height="400"></canvas>
+                    <div class="wheel-pointer"></div>
+                </div>
+                <button class="wheel-btn" id="spinWheelBtn">🎲 ادفع 5 💠</button>
+                <div class="wheel-result" id="wheelResult"></div>
+                <button class="menu-btn" id="closeWheelBtn" style="font-size:0.7rem;padding:3px 18px;margin-top:4px;border-color:#888;color:#888;">✕ إغلاق</button>
+            </div>
+
+            <!-- ===== ACHIEVEMENT TOAST ===== -->
+            <div class="achievement-toast" id="achievementToast">🏆 <span id="achToastText">إنجاز!</span></div>
+        </div>
+
+        <!-- ===== TOUCH CONTROLS ===== -->
+        <div class="touch-controls" id="touchControls">
+            <div class="ctrl-btn" id="leftBtn">◀</div>
+            <div class="ctrl-btn jump" id="jumpBtn">▲</div>
+            <div class="ctrl-btn" id="rightBtn">▶</div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  FLIP PANIC — MAP + SKIP EDITION
+        //  Removed level 37 (index 36: "The Mirror World")
+        //  Added Map view with level selection
+        //  Added Skip level (50 coins per level)
+        // ============================================================
+
+        // ============================================================
+        //  AUDIO ENGINE
+        // ============================================================
+        class AudioEngine {
+            constructor() {
+                this.ctx = null;
+                this.muted = false;
+                this.musicInterval = null;
+                this.musicActive = false;
+                try {
+                    this.ctx = new(window.AudioContext || window.webkitAudioContext)();
+                } catch (e) { this.ctx = null; }
+            }
+
+            init() {
+                if (!this.ctx) return;
+                if (this.ctx.state === 'suspended') this.ctx.resume().catch(() => {});
+            }
+
+            toggleMute() {
+                this.muted = !this.muted;
+                if (this.muted && this.musicInterval) {
+                    clearInterval(this.musicInterval);
+                    this.musicInterval = null;
+                    this.musicActive = false;
+                } else if (!this.muted) {
+                    this.startMusic();
+                }
+                document.getElementById('muteBtn').textContent = this.muted ? '🔇' : '🔊';
+                document.getElementById('muteBtn').classList.toggle('active', this.muted);
+                return this.muted;
+            }
+
+            startMusic() {
+                if (this.muted || !this.ctx) return;
+                if (this.musicInterval) return;
+                this.musicActive = true;
+                let note = 0;
+                const notes = [440, 523, 587, 659, 784, 880, 988, 1047];
+                this.musicInterval = setInterval(() => {
+                    if (this.muted || !this.ctx || this.ctx.state !== 'running') return;
+                    try {
+                        const o = this.ctx.createOscillator();
+                        const g = this.ctx.createGain();
+                        o.type = 'sine';
+                        o.frequency.setValueAtTime(notes[note % notes.length] * 0.5, this.ctx.currentTime);
+                        g.gain.setValueAtTime(0.025, this.ctx.currentTime);
+                        g.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.2);
+                        o.connect(g);
+                        g.connect(this.ctx.destination);
+                        o.start(this.ctx.currentTime);
+                        o.stop(this.ctx.currentTime + 0.2);
+                        note++;
+                    } catch (e) {}
+                }, 220);
+            }
+
+            stopMusic() {
+                if (this.musicInterval) {
+                    clearInterval(this.musicInterval);
+                    this.musicInterval = null;
+                    this.musicActive = false;
+                }
+            }
+
+            playBeep(freq, dur, type, vol) {
+                if (this.muted || !this.ctx) return;
+                try {
+                    const o = this.ctx.createOscillator();
+                    const g = this.ctx.createGain();
+                    o.type = type || 'square';
+                    o.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                    g.gain.setValueAtTime(vol || 0.06, this.ctx.currentTime);
+                    g.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + dur);
+                    o.connect(g);
+                    g.connect(this.ctx.destination);
+                    o.start(this.ctx.currentTime);
+                    o.stop(this.ctx.currentTime + dur);
+                } catch (e) {}
+            }
+
+            sfxFlip() { this.playBeep(200, 0.08, 'sawtooth', 0.1);
+                setTimeout(() => this.playBeep(80, 0.12, 'triangle', 0.08), 50); }
+            sfxWarn() { this.playBeep(1400, 0.05, 'square', 0.05); }
+            sfxDie() { this.playBeep(50, 0.2, 'sawtooth', 0.15);
+                setTimeout(() => this.playBeep(30, 0.25, 'triangle', 0.1), 60); }
+            sfxJump() { this.playBeep(400, 0.04, 'sine', 0.04); }
+            sfxBounce() { this.playBeep(500, 0.06, 'sine', 0.06);
+                setTimeout(() => this.playBeep(700, 0.08, 'triangle', 0.05), 40); }
+            sfxWin() { this.playBeep(600, 0.08, 'sine', 0.08);
+                setTimeout(() => this.playBeep(800, 0.1, 'sine', 0.08), 70);
+                setTimeout(() => this.playBeep(1000, 0.12, 'sine', 0.07), 140); }
+            sfxCoin() { this.playBeep(1200, 0.05, 'sine', 0.07);
+                setTimeout(() => this.playBeep(1600, 0.06, 'sine', 0.06), 50); }
+            sfxBuy() { this.playBeep(900, 0.06, 'sine', 0.09);
+                setTimeout(() => this.playBeep(1200, 0.08, 'sine', 0.08), 50); }
+            sfxEquip() { this.playBeep(700, 0.05, 'sine', 0.06);
+                setTimeout(() => this.playBeep(1000, 0.06, 'triangle', 0.05), 40); }
+            sfxBoss() { this.playBeep(180, 0.3, 'sawtooth', 0.12);
+                setTimeout(() => this.playBeep(120, 0.4, 'sawtooth', 0.1), 120); }
+            sfxDoor() { this.playBeep(300, 0.1, 'sine', 0.07);
+                setTimeout(() => this.playBeep(500, 0.12, 'sine', 0.06), 60); }
+            sfxLaser() { this.playBeep(800, 0.04, 'square', 0.04);
+                setTimeout(() => this.playBeep(400, 0.06, 'square', 0.03), 30); }
+            sfxSkip() { this.playBeep(1000, 0.06, 'sine', 0.08);
+                setTimeout(() => this.playBeep(1300, 0.08, 'sine', 0.07), 50); }
+        }
+
+        // ============================================================
+        //  PARTICLE SYSTEM
+        // ============================================================
+        class Particle {
+            constructor(x, y, color, life, size, vx, vy) {
+                this.x = x;
+                this.y = y;
+                this.vx = vx || (Math.random() - 0.5) * 180;
+                this.vy = vy || (Math.random() - 0.5) * 180 - 50;
+                this.color = color || '#00ffff';
+                this.life = life || 0.7;
+                this.maxLife = this.life;
+                this.size = size || Math.random() * 4 + 2;
+                this.gravity = 0;
+            }
+            update(dt) {
+                this.x += this.vx * dt;
+                this.y += this.vy * dt;
+                this.vy += (this.gravity || 0) * dt;
+                this.life -= dt;
+            }
+            draw(ctx) {
+                const a = Math.max(0, this.life / this.maxLife);
+                ctx.globalAlpha = a;
+                ctx.fillStyle = this.color;
+                ctx.shadowColor = this.color;
+                ctx.shadowBlur = 12;
+                ctx.fillRect(this.x - this.size / 2, this.y - this.size / 2, this.size, this.size);
+                ctx.shadowBlur = 0;
+                ctx.globalAlpha = 1;
+            }
+            get dead() { return this.life <= 0; }
+        }
+
+        class ParticleSystem {
+            constructor() { this.particles = []; }
+            emit(x, y, color, count, spread, life, size) {
+                for (let i = 0; i < (count || 12); i++) {
+                    this.particles.push(new Particle(
+                        x + (Math.random() - 0.5) * 10,
+                        y + (Math.random() - 0.5) * 10,
+                        color,
+                        life || 0.6 + Math.random() * 0.3,
+                        size || Math.random() * 4 + 2,
+                        (Math.random() - 0.5) * (spread || 200),
+                        (Math.random() - 0.5) * (spread || 200) - 60
+                    ));
+                }
+            }
+            update(dt) {
+                for (let p of this.particles) p.update(dt);
+                this.particles = this.particles.filter(p => !p.dead);
+            }
+            draw(ctx) {
+                for (let p of this.particles) p.draw(ctx);
+            }
+            clear() { this.particles = []; }
+        }
+
+        // ============================================================
+        //  SAVE SYSTEM
+        // ============================================================
+        class SaveSystem {
+            static save(key, data) {
+                try { localStorage.setItem('flipPanic_' + key, JSON.stringify(data)); } catch (e) {}
+            }
+            static load(key, def) {
+                try { const d = localStorage.getItem('flipPanic_' + key); return d ? JSON.parse(d) : def; } catch (
+                e) { return def; }
+            }
+            static saveAll(state) {
+                this.save('progress', {
+                    level: state.currentLevel,
+                    deaths: state.deaths,
+                    coins: state.coins,
+                    diamonds: state.diamonds,
+                    bestTimes: state.bestTimes,
+                    levelStars: state.levelStars,
+                    achievements: state.achievements,
+                    dailyClaimed: state.dailyClaimed,
+                    wheelLastSpin: state.wheelLastSpin,
+                    purchased: state.purchased,
+                    equippedSkin: state.equippedSkin,
+                    equippedTrail: state.equippedTrail,
+                    equippedChar: state.equippedChar,
+                    characters: state.characters,
+                    totalPlayTime: state.totalPlayTime,
+                    levelsCompleted: state.levelsCompleted,
+                    comboCount: state.comboCount,
+                    totalCoinsCollected: state.totalCoinsCollected,
+                    totalDiamondsCollected: state.totalDiamondsCollected,
+                    bossDefeated: state.bossDefeated,
+                    secretLevelsUnlocked: state.secretLevelsUnlocked,
+                });
+            }
+            static loadAll() {
+                const d = this.load('progress', {});
+                return {
+                    currentLevel: d.level || 0,
+                    deaths: d.deaths || 0,
+                    coins: d.coins || 0,
+                    diamonds: d.diamonds || 0,
+                    bestTimes: d.bestTimes || {},
+                    levelStars: d.levelStars || {},
+                    achievements: d.achievements || {},
+                    dailyClaimed: d.dailyClaimed || 0,
+                    wheelLastSpin: d.wheelLastSpin || 0,
+                    purchased: d.purchased || {},
+                    equippedSkin: d.equippedSkin || null,
+                    equippedTrail: d.equippedTrail || null,
+                    equippedChar: d.equippedChar || null,
+                    characters: d.characters || { default: true },
+                    totalPlayTime: d.totalPlayTime || 0,
+                    levelsCompleted: d.levelsCompleted || 0,
+                    comboCount: d.comboCount || 0,
+                    totalCoinsCollected: d.totalCoinsCollected || 0,
+                    totalDiamondsCollected: d.totalDiamondsCollected || 0,
+                    bossDefeated: d.bossDefeated || 0,
+                    secretLevelsUnlocked: d.secretLevelsUnlocked || 0,
+                };
+            }
+        }
+
+        // ============================================================
+        //  GAME CONSTANTS
+        // ============================================================
+        const G = {
+            WIDTH: 800,
+            HEIGHT: 450,
+            GRAVITY: 1400,
+            PLAYER_SPEED: 270,
+            JUMP_FORCE: -520,
+            BOUNCE_FORCE: -830,
+            PLAYER_SIZE: 28,
+            FLIP_INTERVAL: 3.5,
+            SKIP_COST: 50,
+        };
+
+        // ============================================================
+        //  CHARACTERS
+        // ============================================================
+        const CHARACTERS = {
+            default: { name: 'الافتراضي', speed: 1.0, jump: 1.0, extraJumps: 0, antiGravity: false, color: '#00d4ff',
+                flippedColor: '#ff3355', cost: 0 },
+            speedy: { name: 'السرعة', speed: 1.35, jump: 1.0, extraJumps: 0, antiGravity: false, color: '#00ff88',
+                flippedColor: '#ff8800', cost: 20 },
+            jumper: { name: 'القافز', speed: 1.0, jump: 1.25, extraJumps: 1, antiGravity: false, color: '#ff8800',
+                flippedColor: '#00aaff', cost: 25 },
+            tank: { name: 'المدرع', speed: 0.85, jump: 0.9, extraJumps: 0, antiGravity: true, color: '#ff4444',
+                flippedColor: '#44ff44', cost: 30 },
+            ghost: { name: 'الشبح', speed: 1.1, jump: 1.1, extraJumps: 1, antiGravity: false, color: '#cc88ff',
+                flippedColor: '#ff88cc', cost: 35 },
+            neon: { name: 'النيون', speed: 1.2, jump: 1.0, extraJumps: 0, antiGravity: false, color: '#00ffff',
+                flippedColor: '#ff44ff', cost: 40 },
+        };
+
+        // ============================================================
+        //  LEVEL DATA — REMOVED LEVEL 37 (index 36: "The Mirror World")
+        //  Total levels: 36 (indices 0-35)
+        // ============================================================
+        const LEVEL_DATA = [
+            // Original levels 1-30 preserved
+            { name: 'Training Lies', platforms: [{ x: 40, y: 360, w: 120, h: 18, type: 'solid' }, { x: 240, y: 320, w: 100,
+                        h: 18, type: 'solid' }, { x: 420, y: 280, w: 80, h: 18, type: 'goal' }], hazards: [], arrows: [
+                    { x: 160, y: 275, dir: 'right', text: '→ اذهب يمين' }
+                ], coins_pickup: [{ x: 280, y: 300 }, { x: 450, y: 260 }], playerStart: { x: 80, y: 300 },
+                description: 'التوجيه البصري', flipDelay: 0, doubleFlip: false, adaptive: false, fullChaos: false,
+                weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'First Confusion', platforms: [{ x: 40, y: 370, w: 110, h: 18, type: 'solid' }, { x: 240, y: 330,
+                        w: 80, h: 18, type: 'solid' }, { x: 420, y: 290, w: 80, h: 18, type: 'goal' }],
+                hazards: [{ x: 155, y: 398, w: 55, h: 22, type: 'spike' }], arrows: [], coins_pickup: [{ x: 270, y: 310 },
+                    { x: 350, y: 310 }
+                ], playerStart: { x: 70, y: 310 }, description: 'الانقلاب الأول', flipDelay: 0, doubleFlip: false,
+                adaptive: false, fullChaos: false, weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'Trust Breaker', platforms: [{ x: 40, y: 360, w: 100, h: 18, type: 'solid' }, { x: 200, y: 360,
+                        w: 70, h: 18, type: 'crumbling' }, { x: 340, y: 310, w: 70, h: 18, type: 'solid' }, { x: 480,
+                        y: 270, w: 80, h: 18, type: 'goal' }
+                ], hazards: [], arrows: [], coins_pickup: [{ x: 220, y: 340 }, { x: 370, y: 290 }, { x: 510, y: 250 }],
+                playerStart: { x: 70, y: 300 }, description: 'منصة تنهار عند الوقوف', flipDelay: 0, doubleFlip: false,
+                adaptive: false, fullChaos: false, weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'Slow Panic', platforms: [{ x: 40, y: 350, w: 100, h: 18, type: 'solid' }, { x: 200, y: 350, w: 70,
+                        h: 18, type: 'disappearing' }, { x: 330, y: 310, w: 70, h: 18, type: 'disappearing' }, { x: 470,
+                        y: 270, w: 80, h: 18, type: 'goal' }
+                ], hazards: [], arrows: [], coins_pickup: [{ x: 230, y: 330 }, { x: 360, y: 290 }], playerStart: { x: 70,
+                    y: 290 }, description: 'منصات تختفي عند الـFlip', flipDelay: 0, doubleFlip: false, adaptive: false,
+                fullChaos: false, weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'Mind Delay', platforms: [{ x: 40, y: 360, w: 100, h: 18, type: 'solid' }, { x: 200, y: 320, w: 80,
+                        h: 18, type: 'solid' }, { x: 340, y: 280, w: 80, h: 18, type: 'solid' }, { x: 490, y: 240, w: 70,
+                        h: 18, type: 'goal' }
+                ], hazards: [{ x: 260, y: 370, w: 45, h: 25, type: 'spike' }], arrows: [], coins_pickup: [{ x: 230,
+                    y: 300 }, { x: 370, y: 260 }, { x: 520, y: 220 }], playerStart: { x: 70, y: 300 },
+                description: 'الـFlip يتأخر 2 ثانية', flipDelay: 2.0, doubleFlip: false, adaptive: false,
+                fullChaos: false, weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'Fake Safety', platforms: [{ x: 40, y: 360, w: 90, h: 18, type: 'solid' }, { x: 190, y: 360, w: 70,
+                        h: 18, type: 'crumbling' }, { x: 320, y: 320, w: 70, h: 18, type: 'crumbling' }, { x: 460, y: 280,
+                        w: 70, h: 18, type: 'goal' }
+                ], hazards: [], arrows: [], coins_pickup: [{ x: 210, y: 340 }, { x: 350, y: 300 }, { x: 490, y: 260 }],
+                playerStart: { x: 70, y: 300 }, description: 'منصات تنهار بسرعة', flipDelay: 0, doubleFlip: false,
+                adaptive: false, fullChaos: false, weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'Double Trap', platforms: [{ x: 40, y: 340, w: 90, h: 18, type: 'solid' }, { x: 190, y: 300, w: 70,
+                        h: 18, type: 'solid' }, { x: 320, y: 260, w: 70, h: 18, type: 'solid' }, { x: 460, y: 220, w: 70,
+                        h: 18, type: 'goal' }
+                ], hazards: [{ x: 110, y: 370, w: 45, h: 25, type: 'spike' }], arrows: [], coins_pickup: [{ x: 220,
+                    y: 280 }, { x: 350, y: 240 }], playerStart: { x: 70, y: 280 }, description: 'Flip مزدوج',
+                flipDelay: 0, doubleFlip: true, adaptive: false, fullChaos: false, weather: 'clear', time: 'day',
+                boss: false, secret: false },
+            { name: 'Chaos Learning', platforms: [{ x: 40, y: 350, w: 100, h: 18, type: 'solid' }, { x: 200, y: 310,
+                        w: 70, h: 18, type: 'solid' }, { x: 330, y: 270, w: 70, h: 18, type: 'solid' }, { x: 470, y: 230,
+                        w: 70, h: 18, type: 'goal' }
+                ], hazards: [], arrows: [], coins_pickup: [{ x: 230, y: 290 }, { x: 360, y: 250 }, { x: 500, y: 210 }],
+                playerStart: { x: 70, y: 290 }, description: 'القفز المتكرر يقلب الجاذبية', flipDelay: 0,
+                doubleFlip: false, adaptive: true, fullChaos: false, weather: 'clear', time: 'day', boss: false,
+                secret: false },
+            { name: 'Almost Impossible', platforms: [{ x: 40, y: 360, w: 35, h: 18, type: 'solid' }, { x: 120, y: 330,
+                        w: 35, h: 18, type: 'solid' }, { x: 200, y: 300, w: 35, h: 18, type: 'solid' }, { x: 280, y: 270,
+                        w: 35, h: 18, type: 'solid' }, { x: 360, y: 240, w: 35, h: 18, type: 'solid' }, { x: 460, y: 200,
+                        w: 50, h: 18, type: 'goal' }
+                ], hazards: [{ x: 50, y: 390, w: 280, h: 15, type: 'spike' }], arrows: [], coins_pickup: [{ x: 150,
+                    y: 310 }, { x: 310, y: 250 }, { x: 480, y: 180 }], playerStart: { x: 55, y: 300 },
+                description: 'منصات صغيرة جداً', flipDelay: 0, doubleFlip: false, adaptive: false, fullChaos: false,
+                weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'Rule Break', platforms: [{ x: 40, y: 340, w: 80, h: 18, type: 'solid' }, { x: 180, y: 340, w: 60,
+                        h: 18, type: 'solid' }, { x: 300, y: 290, w: 60, h: 18, type: 'solid' }, { x: 430, y: 240, w: 70,
+                        h: 18, type: 'goal' }
+                ], hazards: [], arrows: [], coins_pickup: [{ x: 210, y: 320 }, { x: 330, y: 270 }], playerStart: { x: 70,
+                    y: 280 }, description: 'الفوضى الكاملة', flipDelay: 0, doubleFlip: false, adaptive: false,
+                fullChaos: true, weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'Patience Test', platforms: [{ x: 40, y: 360, w: 90, h: 18, type: 'solid' }, { x: 210, y: 340,
+                        w: 55, h: 18, type: 'solid' }, { x: 350, y: 310, w: 55, h: 18, type: 'solid' }, { x: 490, y: 270,
+                        w: 70, h: 18, type: 'goal' }
+                ], hazards: [{ x: 140, y: 395, w: 55, h: 20, type: 'spike' }], arrows: [], coins_pickup: [{ x: 235,
+                    y: 320 }, { x: 375, y: 290 }, { x: 520, y: 250 }], playerStart: { x: 65, y: 300 },
+                description: 'فجوات واسعة', flipDelay: 0, doubleFlip: false, adaptive: false, fullChaos: false,
+                weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'Spike Alley', platforms: [{ x: 40, y: 355, w: 80, h: 18, type: 'solid' }, { x: 180, y: 355, w: 50,
+                        h: 18, type: 'solid' }, { x: 290, y: 315, w: 50, h: 18, type: 'solid' }, { x: 400, y: 275, w: 50,
+                        h: 18, type: 'solid' }, { x: 520, y: 235, w: 60, h: 18, type: 'goal' }
+                ], hazards: [{ x: 125, y: 390, w: 45, h: 20, type: 'spike' }, { x: 235, y: 390, w: 45, h: 20,
+                    type: 'spike' }, { x: 345, y: 350, w: 40, h: 20, type: 'spike' }
+                ], arrows: [], coins_pickup: [{ x: 205, y: 335 }, { x: 315, y: 295 }, { x: 425, y: 255 }, { x: 545,
+                    y: 215 }], playerStart: { x: 60, y: 295 }, description: 'زقاق المسامير', flipDelay: 0,
+                doubleFlip: false, adaptive: false, fullChaos: false, weather: 'clear', time: 'day', boss: false,
+                secret: false },
+            { name: "Crumbler's Path", platforms: [{ x: 40, y: 355, w: 70, h: 18, type: 'solid' }, { x: 160, y: 355,
+                        w: 55, h: 18, type: 'crumbling' }, { x: 270, y: 320, w: 55, h: 18, type: 'crumbling' },
+                    { x: 380, y: 285, w: 55, h: 18, type: 'crumbling' }, { x: 500, y: 245, w: 65, h: 18,
+                        type: 'goal' }
+                ], hazards: [], arrows: [], coins_pickup: [{ x: 185, y: 335 }, { x: 295, y: 300 }, { x: 405, y: 265 }],
+                playerStart: { x: 55, y: 295 }, description: 'سلسلة منصات متهاوية', flipDelay: 0, doubleFlip: false,
+                adaptive: false, fullChaos: false, weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'Ghost Walk', platforms: [{ x: 40, y: 350, w: 80, h: 18, type: 'solid' }, { x: 170, y: 350, w: 55,
+                        h: 18, type: 'disappearing' }, { x: 280, y: 310, w: 55, h: 18, type: 'disappearing' },
+                    { x: 390, y: 270, w: 55, h: 18, type: 'disappearing' }, { x: 510, y: 230, w: 60, h: 18,
+                        type: 'goal' }
+                ], hazards: [{ x: 220, y: 385, w: 50, h: 20, type: 'spike' }], arrows: [], coins_pickup: [{ x: 195,
+                    y: 330 }, { x: 305, y: 290 }, { x: 415, y: 250 }], playerStart: { x: 60, y: 290 },
+                description: 'معظم المنصات شبحية', flipDelay: 0, doubleFlip: false, adaptive: false, fullChaos: false,
+                weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'Fake Gold', platforms: [{ x: 40, y: 360, w: 90, h: 18, type: 'solid' }, { x: 190, y: 330, w: 60,
+                        h: 18, type: 'solid' }, { x: 310, y: 290, w: 70, h: 18, type: 'trap' }, { x: 408, y: 268, w: 60,
+                        h: 18, type: 'goal' }
+                ], hazards: [{ x: 140, y: 395, w: 40, h: 20, type: 'spike' }], arrows: [{ x: 345, y: 270, dir: 'down',
+                    text: '⚠ هدف؟' }
+                ], coins_pickup: [{ x: 220, y: 310 }, { x: 432, y: 248 }], playerStart: { x: 65, y: 300 },
+                description: 'منصة فخ تبدو كالهدف', flipDelay: 0, doubleFlip: false, adaptive: false, fullChaos: false,
+                weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'Rhythm of Chaos', platforms: [{ x: 40, y: 355, w: 85, h: 18, type: 'solid' }, { x: 185, y: 320,
+                        w: 60, h: 18, type: 'solid' }, { x: 310, y: 280, w: 55, h: 18, type: 'solid' }, { x: 430, y: 240,
+                        w: 55, h: 18, type: 'solid' }, { x: 555, y: 200, w: 60, h: 18, type: 'goal' }
+                ], hazards: [{ x: 260, y: 360, w: 40, h: 20, type: 'spike' }], arrows: [], coins_pickup: [{ x: 215,
+                    y: 300 }, { x: 335, y: 260 }, { x: 455, y: 220 }, { x: 580, y: 180 }], playerStart: { x: 60,
+                    y: 295 }, description: 'القفز المتكرر يعكس الجاذبية', flipDelay: 0, doubleFlip: false,
+                adaptive: true, fullChaos: false, weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'The Long Road', platforms: [{ x: 30, y: 370, w: 80, h: 18, type: 'solid' }, { x: 160, y: 350,
+                        w: 55, h: 18, type: 'solid' }, { x: 270, y: 320, w: 50, h: 18, type: 'crumbling' }, { x: 380,
+                        y: 290, w: 50, h: 18, type: 'solid' }, { x: 490, y: 260, w: 50, h: 18, type: 'disappearing' },
+                    { x: 600, y: 225, w: 60, h: 18, type: 'goal' }
+                ], hazards: [{ x: 120, y: 400, w: 35, h: 20, type: 'spike' }, { x: 340, y: 360, w: 35, h: 20,
+                    type: 'spike' }
+                ], arrows: [], coins_pickup: [{ x: 185, y: 330 }, { x: 295, y: 300 }, { x: 405, y: 270 }, { x: 515,
+                    y: 240 }, { x: 625, y: 205 }
+                ], playerStart: { x: 50, y: 310 }, description: 'طريق طويل', flipDelay: 0, doubleFlip: false,
+                adaptive: false, fullChaos: false, weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'Needle Point', platforms: [{ x: 35, y: 365, w: 30, h: 18, type: 'solid' }, { x: 110, y: 340,
+                        w: 28, h: 18, type: 'solid' }, { x: 185, y: 315, w: 28, h: 18, type: 'solid' }, { x: 260, y: 290,
+                        w: 28, h: 18, type: 'solid' }, { x: 340, y: 260, w: 28, h: 18, type: 'solid' }, { x: 430, y: 225,
+                        w: 35, h: 18, type: 'goal' }
+                ], hazards: [{ x: 60, y: 395, w: 200, h: 12, type: 'spike' }, { x: 280, y: 340, w: 50, h: 12,
+                    type: 'spike' }
+                ], arrows: [], coins_pickup: [{ x: 125, y: 320 }, { x: 200, y: 295 }, { x: 355, y: 240 }],
+                playerStart: { x: 45, y: 305 }, description: 'منصات إبرية', flipDelay: 0, doubleFlip: false,
+                adaptive: false, fullChaos: false, weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'Total Madness', platforms: [{ x: 35, y: 345, w: 75, h: 18, type: 'solid' }, { x: 165, y: 310,
+                        w: 50, h: 18, type: 'crumbling' }, { x: 275, y: 275, w: 50, h: 18, type: 'disappearing' },
+                    { x: 390, y: 240, w: 45, h: 18, type: 'solid' }, { x: 500, y: 200, w: 60, h: 18,
+                        type: 'goal' }
+                ], hazards: [{ x: 120, y: 380, w: 40, h: 20, type: 'spike' }, { x: 320, y: 320, w: 50, h: 18,
+                    type: 'spike' }
+                ], arrows: [], coins_pickup: [{ x: 190, y: 290 }, { x: 300, y: 255 }, { x: 415, y: 220 }, { x: 525,
+                    y: 180 }], playerStart: { x: 55, y: 285 }, description: 'كل الآليات مجتمعة', flipDelay: 0,
+                doubleFlip: true, adaptive: false, fullChaos: true, weather: 'clear', time: 'day', boss: false,
+                secret: false },
+            { name: 'Final Gate', platforms: [{ x: 30, y: 365, w: 60, h: 18, type: 'solid' }, { x: 140, y: 340, w: 38,
+                        h: 18, type: 'crumbling' }, { x: 230, y: 310, w: 38, h: 18, type: 'disappearing' }, { x: 320,
+                        y: 278, w: 35, h: 18, type: 'solid' }, { x: 410, y: 245, w: 36, h: 18, type: 'crumbling' },
+                    { x: 500, y: 215, w: 36, h: 18, type: 'disappearing' }, { x: 590, y: 185, w: 35, h: 18,
+                        type: 'solid' }, { x: 685, y: 155, w: 55, h: 18, type: 'goal' }
+                ], hazards: [{ x: 95, y: 395, w: 35, h: 20, type: 'spike' }, { x: 275, y: 345, w: 36, h: 18,
+                    type: 'spike' }, { x: 455, y: 280, w: 35, h: 16, type: 'spike' }, { x: 545, y: 248, w: 35, h: 18,
+                    type: 'spike' }
+                ], arrows: [], coins_pickup: [{ x: 160, y: 320 }, { x: 250, y: 290 }, { x: 340, y: 258 }, { x: 430,
+                    y: 225 }, { x: 520, y: 195 }, { x: 610, y: 165 }, { x: 710, y: 135 }
+                ], playerStart: { x: 45, y: 305 }, description: 'البوابة الأخيرة', flipDelay: 1.8, doubleFlip: false,
+                adaptive: true, fullChaos: false, weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'Precision Madness', platforms: [{ x: 30, y: 370, w: 32, h: 16, type: 'solid' }, { x: 110, y: 340,
+                        w: 30, h: 16, type: 'solid' }, { x: 195, y: 310, w: 28, h: 16, type: 'crumbling' }, { x: 280,
+                        y: 280, w: 28, h: 16, type: 'solid' }, { x: 365, y: 250, w: 30, h: 16, type: 'disappearing' },
+                    { x: 450, y: 220, w: 28, h: 16, type: 'solid' }, { x: 540, y: 188, w: 30, h: 16,
+                        type: 'crumbling' }, { x: 630, y: 158, w: 50, h: 16, type: 'goal' }
+                ], hazards: [{ x: 70, y: 400, w: 30, h: 18, type: 'spike' }, { x: 150, y: 370, w: 35, h: 16,
+                    type: 'spike' }, { x: 235, y: 340, w: 32, h: 16, type: 'spike' }, { x: 320, y: 310, w: 30, h: 16,
+                    type: 'spike' }, { x: 405, y: 278, w: 35, h: 16, type: 'spike' }, { x: 490, y: 248, w: 30, h: 16,
+                    type: 'spike' }
+                ], arrows: [], coins_pickup: [{ x: 125, y: 320 }, { x: 210, y: 290 }, { x: 295, y: 260 }, { x: 380,
+                    y: 230 }, { x: 465, y: 200 }, { x: 555, y: 168 }
+                ], playerStart: { x: 38, y: 310 }, description: 'دقة متناهية', flipDelay: 0.5, doubleFlip: false,
+                adaptive: false, fullChaos: false, weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'Delayed Chaos', platforms: [{ x: 35, y: 360, w: 80, h: 18, type: 'solid' }, { x: 175, y: 325,
+                        w: 55, h: 18, type: 'solid' }, { x: 290, y: 290, w: 50, h: 18, type: 'crumbling' }, { x: 400,
+                        y: 255, w: 50, h: 18, type: 'disappearing' }, { x: 510, y: 218, w: 55, h: 18, type: 'solid' },
+                    { x: 630, y: 180, w: 60, h: 18, type: 'goal' }
+                ], hazards: [{ x: 125, y: 395, w: 40, h: 20, type: 'spike' }, { x: 240, y: 360, w: 38, h: 18,
+                    type: 'spike' }, { x: 355, y: 325, w: 35, h: 18, type: 'spike' }, { x: 465, y: 288, w: 38, h: 18,
+                    type: 'spike' }
+                ], arrows: [], coins_pickup: [{ x: 200, y: 305 }, { x: 315, y: 270 }, { x: 425, y: 235 }, { x: 535,
+                    y: 198 }, { x: 655, y: 160 }
+                ], playerStart: { x: 55, y: 300 }, description: 'تأخير 3 ثوانٍ مع فوضى', flipDelay: 3.0,
+                doubleFlip: false, adaptive: true, fullChaos: false, weather: 'clear', time: 'day', boss: false,
+                secret: false },
+            { name: 'Crumbling Hell', platforms: [{ x: 35, y: 365, w: 65, h: 18, type: 'solid' }, { x: 150, y: 340,
+                        w: 48, h: 18, type: 'crumbling' }, { x: 250, y: 310, w: 48, h: 18, type: 'crumbling' },
+                    { x: 350, y: 280, w: 48, h: 18, type: 'crumbling' }, { x: 450, y: 250, w: 48, h: 18,
+                        type: 'crumbling' }, { x: 550, y: 218, w: 48, h: 18, type: 'crumbling' }, { x: 650, y: 185,
+                        w: 60, h: 18, type: 'goal' }
+                ], hazards: [{ x: 100, y: 395, w: 40, h: 18, type: 'spike' }, { x: 200, y: 370, w: 35, h: 16,
+                    type: 'spike' }, { x: 300, y: 340, w: 35, h: 16, type: 'spike' }, { x: 400, y: 310, w: 35, h: 16,
+                    type: 'spike' }, { x: 500, y: 280, w: 35, h: 16, type: 'spike' }
+                ], arrows: [], coins_pickup: [{ x: 172, y: 320 }, { x: 272, y: 290 }, { x: 372, y: 260 }, { x: 472,
+                    y: 230 }, { x: 572, y: 198 }
+                ], playerStart: { x: 50, y: 305 }, description: 'كل المنصات تنهار', flipDelay: 0, doubleFlip: false,
+                adaptive: false, fullChaos: false, weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'Ghost Town II', platforms: [{ x: 30, y: 365, w: 65, h: 18, type: 'solid' }, { x: 145, y: 335,
+                        w: 45, h: 18, type: 'disappearing' }, { x: 240, y: 305, w: 45, h: 18, type: 'disappearing' },
+                    { x: 335, y: 275, w: 45, h: 18, type: 'solid' }, { x: 430, y: 242, w: 45, h: 18,
+                        type: 'disappearing' }, { x: 525, y: 210, w: 45, h: 18, type: 'disappearing' }, { x: 620, y: 178,
+                        w: 55, h: 18, type: 'goal' }
+                ], hazards: [{ x: 105, y: 398, w: 35, h: 18, type: 'spike' }, { x: 195, y: 368, w: 38, h: 16,
+                    type: 'spike' }, { x: 290, y: 338, w: 35, h: 18, type: 'spike' }, { x: 385, y: 305, w: 38, h: 16,
+                    type: 'spike' }, { x: 480, y: 272, w: 35, h: 18, type: 'spike' }, { x: 575, y: 240, w: 38, h: 16,
+                    type: 'spike' }
+                ], arrows: [], coins_pickup: [{ x: 165, y: 315 }, { x: 260, y: 285 }, { x: 355, y: 255 }, { x: 450,
+                    y: 222 }, { x: 545, y: 190 }, { x: 645, y: 158 }
+                ], playerStart: { x: 45, y: 305 }, description: 'مدينة الأشباح', flipDelay: 0, doubleFlip: false,
+                adaptive: false, fullChaos: false, weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'Spike Maze', platforms: [{ x: 30, y: 370, w: 55, h: 18, type: 'solid' }, { x: 140, y: 340, w: 40,
+                        h: 18, type: 'solid' }, { x: 240, y: 308, w: 38, h: 18, type: 'crumbling' }, { x: 340, y: 275,
+                        w: 38, h: 18, type: 'solid' }, { x: 440, y: 242, w: 40, h: 18, type: 'disappearing' },
+                    { x: 540, y: 210, w: 38, h: 18, type: 'solid' }, { x: 640, y: 178, w: 55, h: 18,
+                        type: 'goal' }
+                ], hazards: [{ x: 95, y: 400, w: 35, h: 16, type: 'spike' }, { x: 190, y: 372, w: 40, h: 14,
+                    type: 'spike' }, { x: 290, y: 340, w: 35, h: 16, type: 'spike' }, { x: 390, y: 308, w: 40, h: 14,
+                    type: 'spike' }, { x: 490, y: 275, w: 35, h: 16, type: 'spike' }, { x: 590, y: 242, w: 40, h: 14,
+                    type: 'spike' }
+                ], arrows: [], coins_pickup: [{ x: 160, y: 320 }, { x: 260, y: 288 }, { x: 360, y: 255 }, { x: 460,
+                    y: 222 }, { x: 560, y: 190 }, { x: 665, y: 158 }
+                ], playerStart: { x: 42, y: 310 }, description: 'متاهة مسامير', flipDelay: 0, doubleFlip: false,
+                adaptive: false, fullChaos: false, weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'Double Trouble II', platforms: [{ x: 35, y: 355, w: 70, h: 18, type: 'solid' }, { x: 160, y: 320,
+                        w: 50, h: 18, type: 'solid' }, { x: 270, y: 285, w: 48, h: 18, type: 'crumbling' }, { x: 380,
+                        y: 250, w: 48, h: 18, type: 'solid' }, { x: 490, y: 215, w: 50, h: 18, type: 'disappearing' },
+                    { x: 600, y: 178, w: 55, h: 18, type: 'goal' }
+                ], hazards: [{ x: 115, y: 388, w: 38, h: 18, type: 'spike' }, { x: 220, y: 355, w: 40, h: 16,
+                    type: 'spike' }, { x: 330, y: 320, w: 38, h: 18, type: 'spike' }, { x: 440, y: 285, w: 40, h: 16,
+                    type: 'spike' }, { x: 550, y: 248, w: 38, h: 18, type: 'spike' }
+                ], arrows: [], coins_pickup: [{ x: 185, y: 300 }, { x: 295, y: 265 }, { x: 405, y: 230 }, { x: 515,
+                    y: 195 }, { x: 625, y: 158 }
+                ], playerStart: { x: 50, y: 295 }, description: 'Flip مزدوج مع تأخير', flipDelay: 1.2,
+                doubleFlip: true, adaptive: false, fullChaos: false, weather: 'clear', time: 'day', boss: false,
+                secret: false },
+            { name: 'Adaptive Nightmare', platforms: [{ x: 30, y: 365, w: 65, h: 18, type: 'solid' }, { x: 145, y: 332,
+                        w: 45, h: 18, type: 'solid' }, { x: 250, y: 298, w: 42, h: 18, type: 'crumbling' }, { x: 350,
+                        y: 262, w: 42, h: 18, type: 'disappearing' }, { x: 450, y: 228, w: 45, h: 18, type: 'solid' },
+                    { x: 555, y: 192, w: 42, h: 18, type: 'crumbling' }, { x: 660, y: 158, w: 50, h: 18,
+                        type: 'goal' }
+                ], hazards: [{ x: 105, y: 398, w: 32, h: 18, type: 'spike' }, { x: 200, y: 365, w: 38, h: 16,
+                    type: 'spike' }, { x: 305, y: 332, w: 35, h: 18, type: 'spike' }, { x: 405, y: 298, w: 38, h: 16,
+                    type: 'spike' }, { x: 505, y: 262, w: 35, h: 18, type: 'spike' }, { x: 605, y: 228, w: 38, h: 16,
+                    type: 'spike' }
+                ], arrows: [], coins_pickup: [{ x: 165, y: 312 }, { x: 270, y: 278 }, { x: 370, y: 242 }, { x: 470,
+                    y: 208 }, { x: 575, y: 172 }, { x: 680, y: 138 }
+                ], playerStart: { x: 45, y: 305 }, description: 'كابوس متكيف', flipDelay: 0, doubleFlip: false,
+                adaptive: true, fullChaos: false, weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'The Gauntlet', platforms: [{ x: 25, y: 370, w: 55, h: 18, type: 'solid' }, { x: 125, y: 338,
+                        w: 40, h: 18, type: 'crumbling' }, { x: 215, y: 305, w: 38, h: 18, type: 'disappearing' },
+                    { x: 305, y: 272, w: 38, h: 18, type: 'solid' }, { x: 398, y: 240, w: 40, h: 18,
+                        type: 'crumbling' }, { x: 492, y: 208, w: 38, h: 18, type: 'disappearing' }, { x: 588, y: 175,
+                        w: 40, h: 18, type: 'solid' }, { x: 685, y: 142, w: 50, h: 18, type: 'goal' }
+                ], hazards: [{ x: 85, y: 400, w: 30, h: 18, type: 'spike' }, { x: 172, y: 370, w: 35, h: 16,
+                    type: 'spike' }, { x: 262, y: 338, w: 32, h: 18, type: 'spike' }, { x: 352, y: 305, w: 35, h: 16,
+                    type: 'spike' }, { x: 445, y: 272, w: 32, h: 18, type: 'spike' }, { x: 540, y: 240, w: 35, h: 16,
+                    type: 'spike' }, { x: 635, y: 208, w: 32, h: 18, type: 'spike' }
+                ], arrows: [], coins_pickup: [{ x: 145, y: 318 }, { x: 235, y: 285 }, { x: 325, y: 252 }, { x: 418,
+                    y: 220 }, { x: 512, y: 188 }, { x: 608, y: 155 }, { x: 705, y: 122 }
+                ], playerStart: { x: 38, y: 310 }, description: 'التحدي الأقصى', flipDelay: 0.8, doubleFlip: true,
+                adaptive: true, fullChaos: false, weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'Patience Destroyer', platforms: [{ x: 30, y: 368, w: 60, h: 18, type: 'solid' }, { x: 170, y: 345,
+                        w: 40, h: 18, type: 'solid' }, { x: 300, y: 318, w: 38, h: 18, type: 'crumbling' }, { x: 430,
+                        y: 288, w: 38, h: 18, type: 'disappearing' }, { x: 560, y: 255, w: 40, h: 18, type: 'solid' },
+                    { x: 690, y: 220, w: 50, h: 18, type: 'goal' }
+                ], hazards: [{ x: 100, y: 400, w: 55, h: 20, type: 'spike' }, { x: 220, y: 378, w: 65, h: 18,
+                    type: 'spike' }, { x: 350, y: 352, w: 60, h: 20, type: 'spike' }, { x: 480, y: 322, w: 65, h: 18,
+                    type: 'spike' }, { x: 610, y: 288, w: 60, h: 20, type: 'spike' }
+                ], arrows: [], coins_pickup: [{ x: 190, y: 325 }, { x: 320, y: 298 }, { x: 450, y: 268 }, { x: 580,
+                    y: 235 }, { x: 710, y: 200 }
+                ], playerStart: { x: 45, y: 308 }, description: 'فجوات هائلة مع تأخير', flipDelay: 3.5,
+                doubleFlip: false, adaptive: false, fullChaos: false, weather: 'clear', time: 'day', boss: false,
+                secret: false },
+            { name: 'True Final Gate', platforms: [{ x: 25, y: 372, w: 50, h: 16, type: 'solid' }, { x: 120, y: 342,
+                        w: 35, h: 16, type: 'crumbling' }, { x: 205, y: 310, w: 32, h: 16, type: 'disappearing' },
+                    { x: 288, y: 278, w: 32, h: 16, type: 'solid' }, { x: 372, y: 246, w: 35, h: 16,
+                        type: 'crumbling' }, { x: 458, y: 215, w: 32, h: 16, type: 'disappearing' }, { x: 545, y: 184,
+                        w: 32, h: 16, type: 'solid' }, { x: 635, y: 152, w: 35, h: 16, type: 'crumbling' },
+                    { x: 728, y: 120, w: 48, h: 16, type: 'goal' }
+                ], hazards: [{ x: 80, y: 402, w: 28, h: 18, type: 'spike' }, { x: 162, y: 374, w: 32, h: 16,
+                    type: 'spike' }, { x: 245, y: 342, w: 30, h: 18, type: 'spike' }, { x: 328, y: 310, w: 32, h: 16,
+                    type: 'spike' }, { x: 412, y: 278, w: 30, h: 18, type: 'spike' }, { x: 498, y: 246, w: 32, h: 16,
+                    type: 'spike' }, { x: 585, y: 215, w: 30, h: 18, type: 'spike' }, { x: 675, y: 184, w: 32, h: 16,
+                    type: 'spike' }
+                ], arrows: [], coins_pickup: [{ x: 138, y: 322 }, { x: 222, y: 290 }, { x: 305, y: 258 }, { x: 390,
+                    y: 226 }, { x: 476, y: 195 }, { x: 563, y: 164 }, { x: 653, y: 132 }, { x: 748, y: 100 }
+                ], playerStart: { x: 35, y: 312 }, description: 'البوابة النهائية', flipDelay: 2.5, doubleFlip: true,
+                adaptive: true, fullChaos: true, weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'Bouncy Madness', platforms: [{ x: 30, y: 370, w: 55, h: 18, type: 'solid' }, { x: 150, y: 350,
+                        w: 50, h: 18, type: 'bouncy' }, { x: 270, y: 315, w: 45, h: 18, type: 'bouncy' }, { x: 390,
+                        y: 280, w: 45, h: 18, type: 'solid' }, { x: 510, y: 240, w: 50, h: 18, type: 'bouncy' },
+                    { x: 630, y: 200, w: 55, h: 18, type: 'goal' }
+                ], hazards: [{ x: 90, y: 400, w: 45, h: 22, type: 'spike' }, { x: 210, y: 380, w: 45, h: 20,
+                    type: 'spike' }, { x: 330, y: 348, w: 40, h: 18, type: 'spike' }, { x: 450, y: 312, w: 45, h: 20,
+                    type: 'spike' }, { x: 570, y: 272, w: 40, h: 18, type: 'spike' }
+                ], arrows: [{ x: 175, y: 330, dir: 'up', text: '♨ ارتداد!' }], coins_pickup: [{ x: 175, y: 328 },
+                    { x: 295, y: 293 }, { x: 415, y: 258 }, { x: 535, y: 218 }, { x: 655, y: 178 }
+                ], playerStart: { x: 45, y: 310 }, description: 'منصات ارتدادية', flipDelay: 0, doubleFlip: false,
+                adaptive: false, fullChaos: false, weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: "Needle's Eye", platforms: [{ x: 28, y: 372, w: 26, h: 16, type: 'solid' }, { x: 108, y: 342,
+                        w: 24, h: 16, type: 'solid' }, { x: 190, y: 310, w: 22, h: 16, type: 'crumbling' }, { x: 275,
+                        y: 278, w: 24, h: 16, type: 'solid' }, { x: 362, y: 246, w: 22, h: 16, type: 'bouncy' },
+                    { x: 450, y: 214, w: 24, h: 16, type: 'solid' }, { x: 540, y: 182, w: 26, h: 16,
+                        type: 'crumbling' }, { x: 632, y: 150, w: 48, h: 16, type: 'goal' }
+                ], hazards: [{ x: 62, y: 402, w: 35, h: 16, type: 'spike' }, { x: 142, y: 374, w: 38, h: 14,
+                    type: 'spike' }, { x: 222, y: 342, w: 40, h: 14, type: 'spike' }, { x: 308, y: 310, w: 38, h: 16,
+                    type: 'spike' }, { x: 395, y: 278, w: 40, h: 14, type: 'spike' }, { x: 485, y: 246, w: 38, h: 16,
+                    type: 'spike' }, { x: 575, y: 214, w: 40, h: 14, type: 'spike' }
+                ], arrows: [], coins_pickup: [{ x: 122, y: 320 }, { x: 205, y: 288 }, { x: 290, y: 256 }, { x: 378,
+                    y: 224 }, { x: 465, y: 192 }, { x: 555, y: 160 }, { x: 655, y: 128 }
+                ], playerStart: { x: 34, y: 312 }, description: 'منصات إبرية دقيقة', flipDelay: 0.6, doubleFlip: false,
+                adaptive: false, fullChaos: false, weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'Double Chaos Hell', platforms: [{ x: 30, y: 360, w: 65, h: 18, type: 'solid' }, { x: 155, y: 325,
+                        w: 48, h: 18, type: 'crumbling' }, { x: 265, y: 290, w: 45, h: 18, type: 'disappearing' },
+                    { x: 375, y: 255, w: 48, h: 18, type: 'bouncy' }, { x: 490, y: 218, w: 50, h: 18,
+                        type: 'solid' }, { x: 610, y: 180, w: 55, h: 18, type: 'goal' }
+                ], hazards: [{ x: 100, y: 395, w: 42, h: 20, type: 'spike' }, { x: 215, y: 358, w: 38, h: 18,
+                    type: 'spike' }, { x: 325, y: 322, w: 40, h: 18, type: 'spike' }, { x: 435, y: 288, w: 42, h: 20,
+                    type: 'spike' }, { x: 550, y: 250, w: 38, h: 18, type: 'spike' }
+                ], arrows: [], coins_pickup: [{ x: 180, y: 303 }, { x: 290, y: 268 }, { x: 400, y: 233 }, { x: 515,
+                    y: 196 }, { x: 635, y: 158 }
+                ], playerStart: { x: 48, y: 300 }, description: 'جحيم مزدوج', flipDelay: 0.4, doubleFlip: true,
+                adaptive: true, fullChaos: true, weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'Spike Ocean', platforms: [{ x: 25, y: 368, w: 48, h: 18, type: 'solid' }, { x: 130, y: 340, w: 38,
+                        h: 18, type: 'solid' }, { x: 225, y: 310, w: 36, h: 18, type: 'crumbling' }, { x: 320, y: 278,
+                        w: 38, h: 18, type: 'bouncy' }, { x: 420, y: 245, w: 36, h: 18, type: 'solid' }, { x: 520,
+                        y: 212, w: 40, h: 18, type: 'disappearing' }, { x: 625, y: 178, w: 50, h: 18, type: 'goal' }
+                ], hazards: [{ x: 75, y: 400, w: 40, h: 22, type: 'spike' }, { x: 175, y: 372, w: 35, h: 20,
+                    type: 'spike' }, { x: 270, y: 342, w: 38, h: 22, type: 'spike' }, { x: 370, y: 310, w: 35, h: 20,
+                    type: 'spike' }, { x: 470, y: 278, w: 38, h: 22, type: 'spike' }, { x: 570, y: 245, w: 35, h: 20,
+                    type: 'spike' }
+                ], arrows: [], coins_pickup: [{ x: 150, y: 318 }, { x: 245, y: 288 }, { x: 340, y: 256 }, { x: 440,
+                    y: 223 }, { x: 540, y: 190 }, { x: 650, y: 156 }
+                ], playerStart: { x: 35, y: 308 }, description: 'محيط من المسامير', flipDelay: 0, doubleFlip: false,
+                adaptive: false, fullChaos: false, weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'Patience or Death', platforms: [{ x: 30, y: 365, w: 55, h: 18, type: 'solid' }, { x: 160, y: 338,
+                        w: 42, h: 18, type: 'disappearing' }, { x: 280, y: 305, w: 40, h: 18, type: 'disappearing' },
+                    { x: 400, y: 270, w: 42, h: 18, type: 'solid' }, { x: 520, y: 235, w: 40, h: 18,
+                        type: 'disappearing' }, { x: 640, y: 198, w: 50, h: 18, type: 'goal' }
+                ], hazards: [{ x: 100, y: 398, w: 45, h: 22, type: 'spike' }, { x: 215, y: 370, w: 50, h: 20,
+                    type: 'spike' }, { x: 335, y: 338, w: 48, h: 22, type: 'spike' }, { x: 455, y: 302, w: 50, h: 20,
+                    type: 'spike' }, { x: 575, y: 268, w: 48, h: 22, type: 'spike' }
+                ], arrows: [], coins_pickup: [{ x: 182, y: 316 }, { x: 300, y: 283 }, { x: 420, y: 248 }, { x: 540,
+                    y: 213 }, { x: 665, y: 176 }
+                ], playerStart: { x: 42, y: 305 }, description: 'تأخير 4 ثوانٍ', flipDelay: 4.0, doubleFlip: false,
+                adaptive: false, fullChaos: false, weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'The Bouncy Gauntlet', platforms: [{ x: 25, y: 370, w: 45, h: 18, type: 'solid' }, { x: 130, y: 345,
+                        w: 42, h: 18, type: 'bouncy' }, { x: 235, y: 315, w: 40, h: 18, type: 'bouncy' }, { x: 340,
+                        y: 282, w: 42, h: 18, type: 'bouncy' }, { x: 445, y: 248, w: 40, h: 18, type: 'bouncy' },
+                    { x: 550, y: 215, w: 45, h: 18, type: 'bouncy' }, { x: 658, y: 180, w: 50, h: 18,
+                        type: 'goal' }
+                ], hazards: [{ x: 75, y: 402, w: 40, h: 20, type: 'spike' }, { x: 180, y: 378, w: 42, h: 18,
+                    type: 'spike' }, { x: 288, y: 348, w: 38, h: 20, type: 'spike' }, { x: 395, y: 315, w: 40, h: 18,
+                    type: 'spike' }, { x: 500, y: 280, w: 42, h: 20, type: 'spike' }, { x: 605, y: 248, w: 38, h: 18,
+                    type: 'spike' }
+                ], arrows: [{ x: 155, y: 320, dir: 'up', text: '♨♨♨' }], coins_pickup: [{ x: 152, y: 323 }, { x: 258,
+                    y: 293 }, { x: 363, y: 260 }, { x: 468, y: 226 }, { x: 573, y: 193 }, { x: 682, y: 158 }
+                ], playerStart: { x: 35, y: 310 }, description: 'سلسلة ارتدادات', flipDelay: 0, doubleFlip: false,
+                adaptive: false, fullChaos: false, weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'Reverse Psychology', platforms: [{ x: 30, y: 365, w: 70, h: 18, type: 'solid' }, { x: 170, y: 335,
+                        w: 50, h: 18, type: 'trap' }, { x: 290, y: 300, w: 50, h: 18, type: 'solid' }, { x: 400, y: 268,
+                        w: 55, h: 18, type: 'trap' }, { x: 510, y: 235, w: 50, h: 18, type: 'solid' }, { x: 620, y: 200,
+                        w: 55, h: 18, type: 'goal' }
+                ], hazards: [{ x: 110, y: 398, w: 45, h: 20, type: 'spike' }, { x: 230, y: 368, w: 42, h: 18,
+                    type: 'spike' }, { x: 355, y: 332, w: 38, h: 20, type: 'spike' }, { x: 465, y: 298, w: 42, h: 18,
+                    type: 'spike' }, { x: 570, y: 268, w: 38, h: 20, type: 'spike' }
+                ], arrows: [{ x: 195, y: 315, dir: 'down', text: '⚠ فخ!' }, { x: 425, y: 248, dir: 'down',
+                    text: '⚠ فخ!' }
+                ], coins_pickup: [{ x: 195, y: 313 }, { x: 315, y: 278 }, { x: 425, y: 246 }, { x: 535, y: 213 },
+                    { x: 645, y: 178 }
+                ], playerStart: { x: 48, y: 305 }, description: 'منصات فخ', flipDelay: 0, doubleFlip: false,
+                adaptive: false, fullChaos: false, weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'The Crucible', platforms: [{ x: 22, y: 372, w: 40, h: 16, type: 'solid' }, { x: 120, y: 340,
+                        w: 35, h: 16, type: 'crumbling' }, { x: 215, y: 305, w: 32, h: 16, type: 'bouncy' },
+                    { x: 310, y: 270, w: 35, h: 16, type: 'disappearing' }, { x: 408, y: 238, w: 32, h: 16,
+                        type: 'solid' }, { x: 505, y: 205, w: 35, h: 16, type: 'crumbling' }, { x: 600, y: 172, w: 40,
+                        h: 16, type: 'bouncy' }, { x: 700, y: 138, w: 48, h: 16, type: 'goal' }
+                ], hazards: [{ x: 68, y: 402, w: 35, h: 18, type: 'spike' }, { x: 165, y: 372, w: 38, h: 16,
+                    type: 'spike' }, { x: 258, y: 338, w: 40, h: 18, type: 'spike' }, { x: 355, y: 302, w: 38, h: 16,
+                    type: 'spike' }, { x: 452, y: 268, w: 40, h: 18, type: 'spike' }, { x: 550, y: 235, w: 38, h: 16,
+                    type: 'spike' }, { x: 650, y: 202, w: 40, h: 18, type: 'spike' }
+                ], arrows: [], coins_pickup: [{ x: 138, y: 318 }, { x: 232, y: 283 }, { x: 328, y: 248 }, { x: 425,
+                    y: 216 }, { x: 522, y: 183 }, { x: 618, y: 150 }, { x: 722, y: 116 }
+                ], playerStart: { x: 32, y: 312 }, description: 'البوتقة', flipDelay: 0.7, doubleFlip: true,
+                adaptive: true, fullChaos: true, weather: 'clear', time: 'day', boss: false, secret: false },
+            { name: 'Ultimate Challenge', platforms: [{ x: 20, y: 375, w: 30, h: 14, type: 'solid' }, { x: 100, y: 345,
+                        w: 26, h: 14, type: 'crumbling' }, { x: 180, y: 312, w: 24, h: 14, type: 'bouncy' },
+                    { x: 260, y: 278, w: 26, h: 14, type: 'disappearing' }, { x: 342, y: 245, w: 24, h: 14,
+                        type: 'solid' }, { x: 425, y: 212, w: 26, h: 14, type: 'crumbling' }, { x: 510, y: 180, w: 24,
+                        h: 14, type: 'bouncy' }, { x: 595, y: 148, w: 28, h: 14, type: 'disappearing' },
+                    { x: 682, y: 115, w: 45, h: 14, type: 'goal' }
+                ], hazards: [{ x: 55, y: 405, w: 30, h: 18, type: 'spike' }, { x: 138, y: 376, w: 32, h: 16,
+                    type: 'spike' }, { x: 215, y: 344, w: 34, h: 18, type: 'spike' }, { x: 295, y: 310, w: 30, h: 16,
+                    type: 'spike' }, { x: 378, y: 278, w: 34, h: 18, type: 'spike' }, { x: 460, y: 244, w: 32, h: 16,
+                    type: 'spike' }, { x: 545, y: 212, w: 30, h: 18, type: 'spike' }, { x: 630, y: 180, w: 34, h: 16,
+                    type: 'spike' }
+                ], arrows: [], coins_pickup: [{ x: 114, y: 323 }, { x: 194, y: 290 }, { x: 274, y: 256 }, { x: 356,
+                    y: 223 }, { x: 440, y: 190 }, { x: 525, y: 158 }, { x: 610, y: 126 }, { x: 702, y: 93 }
+                ], playerStart: { x: 28, y: 315 }, description: 'التحدي الأقصى', flipDelay: 1.5, doubleFlip: true,
+                adaptive: true, fullChaos: true, weather: 'clear', time: 'day', boss: false, secret: false },
+            // ===== NEW LEVELS (continued, without the removed "The Mirror World") =====
+            {
+                name: 'Rainy Night',
+                platforms: [{ x: 30, y: 360, w: 80, h: 18, type: 'solid' }, { x: 170, y: 330, w: 55, h: 18,
+                        type: 'moving', moveRange: 60, moveSpeed: 40 }, { x: 300, y: 290, w: 55, h: 18,
+                        type: 'solid' }, { x: 440, y: 250, w: 60, h: 18, type: 'goal' }
+                ],
+                hazards: [{ x: 230, y: 390, w: 35, h: 20, type: 'spike' }],
+                arrows: [],
+                coins_pickup: [{ x: 200, y: 310 }, { x: 330, y: 270 }, { x: 470, y: 230 }],
+                playerStart: { x: 55, y: 300 },
+                description: 'ليلة ممطرة - منصات متحركة',
+                flipDelay: 0,
+                doubleFlip: false,
+                adaptive: false,
+                fullChaos: false,
+                weather: 'rain',
+                time: 'night',
+                boss: false,
+                secret: false,
+                movingPlatforms: [{ x: 170, y: 330, w: 55, h: 18, range: 60, speed: 40, startX: 170 }]
+            }, {
+                name: 'Snowy Peak',
+                platforms: [{ x: 25, y: 365, w: 70, h: 18, type: 'ice' }, { x: 160, y: 335, w: 50, h: 18,
+                        type: 'ice' }, { x: 280, y: 300, w: 50, h: 18, type: 'ice' }, { x: 410, y: 260, w: 60,
+                        h: 18, type: 'goal' }
+                ],
+                hazards: [],
+                arrows: [],
+                coins_pickup: [{ x: 185, y: 315 }, { x: 305, y: 280 }, { x: 440, y: 240 }],
+                playerStart: { x: 45, y: 305 },
+                description: 'قمة ثلجية - منصات جليدية زلقة',
+                flipDelay: 0,
+                doubleFlip: false,
+                adaptive: false,
+                fullChaos: false,
+                weather: 'snow',
+                time: 'day',
+                boss: false,
+                secret: false
+            }, {
+                name: 'Electric Lab',
+                platforms: [{ x: 30, y: 360, w: 75, h: 18, type: 'solid' }, { x: 170, y: 330, w: 50, h: 18,
+                        type: 'electric' }, { x: 290, y: 290, w: 50, h: 18, type: 'electric' }, { x: 420, y: 250,
+                        w: 55, h: 18, type: 'goal' }
+                ],
+                hazards: [{ x: 110, y: 395, w: 45, h: 20, type: 'laser', dx: 0, dy: 60, speed: 80 }],
+                arrows: [],
+                coins_pickup: [{ x: 195, y: 310 }, { x: 315, y: 270 }, { x: 450, y: 230 }],
+                playerStart: { x: 50, y: 300 },
+                description: 'مختبر كهربائي - ليزر متحرك',
+                flipDelay: 0,
+                doubleFlip: false,
+                adaptive: false,
+                fullChaos: false,
+                weather: 'clear',
+                time: 'night',
+                boss: false,
+                secret: false,
+                lasers: [{ x: 110, y: 375, w: 45, h: 6, dx: 0, dy: 60, speed: 80, startY: 375 }]
+            }, {
+                name: 'Secret Chamber',
+                platforms: [{ x: 30, y: 370, w: 70, h: 18, type: 'solid' }, { x: 160, y: 340, w: 50, h: 18,
+                        type: 'solid' }, { x: 290, y: 305, w: 50, h: 18, type: 'solid' }, { x: 420, y: 265, w: 55,
+                        h: 18, type: 'goal' }
+                ],
+                hazards: [{ x: 120, y: 395, w: 40, h: 20, type: 'spike' }, { x: 330, y: 355, w: 35, h: 18,
+                    type: 'spike' }],
+                arrows: [],
+                coins_pickup: [{ x: 185, y: 320 }, { x: 315, y: 285 }, { x: 445, y: 245 }],
+                playerStart: { x: 50, y: 310 },
+                description: 'غرفة سرية - ابحث عن المفتاح!',
+                flipDelay: 0.5,
+                doubleFlip: false,
+                adaptive: false,
+                fullChaos: false,
+                weather: 'clear',
+                time: 'night',
+                boss: false,
+                secret: true,
+                hasKey: true,
+                hasDoor: true,
+                keyPos: { x: 200, y: 310 },
+                doorPos: { x: 380, y: 265 }
+            }, {
+                name: 'Boss: Shadow Lord',
+                platforms: [{ x: 30, y: 370, w: 120, h: 18, type: 'solid' }, { x: 280, y: 370, w: 120, h: 18,
+                        type: 'solid' }, { x: 530, y: 370, w: 120, h: 18, type: 'solid' }, { x: 720, y: 300,
+                        w: 60, h: 18, type: 'goal' }
+                ],
+                hazards: [],
+                arrows: [],
+                coins_pickup: [{ x: 350, y: 350 }, { x: 560, y: 350 }],
+                playerStart: { x: 60, y: 310 },
+                description: '⚔️ الزعيم: لورد الظل - تجاوز الفوضى!',
+                flipDelay: 0,
+                doubleFlip: true,
+                adaptive: true,
+                fullChaos: true,
+                weather: 'clear',
+                time: 'night',
+                boss: true,
+                secret: false,
+                bossHealth: 5,
+                bossPattern: 'spread'
+            }, {
+                name: 'Boss: Chaos Engine',
+                platforms: [{ x: 30, y: 365, w: 100, h: 18, type: 'solid' }, { x: 250, y: 330, w: 60, h: 18,
+                        type: 'crumbling' }, { x: 430, y: 295, w: 60, h: 18, type: 'disappearing' }, { x: 600,
+                        y: 260, w: 60, h: 18, type: 'solid' }, { x: 740, y: 220, w: 50, h: 18, type: 'goal' }
+                ],
+                hazards: [{ x: 180, y: 400, w: 50, h: 20, type: 'laser', dx: 80, dy: 0, speed: 60 }],
+                arrows: [],
+                coins_pickup: [{ x: 280, y: 310 }, { x: 460, y: 275 }, { x: 630, y: 240 }],
+                playerStart: { x: 55, y: 305 },
+                description: '⚔️ الزعيم: محرك الفوضى - تحدٍ مطلق!',
+                flipDelay: 1.2,
+                doubleFlip: true,
+                adaptive: true,
+                fullChaos: true,
+                weather: 'rain',
+                time: 'night',
+                boss: true,
+                secret: false,
+                bossHealth: 7,
+                bossPattern: 'chaos',
+                lasers: [{ x: 180, y: 380, w: 50, h: 6, dx: 80, dy: 0, speed: 60, startX: 180 }]
+            }, {
+                name: 'Windy Canyon',
+                platforms: [{ x: 25, y: 365, w: 70, h: 18, type: 'solid' }, { x: 155, y: 335, w: 50, h: 18,
+                        type: 'solid' }, { x: 275, y: 300, w: 50, h: 18, type: 'solid' }, { x: 405, y: 260, w: 55,
+                        h: 18, type: 'goal' }
+                ],
+                hazards: [{ x: 100, y: 400, w: 40, h: 20, type: 'spike' }],
+                arrows: [],
+                coins_pickup: [{ x: 180, y: 315 }, { x: 300, y: 280 }, { x: 430, y: 240 }],
+                playerStart: { x: 45, y: 305 },
+                description: 'وادي عاصف - رياح قوية تدفعك',
+                flipDelay: 0,
+                doubleFlip: false,
+                adaptive: false,
+                fullChaos: false,
+                weather: 'wind',
+                time: 'day',
+                boss: false,
+                secret: false,
+                windForce: 80
+            }, {
+                name: 'Frostbite',
+                platforms: [{ x: 20, y: 370, w: 60, h: 18, type: 'ice' }, { x: 140, y: 340, w: 45, h: 18,
+                        type: 'ice' }, { x: 255, y: 305, w: 45, h: 18, type: 'ice' }, { x: 375, y: 268, w: 50,
+                        h: 18, type: 'ice' }, { x: 505, y: 230, w: 55, h: 18, type: 'goal' }
+                ],
+                hazards: [{ x: 80, y: 405, w: 45, h: 18, type: 'spike' }, { x: 195, y: 375, w: 40, h: 16,
+                    type: 'spike' }, { x: 310, y: 340, w: 45, h: 18, type: 'spike' }],
+                arrows: [],
+                coins_pickup: [{ x: 160, y: 320 }, { x: 275, y: 285 }, { x: 395, y: 248 }, { x: 525, y: 210 }],
+                playerStart: { x: 35, y: 310 },
+                description: 'ليلة جليدية - زلق شديد',
+                flipDelay: 0,
+                doubleFlip: false,
+                adaptive: false,
+                fullChaos: false,
+                weather: 'snow',
+                time: 'night',
+                boss: false,
+                secret: false
+            }, {
+                name: 'Volcano Core',
+                platforms: [{ x: 25, y: 365, w: 65, h: 18, type: 'solid' }, { x: 150, y: 335, w: 45, h: 18,
+                        type: 'bouncy' }, { x: 265, y: 300, w: 45, h: 18, type: 'solid' }, { x: 385, y: 265,
+                        w: 45, h: 18, type: 'bouncy' }, { x: 510, y: 225, w: 55, h: 18, type: 'goal' }
+                ],
+                hazards: [{ x: 95, y: 398, w: 40, h: 20, type: 'spike' }, { x: 205, y: 368, w: 45, h: 18,
+                    type: 'spike' }, { x: 325, y: 335, w: 40, h: 20, type: 'spike' }, { x: 445, y: 298, w: 45,
+                    h: 18, type: 'spike' }
+                ],
+                arrows: [],
+                coins_pickup: [{ x: 170, y: 315 }, { x: 285, y: 280 }, { x: 405, y: 245 }, { x: 530, y: 205 }],
+                playerStart: { x: 40, y: 305 },
+                description: 'قلب البركان - حرارة وارتداد',
+                flipDelay: 0.8,
+                doubleFlip: false,
+                adaptive: true,
+                fullChaos: false,
+                weather: 'clear',
+                time: 'night',
+                boss: false,
+                secret: false
+            }
+            // NOTE: Level 37 (index 36: "The Mirror World") has been REMOVED.
+        ];
+
+        // ============================================================
+        //  SHOP ITEMS
+        // ============================================================
+        const SHOP_ITEMS = [
+            { id: 'skin_gold', name: 'ذهبي', cost: 15, category: 'skin', desc: 'مظهر ذهبي لامع', color: '#ffd700',
+                flippedColor: '#ffaa00' },
+            { id: 'skin_neon', name: 'نيون بنفسجي', cost: 20, category: 'skin', desc: 'توهج بنفسجي', color: '#bf00ff',
+                flippedColor: '#ff00bf' },
+            { id: 'skin_ghost', name: 'شبح', cost: 25, category: 'skin', desc: 'شفاف جزئياً', color: '#aaddff',
+                flippedColor: '#ffaadd', alpha: 0.65 },
+            { id: 'skin_lava', name: 'حمم', cost: 30, category: 'skin', desc: 'توهج ناري', color: '#ff4400',
+                flippedColor: '#ff8800' },
+            { id: 'skin_ice', name: 'جليد', cost: 18, category: 'skin', desc: 'أزرق جليدي', color: '#00ccff',
+                flippedColor: '#00ffcc' },
+            { id: 'skin_cyber', name: 'سايبر', cost: 35, category: 'skin', desc: 'نيون أخضر', color: '#00ff88',
+                flippedColor: '#ff0088' },
+            { id: 'trail_rainbow', name: 'قوس قزح', cost: 10, category: 'trail', desc: 'ألوان متغيرة',
+            trailType: 'rainbow' },
+            { id: 'trail_fire', name: 'ناري', cost: 10, category: 'trail', desc: 'جزيئات حمراء', trailType: 'fire' },
+            { id: 'trail_stars', name: 'نجوم', cost: 15, category: 'trail', desc: 'بريق أبيض', trailType: 'stars' },
+            { id: 'trail_electric', name: 'كهربائي', cost: 20, category: 'trail', desc: 'شرارات زرقاء',
+            trailType: 'electric' },
+            { id: 'trail_ice', name: 'جليدي', cost: 12, category: 'trail', desc: 'أزرق متلألئ', trailType: 'ice' },
+            { id: 'trail_glow', name: 'متوهج', cost: 18, category: 'trail', desc: 'توهج ذهبي', trailType: 'glow' },
+            { id: 'char_speedy', name: 'السرعة', cost: 20, category: 'char', desc: 'سرعة أعلى', charId: 'speedy' },
+            { id: 'char_jumper', name: 'القافز', cost: 25, category: 'char', desc: 'قفزة إضافية', charId: 'jumper' },
+            { id: 'char_tank', name: 'المدرع', cost: 30, category: 'char', desc: 'مقاومة الجاذبية', charId: 'tank' },
+            { id: 'char_ghost', name: 'الشبح', cost: 35, category: 'char', desc: 'خفة وشفافية', charId: 'ghost' },
+            { id: 'char_neon', name: 'النيون', cost: 40, category: 'char', desc: 'توازن مثالي', charId: 'neon' },
+        ];
+
+        // ============================================================
+        //  ACHIEVEMENTS
+        // ============================================================
+        const ACHIEVEMENTS = {
+            first_death: { name: 'الموت الأول', desc: 'مُت مرة واحدة', icon: '💀', check: s => s.deaths >= 1 },
+            ten_deaths: { name: 'عاشق الموت', desc: 'مُت 10 مرات', icon: '☠️', check: s => s.deaths >= 10 },
+            fifty_deaths: { name: 'لا يموت', desc: 'مُت 50 مرة', icon: '🧟', check: s => s.deaths >= 50 },
+            first_win: { name: 'النصر الأول', desc: 'أكمل أول مرحلة', icon: '🏆', check: s => s.levelsCompleted >= 1 },
+            ten_wins: { name: 'المحارب', desc: 'أكمل 10 مراحل', icon: '⚔️', check: s => s.levelsCompleted >= 10 },
+            fifty_wins: { name: 'الأسطورة', desc: 'أكمل 50 مرحلة', icon: '👑', check: s => s.levelsCompleted >= 50 },
+            coins_100: { name: 'جامع العملات', desc: 'اجمع 100 💎', icon: '💰', check: s => s.totalCoinsCollected >= 100 },
+            coins_500: { name: 'المليونير', desc: 'اجمع 500 💎', icon: '💎', check: s => s.totalCoinsCollected >= 500 },
+            diamonds_10: { name: 'صياد الماسات', desc: 'اجمع 10 💠', icon: '💠', check: s => s.totalDiamondsCollected >=
+                    10 },
+            boss_1: { name: 'قاتل الزعماء', desc: 'اهزم زعيماً واحداً', icon: '⚡', check: s => s.bossDefeated >= 1 },
+            boss_3: { name: 'صياد الزعماء', desc: 'اهزم 3 زعماء', icon: '🔥', check: s => s.bossDefeated >= 3 },
+            secret_1: { name: 'المستكشف', desc: 'افتح مرحلة سرية', icon: '🗝️', check: s => s.secretLevelsUnlocked >= 1 },
+            combo_10: { name: 'سلسلة ذهبية', desc: 'احصل على كومبو 10', icon: '🔥', check: s => s.comboCount >= 10 },
+            combo_25: { name: 'سلسلة أسطورية', desc: 'احصل على كومبو 25', icon: '🌟', check: s => s.comboCount >= 25 },
+        };
+
+        // ============================================================
+        //  MAIN GAME CLASS
+        // ============================================================
+        class FlipPanic {
+            constructor() {
+                this.canvas = document.getElementById('gameCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.canvas.width = G.WIDTH;
+                this.canvas.height = G.HEIGHT;
+
+                this.audio = new AudioEngine();
+                this.particles = new ParticleSystem();
+
+                this.state = SaveSystem.loadAll();
+                this.currentLevel = this.state.currentLevel || 0;
+                this.deaths = this.state.deaths || 0;
+                this.coins = this.state.coins || 0;
+                this.diamonds = this.state.diamonds || 0;
+                this.bestTimes = this.state.bestTimes || {};
+                this.levelStars = this.state.levelStars || {};
+                this.achievements = this.state.achievements || {};
+                this.purchased = this.state.purchased || {};
+                this.equippedSkin = this.state.equippedSkin || null;
+                this.equippedTrail = this.state.equippedTrail || null;
+                this.equippedChar = this.state.equippedChar || null;
+                this.characters = this.state.characters || { default: true };
+                this.totalPlayTime = this.state.totalPlayTime || 0;
+                this.levelsCompleted = this.state.levelsCompleted || 0;
+                this.comboCount = this.state.comboCount || 0;
+                this.totalCoinsCollected = this.state.totalCoinsCollected || 0;
+                this.totalDiamondsCollected = this.state.totalDiamondsCollected || 0;
+                this.bossDefeated = this.state.bossDefeated || 0;
+                this.secretLevelsUnlocked = this.state.secretLevelsUnlocked || 0;
+                this.dailyClaimed = this.state.dailyClaimed || 0;
+                this.wheelLastSpin = this.state.wheelLastSpin || 0;
+
+                // Player
+                this.player = {
+                    x: 50,
+                    y: 300,
+                    vx: 0,
+                    vy: 0,
+                    width: G.PLAYER_SIZE,
+                    height: G.PLAYER_SIZE,
+                    onGround: false,
+                    color: '#00d4ff',
+                    normalColor: '#00d4ff',
+                    flippedColor: '#ff3355',
+                    alpha: 1.0,
+                    trail: [],
+                    trailType: 'default',
+                    extraJumps: 0,
+                    jumpCount: 0,
+                    charId: 'default',
+                    speedMult: 1.0,
+                    jumpMult: 1.0,
+                    antiGravity: false,
+                    eyeBlink: 0,
+                };
+
+                this.platforms = [];
+                this.hazards = [];
+                this.goal = null;
+                this.arrows = [];
+                this.coinsPickup = [];
+                this.keys = [];
+                this.doors = [];
+                this.enemies = [];
+                this.lasers = [];
+                this.movingPlatforms = [];
+                this.boss = null;
+
+                this.flipped = false;
+                this.warningActive = false;
+                this.flipAccum = 0;
+                this.doubleFlipPending = false;
+                this.doubleFlipTimer = 0;
+                this.chaosActive = false;
+                this.chaosTimer = 0;
+
+                this.screenShake = 0;
+                this.flashAlpha = 0;
+                this.crossAlpha = 0;
+                this.screenTransition = 0;
+                this.misleadTimer = 0;
+                this.floatingTexts = [];
+                this.deathCooldown = 0;
+                this.comboTimer = 0;
+                this.comboActive = 0;
+                this.gameState = 'menu';
+                this.levelTime = 0;
+                this.bestLevelTime = Infinity;
+                this.windForce = 0;
+                this.weatherParticles = [];
+                this.weatherType = 'clear';
+                this.timeOfDay = 'day';
+                this.lastTime = 0;
+
+                this.keys = { left: false, right: false, jump: false };
+                this.touch = { left: false, right: false, jump: false };
+
+                this.setupUI();
+                this.loadLevel(this.currentLevel);
+                this.applyEquipped();
+                this.updateUI();
+                this.renderShop();
+                this.updateMenuStats();
+                this.renderMap();
+
+                this.lastTime = performance.now();
+                this.gameLoop(this.lastTime);
+
+                document.addEventListener('click', () => {
+                    this.audio.init();
+                    if (!this.audio.muted) this.audio.startMusic();
+                }, { once: true });
+            }
+
+            // ===== UI SETUP =====
+            setupUI() {
+                const setupTouch = (id, onS, onE) => {
+                    const el = document.getElementById(id);
+                    if (!el) return;
+                    el.addEventListener('pointerdown', e => { e.preventDefault();
+                        this.audio.init();
+                        onS(); });
+                    el.addEventListener('pointerup', e => { e.preventDefault();
+                        onE(); });
+                    el.addEventListener('pointerleave', () => onE());
+                    el.addEventListener('pointercancel', () => onE());
+                };
+                setupTouch('leftBtn', () => this.touch.left = true, () => this.touch.left = false);
+                setupTouch('rightBtn', () => this.touch.right = true, () => this.touch.right = false);
+                setupTouch('jumpBtn', () => { this.touch.jump = true;
+                    this.audio.sfxJump(); }, () => this.touch.jump = false);
+
+                document.addEventListener('keydown', e => {
+                    this.audio.init();
+                    if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'w') { e.preventDefault();
+                        this.keys.jump = true; }
+                    if (e.key === 'ArrowLeft' || e.key === 'a') this.keys.left = true;
+                    if (e.key === 'ArrowRight' || e.key === 'd') this.keys.right = true;
+                });
+                document.addEventListener('keyup', e => {
+                    if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'w') this.keys.jump = false;
+                    if (e.key === 'ArrowLeft' || e.key === 'a') this.keys.left = false;
+                    if (e.key === 'ArrowRight' || e.key === 'd') this.keys.right = false;
+                });
+
+                document.getElementById('playBtn').addEventListener('click', () => {
+                    this.audio.init();
+                    this.uiStart('startScreen').classList.add('hidden');
+                    this.uiStart('shopScreen').classList.add('hidden');
+                    this.uiStart('mapScreen').classList.add('hidden');
+                    this.uiStart('wheelScreen').classList.add('hidden');
+                    this.gameState = 'playing';
+                    this.loadLevel(this.currentLevel);
+                    this.updateUI();
+                    this.saveAll();
+                });
+
+                document.getElementById('continueBtn').addEventListener('click', () => {
+                    this.audio.init();
+                    this.uiStart('startScreen').classList.add('hidden');
+                    this.uiStart('shopScreen').classList.add('hidden');
+                    this.uiStart('mapScreen').classList.add('hidden');
+                    this.uiStart('wheelScreen').classList.add('hidden');
+                    this.gameState = 'playing';
+                    this.loadLevel(this.currentLevel);
+                    this.updateUI();
+                    this.saveAll();
+                });
+
+                document.getElementById('mapBtn').addEventListener('click', () => {
+                    this.audio.init();
+                    this.uiStart('startScreen').classList.add('hidden');
+                    this.uiStart('mapScreen').classList.remove('hidden');
+                    this.uiStart('shopScreen').classList.add('hidden');
+                    this.uiStart('wheelScreen').classList.add('hidden');
+                    this.gameState = 'map';
+                    this.renderMap();
+                });
+
+                document.getElementById('backFromMap').addEventListener('click', () => {
+                    this.uiStart('mapScreen').classList.add('hidden');
+                    this.uiStart('startScreen').classList.remove('hidden');
+                    this.gameState = 'menu';
+                    this.updateMenuStats();
+                });
+
+                document.getElementById('shopBtn').addEventListener('click', () => {
+                    this.audio.init();
+                    this.uiStart('startScreen').classList.add('hidden');
+                    this.uiStart('shopScreen').classList.remove('hidden');
+                    this.uiStart('mapScreen').classList.add('hidden');
+                    this.uiStart('wheelScreen').classList.add('hidden');
+                    this.gameState = 'shop';
+                    this.uiStart('menuBtn').style.display = 'none';
+                    this.renderShop();
+                });
+
+                document.getElementById('backFromShop').addEventListener('click', () => {
+                    this.uiStart('shopScreen').classList.add('hidden');
+                    this.uiStart('startScreen').classList.remove('hidden');
+                    this.gameState = 'menu';
+                    this.uiStart('menuBtn').style.display = 'none';
+                    this.updateMenuStats();
+                });
+
+                document.getElementById('wheelBtn').addEventListener('click', () => {
+                    this.audio.init();
+                    this.uiStart('startScreen').classList.add('hidden');
+                    this.uiStart('wheelScreen').classList.remove('hidden');
+                    this.uiStart('shopScreen').classList.add('hidden');
+                    this.uiStart('mapScreen').classList.add('hidden');
+                    this.gameState = 'wheel';
+                    this.initWheel();
+                });
+
+                document.getElementById('closeWheelBtn').addEventListener('click', () => {
+                    this.uiStart('wheelScreen').classList.add('hidden');
+                    this.uiStart('startScreen').classList.remove('hidden');
+                    this.gameState = 'menu';
+                    this.updateMenuStats();
+                });
+
+                document.getElementById('spinWheelBtn').addEventListener('click', () => {
+                    this.spinWheel();
+                });
+
+                document.getElementById('muteBtn').addEventListener('click', () => {
+                    this.audio.toggleMute();
+                });
+
+                document.getElementById('menuBtn').addEventListener('click', () => {
+                    this.goToMainMenu();
+                });
+
+                // Skip button (in-game)
+                document.getElementById('skipBtn').addEventListener('click', () => {
+                    this.audio.init();
+                    this.trySkipLevel();
+                });
+
+                // Map skip button
+                document.getElementById('mapSkipBtn').addEventListener('click', () => {
+                    this.audio.init();
+                    this.trySkipLevel();
+                });
+
+                document.getElementById('tabSkins').addEventListener('click', () => {
+                    this.shopTab = 'skin';
+                    document.getElementById('tabSkins').classList.add('active');
+                    document.getElementById('tabTrails').classList.remove('active');
+                    document.getElementById('tabChars').classList.remove('active');
+                    this.renderShop();
+                });
+                document.getElementById('tabTrails').addEventListener('click', () => {
+                    this.shopTab = 'trail';
+                    document.getElementById('tabTrails').classList.add('active');
+                    document.getElementById('tabSkins').classList.remove('active');
+                    document.getElementById('tabChars').classList.remove('active');
+                    this.renderShop();
+                });
+                document.getElementById('tabChars').addEventListener('click', () => {
+                    this.shopTab = 'char';
+                    document.getElementById('tabChars').classList.add('active');
+                    document.getElementById('tabSkins').classList.remove('active');
+                    document.getElementById('tabTrails').classList.remove('active');
+                    this.renderShop();
+                });
+
+                document.getElementById('retryBtn').addEventListener('click', () => {
+                    this.triggerTransition(() => {
+                        this.loadLevel(this.currentLevel);
+                        this.saveAll();
+                    });
+                });
+                document.getElementById('nextBtn').addEventListener('click', () => {
+                    this.currentLevel++;
+                    this.triggerTransition(() => {
+                        this.loadLevel(this.currentLevel);
+                        this.saveAll();
+                    });
+                });
+
+                if (this.levelsCompleted > 0 || this.currentLevel > 0) {
+                    document.getElementById('continueBtn').style.display = 'inline-block';
+                }
+            }
+
+            uiStart(id) {
+                if (id.startsWith('#')) return document.querySelector(id);
+                const el = document.getElementById(id);
+                return el || document.getElementById(id);
+            }
+
+            // ===== SAVE =====
+            saveAll() {
+                const data = {
+                    currentLevel: this.currentLevel,
+                    deaths: this.deaths,
+                    coins: this.coins,
+                    diamonds: this.diamonds,
+                    bestTimes: this.bestTimes,
+                    levelStars: this.levelStars,
+                    achievements: this.achievements,
+                    dailyClaimed: this.dailyClaimed,
+                    wheelLastSpin: this.wheelLastSpin,
+                    purchased: this.purchased,
+                    equippedSkin: this.equippedSkin,
+                    equippedTrail: this.equippedTrail,
+                    equippedChar: this.equippedChar,
+                    characters: this.characters,
+                    totalPlayTime: this.totalPlayTime,
+                    levelsCompleted: this.levelsCompleted,
+                    comboCount: this.comboCount,
+                    totalCoinsCollected: this.totalCoinsCollected,
+                    totalDiamondsCollected: this.totalDiamondsCollected,
+                    bossDefeated: this.bossDefeated,
+                    secretLevelsUnlocked: this.secretLevelsUnlocked,
+                };
+                SaveSystem.saveAll(data);
+                Object.assign(this.state, data);
+            }
+
+            // ===== APPLY EQUIPPED =====
+            applyEquipped() {
+                this.player.normalColor = '#00d4ff';
+                this.player.flippedColor = '#ff3355';
+                this.player.alpha = 1.0;
+                this.player.trailType = 'default';
+                this.player.charId = 'default';
+                this.player.extraJumps = 0;
+                this.player.speedMult = 1.0;
+                this.player.jumpMult = 1.0;
+                this.player.antiGravity = false;
+
+                if (this.equippedSkin) {
+                    const si = SHOP_ITEMS.find(s => s.id === this.equippedSkin && s.category === 'skin');
+                    if (si && this.purchased[this.equippedSkin]) {
+                        if (si.color) this.player.normalColor = si.color;
+                        if (si.flippedColor) this.player.flippedColor = si.flippedColor;
+                        if (si.alpha) this.player.alpha = si.alpha;
+                    }
+                }
+
+                if (this.equippedTrail) {
+                    const ti = SHOP_ITEMS.find(s => s.id === this.equippedTrail && s.category === 'trail');
+                    if (ti && this.purchased[this.equippedTrail]) {
+                        if (ti.trailType) this.player.trailType = ti.trailType;
+                    }
+                }
+
+                if (this.equippedChar) {
+                    const ch = CHARACTERS[this.equippedChar];
+                    if (ch && this.characters[this.equippedChar]) {
+                        this.player.charId = this.equippedChar;
+                        this.player.speedMult = ch.speed || 1.0;
+                        this.player.jumpMult = ch.jump || 1.0;
+                        this.player.extraJumps = ch.extraJumps || 0;
+                        this.player.antiGravity = ch.antiGravity || false;
+                        if (ch.color) this.player.normalColor = ch.color;
+                        if (ch.flippedColor) this.player.flippedColor = ch.flippedColor;
+                    }
+                }
+
+                this.player.color = this.player.normalColor;
+            }
+
+            // ===== LOAD LEVEL =====
+            loadLevel(index) {
+                if (index >= LEVEL_DATA.length) {
+                    this.showVictory();
+                    return;
+                }
+
+                const lvl = LEVEL_DATA[index];
+                if (!lvl) return;
+
+                this.currentLevel = index;
+                this.levelTime = 0;
+                this.comboActive = 0;
+                this.comboTimer = 0;
+
+                this.platforms = lvl.platforms.map(p => ({
+                    ...p,
+                    originalY: p.y,
+                    disappearTimer: 0,
+                    crumbleTimer: 0,
+                    crumbled: false,
+                    chaosOffset: 0,
+                    startX: p.x || 0,
+                    startY: p.y || 0,
+                    moveTimer: Math.random() * Math.PI * 2
+                }));
+
+                this.hazards = (lvl.hazards || []).map(h => ({ ...h }));
+                this.arrows = lvl.arrows || [];
+                this.coinsPickup = (lvl.coins_pickup || []).map(c => ({
+                    x: c.x,
+                    y: c.y,
+                    collected: false,
+                    bobOffset: Math.random() * Math.PI * 2
+                }));
+                this.goal = this.platforms.find(p => p.type === 'goal') || null;
+
+                this.movingPlatforms = (lvl.movingPlatforms || []).map(mp => ({
+                    ...mp,
+                    startX: mp.startX || mp.x,
+                    startY: mp.startY || mp.y,
+                    timer: Math.random() * Math.PI * 2
+                }));
+
+                this.lasers = (lvl.lasers || []).map(l => ({
+                    ...l,
+                    startX: l.startX || l.x,
+                    startY: l.startY || l.y,
+                    timer: 0
+                }));
+
+                this.keys = [];
+                this.doors = [];
+                if (lvl.hasKey) {
+                    this.keys.push({ x: lvl.keyPos.x, y: lvl.keyPos.y, collected: false, radius: 10 });
+                }
+                if (lvl.hasDoor) {
+                    this.doors.push({ x: lvl.doorPos.x, y: lvl.doorPos.y, w: 30, h: 40, open: false });
+                }
+
+                this.enemies = (lvl.enemies || []).map(e => ({
+                    ...e,
+                    startX: e.x,
+                    startY: e.y,
+                    timer: 0,
+                    dir: 1
+                }));
+
+                this.boss = null;
+                if (lvl.boss) {
+                    this.boss = {
+                        x: G.WIDTH / 2 - 40,
+                        y: 80,
+                        w: 80,
+                        h: 80,
+                        health: lvl.bossHealth || 5,
+                        maxHealth: lvl.bossHealth || 5,
+                        pattern: lvl.bossPattern || 'spread',
+                        timer: 0,
+                        phase: 0,
+                        alive: true,
+                        hitTimer: 0
+                    };
+                }
+
+                this.windForce = lvl.windForce || 0;
+                this.weatherType = lvl.weather || 'clear';
+                this.timeOfDay = lvl.time || 'day';
+                this.weatherParticles = [];
+
+                const ps = lvl.playerStart;
+                this.player.x = ps.x;
+                this.player.y = ps.y;
+                this.player.vx = 0;
+                this.player.vy = 0;
+                this.player.onGround = false;
+                this.player.color = this.player.normalColor;
+                this.player.jumpCount = 0;
+                this.player.trail = [];
+
+                this.flipped = false;
+                this.warningActive = false;
+                this.flipAccum = 0;
+                this.doubleFlipPending = false;
+                this.doubleFlipTimer = 0;
+                this.chaosActive = false;
+                this.chaosTimer = 0;
+
+                this.screenShake = 0;
+                this.flashAlpha = 0;
+                this.crossAlpha = 0;
+                this.deathCooldown = 0;
+                this.misleadTimer = 0;
+                this.particles.clear();
+                this.floatingTexts = [];
+
+                this.gameState = 'playing';
+                this.uiStart('retryBtn').style.display = 'none';
+                this.uiStart('nextBtn').style.display = 'none';
+                this.uiStart('menuBtn').style.display = 'inline-block';
+                this.uiStart('skipBtn').style.display = 'inline-block';
+                this.uiStart('misleadMsg').textContent = '';
+
+                if (lvl.secret && !this.secretLevelsUnlocked) {
+                    this.secretLevelsUnlocked++;
+                    this.showAchievement('🗝️', 'مرحلة سرية مكتشفة!');
+                }
+
+                this.updateUI();
+                this.saveAll();
+                this.renderMap();
+            }
+
+            // ===== TRY SKIP LEVEL =====
+            trySkipLevel() {
+                if (this.gameState !== 'playing' && this.gameState !== 'map') return;
+                const cost = G.SKIP_COST;
+                if (this.coins < cost) {
+                    this.uiStart('misleadMsg').textContent = `❌ تحتاج ${cost} 💎 للتخطي!`;
+                    this.misleadTimer = 2;
+                    return;
+                }
+                if (this.currentLevel >= LEVEL_DATA.length - 1) {
+                    this.uiStart('misleadMsg').textContent = '⚠️ هذه آخر مرحلة!';
+                    this.misleadTimer = 2;
+                    return;
+                }
+
+                // Confirm skip
+                if (this.gameState === 'playing') {
+                    if (!confirm(`تخطي المرحلة الحالية مقابل ${cost} 💎؟`)) return;
+                }
+
+                this.coins -= cost;
+                this.audio.sfxSkip();
+                this.particles.emit(G.WIDTH / 2, G.HEIGHT / 2, '#ffdd00', 20);
+                this.floatingTexts.push({ x: G.WIDTH / 2, y: G.HEIGHT / 2 - 20, text: `⏭ تخطي! -${cost} 💎`,
+                    life: 2, color: '#ffdd00' });
+                this.saveAll();
+                this.updateUI();
+                this.updateMenuStats();
+
+                // Advance to next level
+                this.currentLevel++;
+                this.triggerTransition(() => {
+                    this.loadLevel(this.currentLevel);
+                    this.saveAll();
+                    this.renderMap();
+                });
+            }
+
+            // ===== RENDER MAP =====
+            renderMap() {
+                const grid = document.getElementById('mapGrid');
+                grid.innerHTML = '';
+                const total = LEVEL_DATA.length;
+                let totalStars = 0;
+                for (let i = 0; i < total; i++) {
+                    const stars = this.levelStars[i] || 0;
+                    totalStars += stars;
+                }
+                document.getElementById('mapCoinDisplay').textContent = this.coins;
+                document.getElementById('mapStarCount').textContent = totalStars;
+
+                for (let i = 0; i < total; i++) {
+                    const lvl = LEVEL_DATA[i];
+                    const node = document.createElement('div');
+                    node.className = 'map-node';
+
+                    const isCompleted = this.levelsCompleted > i || this.levelStars[i] > 0;
+                    const isCurrent = i === this.currentLevel;
+                    const isUnlocked = i <= this.currentLevel || isCompleted;
+
+                    if (isCurrent) node.classList.add('current');
+                    else if (isCompleted) node.classList.add('completed');
+                    else if (isUnlocked) node.classList.add('unlocked');
+                    else node.classList.add('locked');
+
+                    const stars = this.levelStars[i] || 0;
+                    const starStr = '⭐'.repeat(Math.min(stars, 3));
+
+                    let nameDisplay = lvl.name.length > 10 ? lvl.name.substring(0, 8) + '…' : lvl.name;
+                    if (lvl.boss) nameDisplay = '👹 ' + nameDisplay;
+                    if (lvl.secret) nameDisplay = '🔮 ' + nameDisplay;
+
+                    node.innerHTML = `
+                        <div class="node-num">${i+1}</div>
+                        <div class="node-name">${nameDisplay}</div>
+                        <div class="node-stars">${starStr}</div>
+                        ${!isUnlocked ? '<div class="lock-icon">🔒</div>' : ''}
+                    `;
+
+                    if (isUnlocked) {
+                        node.addEventListener('click', () => {
+                            this.audio.init();
+                            if (i === this.currentLevel) {
+                                // reload current
+                                this.triggerTransition(() => {
+                                    this.loadLevel(i);
+                                    this.saveAll();
+                                });
+                            } else {
+                                this.currentLevel = i;
+                                this.triggerTransition(() => {
+                                    this.loadLevel(i);
+                                    this.saveAll();
+                                });
+                            }
+                            // Close map
+                            this.uiStart('mapScreen').classList.add('hidden');
+                            this.gameState = 'playing';
+                            this.uiStart('startScreen').classList.add('hidden');
+                            this.uiStart('menuBtn').style.display = 'inline-block';
+                            this.uiStart('skipBtn').style.display = 'inline-block';
+                        });
+                    }
+
+                    grid.appendChild(node);
+                }
+
+                // Update skip button state
+                const canSkip = this.coins >= G.SKIP_COST && this.currentLevel < LEVEL_DATA.length - 1;
+                document.getElementById('mapSkipBtn').disabled = !canSkip;
+                document.getElementById('mapSkipBtn').textContent = canSkip ?
+                    `⏭ تخطي المرحلة (${G.SKIP_COST}💎)` :
+                    `⏭ تخطي (${G.SKIP_COST}💎) - غير متاح`;
+            }
+
+            // ===== TRIGGER TRANSITION =====
+            triggerTransition(cb) {
+                this.screenTransition = 1;
+                this.uiStart('transitionOverlay').classList.add('active');
+                setTimeout(() => {
+                    cb();
+                    this.lastTime = performance.now();
+                    this.flipAccum = 0;
+                    setTimeout(() => {
+                        this.screenTransition = 0;
+                        this.uiStart('transitionOverlay').classList.remove('active');
+                    }, 120);
+                }, 200);
+            }
+
+            // ===== GO TO MAIN MENU =====
+            goToMainMenu() {
+                this.gameState = 'menu';
+                this.uiStart('startScreen').classList.remove('hidden');
+                this.uiStart('shopScreen').classList.add('hidden');
+                this.uiStart('mapScreen').classList.add('hidden');
+                this.uiStart('wheelScreen').classList.add('hidden');
+                this.uiStart('menuBtn').style.display = 'none';
+                this.uiStart('skipBtn').style.display = 'none';
+                this.uiStart('retryBtn').style.display = 'none';
+                this.uiStart('nextBtn').style.display = 'none';
+                this.uiStart('misleadMsg').textContent = '';
+                this.particles.clear();
+                this.player.trail = [];
+                this.floatingTexts = [];
+                this.updateUI();
+                this.updateMenuStats();
+                this.saveAll();
+                this.renderMap();
+                if (this.levelsCompleted > 0 || this.currentLevel > 0) {
+                    document.getElementById('continueBtn').style.display = 'inline-block';
+                } else {
+                    document.getElementById('continueBtn').style.display = 'none';
+                }
+            }
+
+            // ===== SHOW VICTORY =====
+            showVictory() {
+                this.uiStart('misleadMsg').textContent = '🎉 لقد تغلبت على كل الفوضى! أنت أسطورة! 🎉';
+                this.misleadTimer = 999;
+                this.uiStart('retryBtn').style.display = 'inline-block';
+                this.uiStart('retryBtn').textContent = 'من البداية';
+                this.uiStart('retryBtn').onclick = () => {
+                    this.currentLevel = 0;
+                    this.deaths = 0;
+                    this.coins = 0;
+                    this.diamonds = 0;
+                    this.triggerTransition(() => this.loadLevel(0));
+                    this.saveAll();
+                };
+                this.uiStart('nextBtn').style.display = 'none';
+                this.uiStart('menuBtn').style.display = 'inline-block';
+                this.uiStart('skipBtn').style.display = 'none';
+                this.audio.sfxWin();
+                this.gameState = 'win';
+            }
+
+            // ===== WIN LEVEL =====
+            winLevel() {
+                if (this.gameState !== 'playing') return;
+                this.gameState = 'win';
+
+                const reward = 10 + Math.floor(Math.random() * 5);
+                this.coins += reward;
+                this.totalCoinsCollected += reward;
+                this.levelsCompleted++;
+
+                if (this.boss && this.boss.alive === false) {
+                    this.bossDefeated++;
+                    this.diamonds += 3;
+                    this.totalDiamondsCollected += 3;
+                    this.audio.sfxBoss();
+                    this.floatingTexts.push({ x: G.WIDTH / 2, y: G.HEIGHT / 2 - 40, text: '⚔️ زعيم مهزوم! +3 💠',
+                        life: 3, color: '#ff44aa' });
+                }
+
+                this.audio.sfxWin();
+                this.particles.emit(this.player.x + this.player.width / 2, this.player.y + this.player.height / 2,
+                    '#ffdd00', 30);
+                this.particles.emit(this.player.x + this.player.width / 2, this.player.y + this.player.height / 2,
+                    '#ffffff', 12);
+
+                this.floatingTexts.push({
+                    x: this.player.x + this.player.width / 2,
+                    y: this.player.y - 20,
+                    text: `+${reward} 💎`,
+                    life: 2.5,
+                    color: '#ffdd00'
+                });
+
+                const stars = this.calculateStars();
+                this.levelStars[this.currentLevel] = Math.max(this.levelStars[this.currentLevel] || 0, stars);
+
+                if (this.levelTime < (this.bestTimes[this.currentLevel] || Infinity)) {
+                    this.bestTimes[this.currentLevel] = this.levelTime;
+                }
+
+                this.uiStart('misleadMsg').textContent = `✅ نجحت! +${reward} 💎 ⭐${'⭐'.repeat(stars)}`;
+                this.misleadTimer = 3;
+
+                this.checkAchievements();
+
+                if (this.currentLevel < LEVEL_DATA.length - 1) {
+                    this.uiStart('nextBtn').style.display = 'inline-block';
+                    this.uiStart('nextBtn').onclick = () => {
+                        this.currentLevel++;
+                        this.triggerTransition(() => this.loadLevel(this.currentLevel));
+                        this.saveAll();
+                        this.renderMap();
+                    };
+                } else {
+                    this.uiStart('nextBtn').style.display = 'none';
+                    setTimeout(() => this.showVictory(), 1500);
+                }
+
+                this.uiStart('retryBtn').style.display = 'inline-block';
+                this.uiStart('retryBtn').textContent = 'إعادة المرحلة';
+                this.uiStart('retryBtn').onclick = () => {
+                    this.triggerTransition(() => this.loadLevel(this.currentLevel));
+                    this.saveAll();
+                    this.renderMap();
+                };
+                this.uiStart('menuBtn').style.display = 'inline-block';
+                this.uiStart('skipBtn').style.display = 'none';
+
+                this.updateUI();
+                this.saveAll();
+                this.renderMap();
+            }
+
+            // ===== CALCULATE STARS =====
+            calculateStars() {
+                const lvl = LEVEL_DATA[this.currentLevel];
+                if (!lvl) return 1;
+                let stars = 3;
+                if (this.deaths > 5) stars = 1;
+                else if (this.deaths > 2) stars = 2;
+                if (this.levelTime > 30) stars = Math.max(1, stars - 1);
+                return Math.max(1, Math.min(3, stars));
+            }
+
+            // ===== KILL PLAYER =====
+            killPlayer() {
+                if (this.deathCooldown > 0 || this.gameState !== 'playing') return;
+                this.deaths++;
+                this.deathCooldown = 0.5;
+                this.audio.sfxDie();
+                this.screenShake = 18;
+                this.flashAlpha = 0.6;
+                this.crossAlpha = 1.4;
+                this.particles.emit(this.player.x + this.player.width / 2, this.player.y + this.player.height / 2,
+                    '#ff0055', 25);
+                this.particles.emit(this.player.x + this.player.width / 2, this.player.y + this.player.height / 2,
+                    '#ffffff', 10);
+                this.updateUI();
+                this.saveAll();
+
+                this.checkAchievements();
+
+                this.triggerTransition(() => {
+                    this.comboActive = 0;
+                    this.comboTimer = 0;
+                    this.loadLevel(this.currentLevel);
+                    this.saveAll();
+                    this.renderMap();
+                });
+            }
+
+            // ===== CHECK ACHIEVEMENTS =====
+            checkAchievements() {
+                const state = {
+                    deaths: this.deaths,
+                    levelsCompleted: this.levelsCompleted,
+                    totalCoinsCollected: this.totalCoinsCollected,
+                    totalDiamondsCollected: this.totalDiamondsCollected,
+                    bossDefeated: this.bossDefeated,
+                    secretLevelsUnlocked: this.secretLevelsUnlocked,
+                    comboCount: this.comboActive,
+                };
+                for (const [id, ach] of Object.entries(ACHIEVEMENTS)) {
+                    if (!this.achievements[id] && ach.check(state)) {
+                        this.achievements[id] = true;
+                        this.showAchievement(ach.icon, `${ach.name}: ${ach.desc}`);
+                        this.audio.sfxBuy();
+                    }
+                }
+                this.saveAll();
+                this.updateMenuStats();
+            }
+
+            // ===== SHOW ACHIEVEMENT TOAST =====
+            showAchievement(icon, text) {
+                const toast = this.uiStart('achievementToast');
+                this.uiStart('achToastText').textContent = `${icon} ${text}`;
+                toast.classList.add('show');
+                clearTimeout(this._achTimeout);
+                this._achTimeout = setTimeout(() => toast.classList.remove('show'), 2800);
+            }
+
+            // ===== UPDATE UI =====
+            updateUI() {
+                this.uiStart('hudCoinVal').textContent = this.coins;
+                this.uiStart('hudDiamondVal').textContent = this.diamonds;
+                const lvl = LEVEL_DATA[this.currentLevel];
+                if (lvl) {
+                    this.uiStart('levelDisplay').textContent = `مرحلة ${this.currentLevel+1}: ${lvl.name}`;
+                } else {
+                    this.uiStart('levelDisplay').textContent = 'النهاية!';
+                }
+                this.uiStart('deathDisplay').textContent = `💀 ${this.deaths}`;
+                this.uiStart('comboCount').textContent = this.comboActive;
+                this.uiStart('comboDisplay').classList.toggle('active', this.comboActive > 2);
+                const hc = this.uiStart('hudCoin');
+                hc.classList.add('bump');
+                setTimeout(() => hc.classList.remove('bump'), 150);
+
+                // Update skip button
+                const canSkip = this.coins >= G.SKIP_COST && this.currentLevel < LEVEL_DATA.length - 1;
+                const skipBtn = this.uiStart('skipBtn');
+                skipBtn.style.display = (this.gameState === 'playing') ? 'inline-block' : 'none';
+                skipBtn.textContent = canSkip ? `⏭ تخطي (${G.SKIP_COST}💎)` : `⏭ تخطي (${G.SKIP_COST}💎)`;
+                skipBtn.style.opacity = canSkip ? '1' : '0.5';
+            }
+
+            updateMenuStats() {
+                document.getElementById('menuDeaths').textContent = this.deaths;
+                document.getElementById('menuCoins').textContent = this.coins;
+                document.getElementById('menuDiamonds').textContent = this.diamonds;
+                const achCount = Object.values(this.achievements).filter(v => v).length;
+                document.getElementById('menuAchievements').textContent = achCount;
+            }
+
+            // ===== SHOP =====
+            shopTab = 'skin';
+
+            renderShop() {
+                const div = document.getElementById('shopItems');
+                div.innerHTML = '';
+                document.getElementById('shopCurrency').textContent =
+                    `💎 عملات: ${this.coins} &nbsp; 💠 ماسات: ${this.diamonds}`;
+
+                const items = SHOP_ITEMS.filter(i => i.category === this.shopTab);
+                items.forEach(item => {
+                    const owned = this.purchased[item.id];
+                    const isEq = (item.category === 'skin' && this.equippedSkin === item.id) ||
+                        (item.category === 'trail' && this.equippedTrail === item.id) ||
+                        (item.category === 'char' && this.equippedChar === item.id);
+
+                    const d = document.createElement('div');
+                    d.className = 'shop-item' + (isEq ? ' equipped' : '');
+
+                    let btnHTML = '';
+                    if (owned) {
+                        btnHTML = isEq ?
+                            `<button class="unequip-btn">إلغاء</button>` :
+                            `<button class="equip-btn">تجهيز</button>`;
+                    } else {
+                        const cost = item.cost || 0;
+                        const canAfford = (cost <= this.coins) || (item.category === 'char' && cost <= this.diamonds);
+                        btnHTML = `<button ${canAfford?'':'disabled'}>شراء ${cost}${item.category==='char'?'💠':'💎'}</button>`;
+                    }
+
+                    const icon = item.category === 'skin' ? '🎨' : item.category === 'trail' ? '✨' : '👤';
+                    d.innerHTML =
+                        `<span style="flex:1;font-size:0.7rem;">${icon} ${item.name}<br><small style="color:#aaa;">${item.desc}</small></span>${btnHTML}`;
+
+                    d.querySelector('button').addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.audio.init();
+                        if (!owned) {
+                            const cost = item.cost || 0;
+                            const currency = item.category === 'char' ? this.diamonds : this.coins;
+                            if (currency >= cost) {
+                                if (item.category === 'char') {
+                                    this.diamonds -= cost;
+                                } else {
+                                    this.coins -= cost;
+                                }
+                                this.purchased[item.id] = true;
+                                if (item.category === 'char') {
+                                    this.characters[item.charId] = true;
+                                }
+                                this.audio.sfxBuy();
+                                d.classList.add('purchased-flash');
+                                setTimeout(() => d.classList.remove('purchased-flash'), 500);
+                                this.equipItem(item.id);
+                                this.applyEquipped();
+                                this.saveAll();
+                                this.renderShop();
+                                this.updateUI();
+                                this.updateMenuStats();
+                            }
+                        } else {
+                            this.equipItem(item.id);
+                            this.applyEquipped();
+                            this.saveAll();
+                            this.renderShop();
+                            this.updateUI();
+                        }
+                    });
+                    div.appendChild(d);
+                });
+            }
+
+            equipItem(id) {
+                const item = SHOP_ITEMS.find(s => s.id === id);
+                if (!item || !this.purchased[id]) return;
+
+                if (item.category === 'skin') {
+                    if (this.equippedSkin === id) { this.equippedSkin = null; } else { this.equippedSkin = id; }
+                } else if (item.category === 'trail') {
+                    if (this.equippedTrail === id) { this.equippedTrail = null; } else { this.equippedTrail = id; }
+                } else if (item.category === 'char') {
+                    if (this.equippedChar === id) { this.equippedChar = null; } else { this.equippedChar = id; }
+                }
+                this.audio.sfxEquip();
+                this.saveAll();
+            }
+
+            // ===== WHEEL =====
+            wheelAngle = 0;
+            wheelSpinning = false;
+
+            initWheel() {
+                this.drawWheel(0);
+                const btn = document.getElementById('spinWheelBtn');
+                const lastSpin = this.wheelLastSpin || 0;
+                const now = Date.now();
+                const canSpin = (now - lastSpin) > 24 * 60 * 60 * 1000;
+                btn.disabled = !canSpin || this.diamonds < 5;
+                btn.textContent = canSpin ? '🎲 ادفع 5 💠' : '⏳ انتظر 24 ساعة';
+                document.getElementById('wheelResult').textContent = '';
+            }
+
+            drawWheel(angle) {
+                const canvas = document.getElementById('wheelCanvas');
+                const ctx = canvas.getContext('2d');
+                const w = canvas.width,
+                    h = canvas.height;
+                const cx = w / 2,
+                    cy = h / 2,
+                    r = 170;
+
+                ctx.clearRect(0, 0, w, h);
+                const segments = [
+                    { label: '+2 💎', color: '#ffdd00' },
+                    { label: '+5 💎', color: '#ff8800' },
+                    { label: '+1 💠', color: '#00e5ff' },
+                    { label: '+3 💎', color: '#ffdd00' },
+                    { label: '+10 💎', color: '#ff4400' },
+                    { label: '+2 💠', color: '#00aaff' },
+                    { label: '+1 💎', color: '#ffcc44' },
+                    { label: '🎉 +5 💠', color: '#ff44aa' },
+                ];
+                const n = segments.length;
+                const arc = (Math.PI * 2) / n;
+
+                for (let i = 0; i < n; i++) {
+                    const start = i * arc + angle;
+                    const end = start + arc;
+                    ctx.beginPath();
+                    ctx.moveTo(cx, cy);
+                    ctx.arc(cx, cy, r, start, end);
+                    ctx.closePath();
+                    ctx.fillStyle = segments[i].color;
+                    ctx.fill();
+                    ctx.strokeStyle = '#000';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+
+                    ctx.save();
+                    ctx.translate(cx, cy);
+                    ctx.rotate(start + arc / 2);
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 14px "Courier New"';
+                    ctx.shadowColor = '#000';
+                    ctx.shadowBlur = 6;
+                    ctx.fillText(segments[i].label, r * 0.7, 0);
+                    ctx.restore();
+                }
+
+                ctx.beginPath();
+                ctx.arc(cx, cy, 16, 0, Math.PI * 2);
+                ctx.fillStyle = '#ff44aa';
+                ctx.shadowColor = '#ff44aa';
+                ctx.shadowBlur = 20;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+
+            spinWheel() {
+                if (this.wheelSpinning) return;
+                const now = Date.now();
+                const lastSpin = this.wheelLastSpin || 0;
+                if ((now - lastSpin) < 24 * 60 * 60 * 1000) {
+                    document.getElementById('wheelResult').textContent = '⏳ انتظر 24 ساعة بين كل دورة!';
+                    return;
+                }
+                if (this.diamonds < 5) {
+                    document.getElementById('wheelResult').textContent = '❌ تحتاج 5 💠 للدوران!';
+                    return;
+                }
+
+                this.diamonds -= 5;
+                this.wheelSpinning = true;
+                const btn = document.getElementById('spinWheelBtn');
+                btn.disabled = true;
+
+                const spins = 5 + Math.random() * 5;
+                const targetAngle = spins * 2 * Math.PI + Math.random() * 2 * Math.PI;
+                const startAngle = this.wheelAngle;
+                const duration = 3000;
+                const startTime = performance.now();
+
+                const animateWheel = (t) => {
+                    const elapsed = t - startTime;
+                    const progress = Math.min(1, elapsed / duration);
+                    const ease = 1 - Math.pow(1 - progress, 3);
+                    const currentAngle = startAngle + targetAngle * ease;
+                    this.wheelAngle = currentAngle;
+                    this.drawWheel(currentAngle);
+
+                    if (progress < 1) {
+                        requestAnimationFrame(animateWheel);
+                    } else {
+                        this.wheelSpinning = false;
+                        btn.disabled = false;
+                        this.wheelLastSpin = Date.now();
+                        const n = 8;
+                        const arc = (Math.PI * 2) / n;
+                        const normalized = (currentAngle % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
+                        const idx = Math.floor(((Math.PI * 2 - normalized) % (Math.PI * 2)) / arc) % n;
+                        const segments = [
+                            { label: '+2 💎', reward: 2, type: 'coin' },
+                            { label: '+5 💎', reward: 5, type: 'coin' },
+                            { label: '+1 💠', reward: 1, type: 'diamond' },
+                            { label: '+3 💎', reward: 3, type: 'coin' },
+                            { label: '+10 💎', reward: 10, type: 'coin' },
+                            { label: '+2 💠', reward: 2, type: 'diamond' },
+                            { label: '+1 💎', reward: 1, type: 'coin' },
+                            { label: '🎉 +5 💠', reward: 5, type: 'diamond' },
+                        ];
+                        const result = segments[idx];
+                        if (result.type === 'coin') {
+                            this.coins += result.reward;
+                            this.totalCoinsCollected += result.reward;
+                        } else {
+                            this.diamonds += result.reward;
+                            this.totalDiamondsCollected += result.reward;
+                        }
+                        document.getElementById('wheelResult').textContent =
+                            `🎉 حصلت على ${result.label}!`;
+                        this.audio.sfxWin();
+                        this.saveAll();
+                        this.updateUI();
+                        this.updateMenuStats();
+                        this.initWheel();
+                        this.renderMap();
+                    }
+                };
+                requestAnimationFrame(animateWheel);
+            }
+
+            // ===== UPDATE =====
+            update(dt) {
+                if (dt > 0.1) dt = 0.1;
+                this.totalPlayTime += dt;
+
+                this.particles.update(dt);
+
+                for (let ft of this.floatingTexts) ft.life -= dt;
+                this.floatingTexts = this.floatingTexts.filter(ft => ft.life > 0);
+
+                this.updateWeather(dt);
+
+                if (this.screenShake > 0) this.screenShake *= 0.85;
+                if (this.flashAlpha > 0) this.flashAlpha *= 0.8;
+                if (this.crossAlpha > 0) this.crossAlpha *= 0.83;
+
+                if (this.misleadTimer > 0) {
+                    this.misleadTimer -= dt;
+                    if (this.misleadTimer <= 0) this.uiStart('misleadMsg').textContent = '';
+                }
+
+                if (this.comboTimer > 0) {
+                    this.comboTimer -= dt;
+                    if (this.comboTimer <= 0) {
+                        this.comboActive = 0;
+                        this.updateUI();
+                    }
+                }
+
+                if (this.gameState !== 'playing') return;
+                if (this.deathCooldown > 0) { this.deathCooldown -= dt; return; }
+
+                const lvl = LEVEL_DATA[this.currentLevel];
+                if (!lvl) return;
+
+                this.levelTime += dt;
+
+                // Flip mechanic
+                const flipDelay = lvl.flipDelay || 0;
+                const effInt = G.FLIP_INTERVAL + flipDelay;
+                this.flipAccum += dt;
+
+                if (this.flipAccum >= effInt) {
+                    this.flipAccum = 0;
+                    this.warningActive = true;
+                    this.audio.sfxWarn();
+                    this.screenShake = 8;
+                    this.flashAlpha = 0.3;
+                    this.crossAlpha = 0.8;
+
+                    setTimeout(() => {
+                        if (this.gameState !== 'playing') return;
+                        this.flipped = !this.flipped;
+                        this.player.color = this.flipped ? this.player.flippedColor : this.player.normalColor;
+                        this.audio.sfxFlip();
+                        this.screenShake = 12;
+                        this.flashAlpha = 0.4;
+                        this.crossAlpha = 1.2;
+                        this.particles.emit(this.player.x + this.player.width / 2, this.player.y + this.player
+                            .height / 2, '#ffffff', 14);
+
+                        if (lvl.adaptive && this.player.jumpCount > 3 && this.flipped) {
+                            this.uiStart('misleadMsg').textContent = '⛔ الجاذبية انعكست!';
+                            this.misleadTimer = 1.8;
+                        }
+                        if (lvl.doubleFlip) {
+                            this.doubleFlipPending = true;
+                            this.doubleFlipTimer = 0.6;
+                            this.uiStart('misleadMsg').textContent = '⚠️ Flip مزدوج!';
+                            this.misleadTimer = 1.2;
+                        }
+                        if (lvl.fullChaos) {
+                            this.chaosActive = true;
+                            this.chaosTimer = 2.8;
+                            this.uiStart('misleadMsg').textContent = '💥 فوضى كاملة!';
+                            this.misleadTimer = 2.2;
+                        }
+                        this.warningActive = false;
+                        this.crossAlpha = 0;
+                    }, 550);
+                    setTimeout(() => { this.warningActive = false;
+                        this.crossAlpha = 0; }, 700);
+                }
+
+                if (this.warningActive && this.flipAccum > effInt - 0.5) {
+                    this.screenShake = Math.max(this.screenShake, 6);
+                }
+
+                if (this.doubleFlipPending) {
+                    this.doubleFlipTimer -= dt;
+                    if (this.doubleFlipTimer <= 0) {
+                        this.flipped = !this.flipped;
+                        this.player.color = this.flipped ? this.player.flippedColor : this.player.normalColor;
+                        this.audio.sfxFlip();
+                        this.screenShake = 12;
+                        this.flashAlpha = 0.4;
+                        this.crossAlpha = 1.2;
+                        this.particles.emit(this.player.x + this.player.width / 2, this.player.y + this.player
+                            .height / 2, '#ffffff', 12);
+                        this.doubleFlipPending = false;
+                        this.chaosActive = true;
+                        this.chaosTimer = 1.0;
+                    }
+                }
+
+                if (this.chaosActive) {
+                    this.chaosTimer -= dt;
+                    if (this.chaosTimer <= 0) {
+                        this.chaosActive = false;
+                        this.chaosTimer = 0;
+                    }
+                }
+
+                // Player movement
+                let moveDir = 0;
+                if (this.keys.left || this.touch.left) moveDir -= 1;
+                if (this.keys.right || this.touch.right) moveDir += 1;
+
+                if (this.windForce) {
+                    moveDir += (this.windForce / G.PLAYER_SPEED) * 0.3;
+                }
+
+                if (this.flipped) moveDir *= -1;
+
+                if (this.chaosActive && lvl.fullChaos) {
+                    if (Math.random() < 0.02) moveDir *= -1;
+                }
+
+                const speedMult = this.player.speedMult || 1.0;
+                const targetVx = moveDir * G.PLAYER_SPEED * speedMult;
+                this.player.vx += (targetVx - this.player.vx) * (dt * 10);
+                if (Math.abs(this.player.vx) < 1) this.player.vx = 0;
+
+                const wantJump = this.keys.jump || this.touch.jump;
+                const jumpMult = this.player.jumpMult || 1.0;
+                const jumpForce = G.JUMP_FORCE * jumpMult;
+
+                if (wantJump && this.player.onGround) {
+                    this.player.jumpCount++;
+                    this.player.vy = jumpForce;
+                    this.player.onGround = false;
+                    this.audio.sfxJump();
+                    this.particles.emit(this.player.x + this.player.width / 2, this.player.y + this.player.height,
+                        '#00ffff', 8);
+                }
+
+                if (wantJump && !this.player.onGround && this.player.jumpCount < (this.player.extraJumps || 0) + 1) {
+                    this.player.jumpCount++;
+                    this.player.vy = jumpForce * 0.9;
+                    this.audio.sfxJump();
+                    this.particles.emit(this.player.x + this.player.width / 2, this.player.y + this.player.height,
+                        '#ff44aa', 8);
+                }
+
+                let grav = G.GRAVITY;
+                if (this.chaosActive && lvl.fullChaos) grav = -G.GRAVITY * 0.7;
+                if (this.player.antiGravity && this.flipped) grav *= -0.3;
+
+                this.player.vy += grav * dt;
+                if (this.chaosActive && lvl.fullChaos && Math.abs(this.player.vy) > 900) {
+                    this.player.vy = Math.sign(this.player.vy) * 900;
+                }
+
+                this.player.x += this.player.vx * dt;
+                this.player.y += this.player.vy * dt;
+
+                if (this.player.x < 0) this.player.x = 0;
+                if (this.player.x + this.player.width > G.WIDTH) this.player.x = G.WIDTH - this.player.width;
+
+                // Platform collision
+                this.player.onGround = false;
+                const px = this.player.x,
+                    py = this.player.y,
+                    pw = this.player.width,
+                    ph = this.player.height;
+
+                for (let mp of this.movingPlatforms) {
+                    mp.timer += dt;
+                    const offset = Math.sin(mp.timer * mp.speed * 0.01) * mp.range;
+                    mp.x = mp.startX + offset;
+                }
+
+                for (let l of this.lasers) {
+                    l.timer += dt;
+                    const dx = l.dx || 0,
+                        dy = l.dy || 0;
+                    const speed = l.speed || 60;
+                    const offset = Math.sin(l.timer * speed * 0.01) * 30;
+                    if (dx !== 0) l.x = l.startX + offset;
+                    if (dy !== 0) l.y = l.startY + offset;
+                }
+
+                for (let e of this.enemies) {
+                    e.timer += dt;
+                    e.x += e.dir * (e.speed || 40) * dt;
+                    if (e.x < e.startX - 50 || e.x > e.startX + 50) e.dir *= -1;
+                    if (this.checkCollision(px, py, pw, ph, e.x, e.y, e.w || 30, e.h || 30)) {
+                        this.killPlayer();
+                        return;
+                    }
+                }
+
+                for (let p of this.platforms) {
+                    if (p.crumbled) continue;
+                    if (p.type === 'disappearing' && this.flipped) continue;
+                    if (p.type === 'chaos' && this.chaosActive) {
+                        p.chaosOffset = Math.sin(performance.now() / 200) * 8;
+                    }
+
+                    let pxp = p.x,
+                        pyp = p.y;
+                    for (let mp of this.movingPlatforms) {
+                        if (mp.x === p.x && mp.y === p.y) {
+                            pxp = mp.x;
+                            pyp = mp.y;
+                        }
+                    }
+
+                    const py_eff = pyp + (p.chaosOffset || 0);
+                    if (this.checkCollision(px, py, pw, ph, pxp, py_eff, p.w, p.h)) {
+                        const prevBottom = this.player.y - this.player.vy * dt + ph;
+                        if (prevBottom <= py_eff + 6 && this.player.vy >= 0) {
+                            this.player.y = py_eff - ph;
+                            if (p.type === 'bouncy') {
+                                this.player.vy = G.BOUNCE_FORCE * (this.player.jumpMult || 1.0);
+                                this.player.onGround = false;
+                                this.audio.sfxBounce();
+                                this.particles.emit(this.player.x + pw / 2, this.player.y + ph, '#ff44aa', 12);
+                                this.particles.emit(this.player.x + pw / 2, this.player.y + ph, '#ffffff', 6);
+                            } else if (p.type === 'ice') {
+                                this.player.onGround = true;
+                                this.player.vy = 0;
+                                this.player.vx *= 0.98;
+                            } else if (p.type === 'electric') {
+                                this.killPlayer();
+                                return;
+                            } else {
+                                this.player.vy = 0;
+                                this.player.onGround = true;
+                            }
+
+                            if (p.type === 'crumbling') {
+                                p.crumbleTimer += dt;
+                                if (p.crumbleTimer > 0.7) {
+                                    p.crumbled = true;
+                                    this.particles.emit(p.x + p.w / 2, p.y + p.h / 2, '#ff8800', 16);
+                                    this.audio.sfxFlip();
+                                }
+                            }
+                            if (p.type === 'trap') {
+                                this.killPlayer();
+                                return;
+                            }
+                        } else if (this.player.vy < 0 && prevBottom > py_eff + p.h) {
+                            this.player.y = py_eff + p.h;
+                            this.player.vy = 0;
+                        }
+                    }
+                }
+
+                for (let h of this.hazards) {
+                    if (h.type === 'laser') {
+                        let lx = h.x,
+                            ly = h.y;
+                        for (let l of this.lasers) {
+                            if (l.x === h.x && l.y === h.y) { lx = l.x;
+                                ly = l.y; }
+                        }
+                        if (this.checkCollision(px, py, pw, ph, lx, ly, h.w || 40, h.h || 6)) {
+                            this.killPlayer();
+                            return;
+                        }
+                    } else if (this.checkCollision(px, py, pw, ph, h.x, h.y, h.w, h.h)) {
+                        this.killPlayer();
+                        return;
+                    }
+                }
+
+                for (let k of this.keys) {
+                    if (k.collected) continue;
+                    const dx = px + pw / 2 - k.x,
+                        dy = py + ph / 2 - k.y;
+                    if (Math.sqrt(dx * dx + dy * dy) < 20) {
+                        k.collected = true;
+                        this.audio.sfxCoin();
+                        this.particles.emit(k.x, k.y, '#ffdd00', 12);
+                        this.floatingTexts.push({ x: k.x, y: k.y - 10, text: '🔑 مفتاح!', life: 1.5,
+                            color: '#ffdd00' });
+                        for (let d of this.doors) d.open = true;
+                        this.audio.sfxDoor();
+                    }
+                }
+
+                for (let d of this.doors) {
+                    if (!d.open) continue;
+                    if (this.checkCollision(px, py, pw, ph, d.x, d.y, d.w, d.h)) {
+                        // pass
+                    }
+                }
+
+                const pcx = px + pw / 2,
+                    pcy = py + ph / 2;
+                for (let c of this.coinsPickup) {
+                    if (c.collected) continue;
+                    const dx = pcx - c.x,
+                        dy = pcy - c.y;
+                    if (Math.sqrt(dx * dx + dy * dy) < 22) {
+                        c.collected = true;
+                        this.coins++;
+                        this.totalCoinsCollected++;
+                        this.comboActive++;
+                        this.comboTimer = 2.0;
+                        this.audio.sfxCoin();
+                        this.particles.emit(c.x, c.y, '#ffdd00', 12);
+                        this.floatingTexts.push({ x: c.x, y: c.y - 10, text: '+1 💎', life: 1.5,
+                            color: '#ffdd00' });
+                        this.updateUI();
+                        this.saveAll();
+                        if (this.comboActive > 5 && this.comboActive % 5 === 0) {
+                            const bonus = Math.floor(this.comboActive / 5);
+                            this.coins += bonus;
+                            this.totalCoinsCollected += bonus;
+                            this.floatingTexts.push({ x: c.x + 20, y: c.y - 30, text: `+${bonus} كومبو!`,
+                                life: 1.8, color: '#ff44aa' });
+                            this.updateUI();
+                            this.saveAll();
+                        }
+                        this.checkAchievements();
+                    }
+                }
+
+                if (this.boss && this.boss.alive) {
+                    this.boss.timer += dt;
+                    if (this.boss.pattern === 'spread') {
+                        if (this.boss.timer > 1.5) {
+                            this.boss.timer = 0;
+                            for (let i = 0; i < 4; i++) {
+                                const angle = i * Math.PI / 2 + this.boss.phase * 0.3;
+                                const dist = 60 + Math.random() * 40;
+                                const hx = this.boss.x + this.boss.w / 2 + Math.cos(angle) * dist;
+                                const hy = this.boss.y + this.boss.h / 2 + Math.sin(angle) * dist;
+                                this.particles.emit(hx, hy, '#ff0044', 8);
+                                this.hazards.push({ x: hx - 10, y: hy - 10, w: 20, h: 20, type: 'spike',
+                                    temp: true });
+                            }
+                            this.boss.phase++;
+                        }
+                    } else if (this.boss.pattern === 'chaos') {
+                        if (this.boss.timer > 0.8) {
+                            this.boss.timer = 0;
+                            for (let i = 0; i < 3; i++) {
+                                const hx = Math.random() * (G.WIDTH - 40) + 20;
+                                const hy = Math.random() * (G.HEIGHT - 60) + 30;
+                                this.hazards.push({ x: hx - 10, y: hy - 10, w: 20, h: 20, type: 'spike',
+                                    temp: true });
+                                this.particles.emit(hx, hy, '#ff4400', 6);
+                            }
+                            if (Math.random() < 0.3) {
+                                this.flipped = !this.flipped;
+                                this.player.color = this.flipped ? this.player.flippedColor : this.player
+                                    .normalColor;
+                                this.audio.sfxFlip();
+                                this.screenShake = 10;
+                                this.flashAlpha = 0.3;
+                            }
+                        }
+                    }
+
+                    if (this.checkCollision(px, py, pw, ph, this.boss.x, this.boss.y, this.boss.w, this.boss.h)) {
+                        if (this.player.vy > 200 && this.player.onGround) {
+                            this.boss.health--;
+                            this.boss.hitTimer = 0.3;
+                            this.audio.sfxBounce();
+                            this.particles.emit(this.boss.x + this.boss.w / 2, this.boss.y + this.boss.h / 2,
+                                '#ff44aa', 20);
+                            this.screenShake = 14;
+                            this.player.vy = -300;
+                            if (this.boss.health <= 0) {
+                                this.boss.alive = false;
+                                this.bossDefeated++;
+                                this.diamonds += 5;
+                                this.totalDiamondsCollected += 5;
+                                this.audio.sfxWin();
+                                this.particles.emit(this.boss.x + this.boss.w / 2, this.boss.y + this.boss.h / 2,
+                                    '#ffdd00', 40);
+                                this.particles.emit(this.boss.x + this.boss.w / 2, this.boss.y + this.boss.h / 2,
+                                    '#ffffff', 20);
+                                this.floatingTexts.push({ x: G.WIDTH / 2, y: G.HEIGHT / 2 - 40,
+                                    text: '⚔️ زعيم مهزوم! +5 💠', life: 3, color: '#ff44aa' });
+                                this.saveAll();
+                                this.updateUI();
+                            }
+                        } else {
+                            this.killPlayer();
+                            return;
+                        }
+                    }
+
+                    this.hazards = this.hazards.filter(h => !h.temp);
+                }
+
+                if (this.goal && !this.goal.crumbled) {
+                    let doorBlocked = false;
+                    for (let d of this.doors) {
+                        if (!d.open) {
+                            if (this.checkCollision(px, py, pw, ph, d.x, d.y, d.w, d.h)) {
+                                doorBlocked = true;
+                                this.uiStart('misleadMsg').textContent = '🔒 ابحث عن المفتاح!';
+                                this.misleadTimer = 1.5;
+                            }
+                        }
+                    }
+                    if (!doorBlocked && this.checkCollision(px, py, pw, ph, this.goal.x, this.goal.y, this.goal.w,
+                            this.goal.h)) {
+                        this.winLevel();
+                    }
+                }
+
+                if (this.player.y > G.HEIGHT + 60) {
+                    this.killPlayer();
+                    return;
+                }
+                if (this.player.y < -80) {
+                    this.player.y = -80;
+                    this.player.vy = Math.abs(this.player.vy) * 0.3;
+                }
+
+                const trailColor = this.player.trailType === 'rainbow' ?
+                    `hsl(${performance.now()*0.3%360},100%,60%)` :
+                    this.player.trailType === 'fire' ? ['#ff4400', '#ff8800', '#ffcc00'][Math.floor(Math.random() *
+                    3)] :
+                    this.player.trailType === 'stars' ? '#ffffff' :
+                    this.player.trailType === 'electric' ? ['#00ccff', '#ffffff'][Math.floor(Math.random() * 2)] :
+                    this.player.trailType === 'ice' ? '#00ccff' :
+                    this.player.trailType === 'glow' ? '#ffdd00' :
+                    this.player.color;
+
+                this.player.trail.push({
+                    x: this.player.x + this.player.width / 2,
+                    y: this.player.y + this.player.height / 2,
+                    life: 0.2,
+                    color: trailColor,
+                    type: this.player.trailType
+                });
+                for (let t of this.player.trail) t.life -= dt;
+                this.player.trail = this.player.trail.filter(t => t.life > 0);
+
+                this.updateUI();
+            }
+
+            // ===== WEATHER =====
+            updateWeather(dt) {
+                if (this.weatherType === 'rain') {
+                    for (let i = 0; i < 3; i++) {
+                        this.weatherParticles.push({
+                            x: Math.random() * G.WIDTH,
+                            y: -5,
+                            vy: 150 + Math.random() * 100,
+                            vx: -30 + Math.random() * 20,
+                            life: 0.8 + Math.random() * 0.3,
+                            size: 1 + Math.random() * 2,
+                            color: 'rgba(100,180,255,0.4)'
+                        });
+                    }
+                } else if (this.weatherType === 'snow') {
+                    for (let i = 0; i < 2; i++) {
+                        this.weatherParticles.push({
+                            x: Math.random() * G.WIDTH,
+                            y: -5,
+                            vy: 30 + Math.random() * 40,
+                            vx: -10 + Math.random() * 20,
+                            life: 2 + Math.random() * 1,
+                            size: 2 + Math.random() * 3,
+                            color: 'rgba(255,255,255,0.6)',
+                            wobble: Math.random() * Math.PI * 2
+                        });
+                    }
+                }
+
+                for (let p of this.weatherParticles) {
+                    p.x += (p.vx || 0) * dt;
+                    p.y += (p.vy || 0) * dt;
+                    p.life -= dt;
+                    if (p.wobble !== undefined) p.wobble += dt * 2;
+                    if (p.wobble !== undefined) p.x += Math.sin(p.wobble) * 10 * dt;
+                }
+                this.weatherParticles = this.weatherParticles.filter(p => p.life > 0 && p.y < G.HEIGHT + 20);
+            }
+
+            // ===== COLLISION =====
+            checkCollision(px, py, pw, ph, rx, ry, rw, rh) {
+                return px < rx + rw && px + pw > rx && py < ry + rh && py + ph > ry;
+            }
+
+            // ===== DRAW =====
+            draw() {
+                const ctx = this.ctx;
+                const W = G.WIDTH,
+                    H = G.HEIGHT;
+
+                ctx.clearRect(0, 0, W, H);
+
+                let sx = 0,
+                    sy = 0;
+                if (this.screenShake > 0.15) {
+                    sx = (Math.random() - 0.5) * this.screenShake * 2.2;
+                    sy = (Math.random() - 0.5) * this.screenShake * 2.2;
+                }
+                ctx.save();
+                ctx.translate(sx, sy);
+
+                const isNight = this.timeOfDay === 'night';
+                ctx.fillStyle = isNight ? '#05051a' : '#0a0a20';
+                ctx.fillRect(0, 0, W, H);
+
+                const grad = ctx.createLinearGradient(0, 0, 0, H);
+                if (isNight) {
+                    grad.addColorStop(0, '#0a0a30');
+                    grad.addColorStop(0.5, '#0a0a20');
+                    grad.addColorStop(1, '#050510');
+                } else {
+                    grad.addColorStop(0, '#1a1a3a');
+                    grad.addColorStop(0.5, '#0a0a20');
+                    grad.addColorStop(1, '#050510');
+                }
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, W, H);
+
+                if (isNight) {
+                    for (let i = 0; i < 60; i++) {
+                        const starX = (i * 137 + 50) % W;
+                        const starY = (i * 251 + 30) % (H * 0.6);
+                        const brightness = 0.3 + 0.7 * Math.sin(performance.now() / 1000 + i);
+                        ctx.fillStyle = `rgba(255,255,255,${brightness*0.5})`;
+                        ctx.fillRect(starX, starY, 1.5, 1.5);
+                    }
+                }
+
+                for (let p of this.weatherParticles) {
+                    ctx.globalAlpha = Math.min(1, p.life);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(p.x, p.y, p.size || 2, p.size || 2);
+                }
+                ctx.globalAlpha = 1;
+
+                ctx.strokeStyle = isNight ? 'rgba(20,20,60,0.3)' : 'rgba(30,30,60,0.25)';
+                ctx.lineWidth = 0.5;
+                for (let i = 0; i < W; i += 50) { ctx.beginPath();
+                    ctx.moveTo(i, 0);
+                    ctx.lineTo(i, H);
+                    ctx.stroke(); }
+                for (let j = 0; j < H; j += 50) { ctx.beginPath();
+                    ctx.moveTo(0, j);
+                    ctx.lineTo(W, j);
+                    ctx.stroke(); }
+
+                for (let a of this.arrows) {
+                    ctx.fillStyle = '#ffcc00';
+                    ctx.font = 'bold 16px "Courier New"';
+                    ctx.textAlign = 'center';
+                    ctx.shadowColor = '#ffcc00';
+                    ctx.shadowBlur = 12;
+                    ctx.fillText(a.text, a.x, a.y);
+                    ctx.shadowBlur = 0;
+                }
+
+                for (let k of this.keys) {
+                    if (k.collected) continue;
+                    const bob = Math.sin(performance.now() / 500 + k.x) * 4;
+                    ctx.fillStyle = '#ffdd00';
+                    ctx.shadowColor = '#ffdd00';
+                    ctx.shadowBlur = 18;
+                    ctx.beginPath();
+                    ctx.arc(k.x, k.y + bob, k.radius || 10, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                    ctx.fillStyle = '#000';
+                    ctx.font = '12px "Courier New"';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText('🔑', k.x, k.y + bob + 1);
+                }
+
+                for (let d of this.doors) {
+                    ctx.fillStyle = d.open ? 'rgba(100,255,100,0.3)' : 'rgba(255,100,100,0.4)';
+                    ctx.shadowColor = d.open ? '#00ff00' : '#ff0000';
+                    ctx.shadowBlur = d.open ? 15 : 10;
+                    ctx.fillRect(d.x, d.y, d.w, d.h);
+                    ctx.shadowBlur = 0;
+                    ctx.strokeStyle = d.open ? '#00ff00' : '#ff0000';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(d.x, d.y, d.w, d.h);
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '18px "Courier New"';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(d.open ? '🚪' : '🔒', d.x + d.w / 2, d.y + d.h / 2);
+                }
+
+                const tm = performance.now() / 1000;
+                for (let c of this.coinsPickup) {
+                    if (c.collected) continue;
+                    const by = c.y + Math.sin(tm * 3 + c.bobOffset) * 6;
+                    ctx.fillStyle = '#ffdd00';
+                    ctx.shadowColor = '#ffdd00';
+                    ctx.shadowBlur = 16;
+                    ctx.beginPath();
+                    ctx.arc(c.x, by, 9, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                    ctx.fillStyle = '#fff8c0';
+                    ctx.beginPath();
+                    ctx.arc(c.x - 2, by - 3, 3, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.fillStyle = '#ffffff';
+                    ctx.shadowColor = '#ffffff';
+                    ctx.shadowBlur = 6;
+                    ctx.beginPath();
+                    ctx.arc(c.x + 3, by - 4, 1.5, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+
+                for (let p of this.platforms) {
+                    if (p.crumbled) continue;
+                    let pxp = p.x,
+                        pyp = p.y;
+                    for (let mp of this.movingPlatforms) {
+                        if (mp.x === p.x && mp.y === p.y) { pxp = mp.x;
+                            pyp = mp.y; }
+                    }
+                    const pe = pyp + (p.chaosOffset || 0);
+
+                    let cl = '#00ffcc';
+                    if (p.type === 'goal') cl = '#ffdd00';
+                    else if (p.type === 'trap') cl = '#ff8800';
+                    else if (p.type === 'disappearing') cl = this.flipped ? '#333' : '#ff8800';
+                    else if (p.type === 'crumbling') cl = p.crumbleTimer > 0.4 ? '#ff4444' : '#ff8800';
+                    else if (p.type === 'bouncy') cl = '#ff44aa';
+                    else if (p.type === 'chaos') cl = this.chaosActive ? '#ff00ff' : '#aa00ff';
+                    else if (p.type === 'ice') cl = '#00ccff';
+                    else if (p.type === 'electric') cl = '#ffaa00';
+                    else if (p.type === 'moving') cl = '#44ff88';
+
+                    ctx.fillStyle = cl;
+                    ctx.shadowColor = cl;
+                    ctx.shadowBlur = p.type === 'bouncy' ? 20 : p.type === 'ice' ? 14 : 12;
+                    ctx.fillRect(pxp, pe, p.w, p.h);
+                    ctx.shadowBlur = 0;
+                    ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(pxp, pe, p.w, p.h);
+
+                    if (p.type === 'goal') {
+                        ctx.fillStyle = '#ffffff';
+                        ctx.shadowColor = '#ffdd00';
+                        ctx.shadowBlur = 12;
+                        ctx.font = 'bold 14px "Courier New"';
+                        ctx.textAlign = 'center';
+                        ctx.fillText('🏁', pxp + p.w / 2, pe - 6);
+                        ctx.shadowBlur = 0;
+                    }
+                    if (p.type === 'trap') {
+                        ctx.fillStyle = '#ff0000';
+                        ctx.font = 'bold 10px "Courier New"';
+                        ctx.textAlign = 'center';
+                        ctx.fillText('⚠ فخ', pxp + p.w / 2, pe - 8);
+                    }
+                    if (p.type === 'bouncy') {
+                        ctx.fillStyle = '#ffffff';
+                        ctx.shadowColor = '#ff44aa';
+                        ctx.shadowBlur = 14;
+                        ctx.font = 'bold 14px "Courier New"';
+                        ctx.textAlign = 'center';
+                        ctx.fillText('♨', pxp + p.w / 2, pe - 6);
+                        ctx.shadowBlur = 0;
+                    }
+                    if (p.type === 'ice') {
+                        ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                        ctx.fillRect(pxp + 4, pe + 4, p.w - 8, 3);
+                        ctx.fillRect(pxp + 4, pe + p.h - 7, p.w - 8, 3);
+                    }
+                    if (p.type === 'electric') {
+                        ctx.fillStyle = 'rgba(255,255,0,0.2)';
+                        for (let i = 0; i < 3; i++) {
+                            const ex = pxp + 10 + i * (p.w - 20) / 2;
+                            const ey = pe + 4 + Math.sin(performance.now() / 150 + i * 2) * 4;
+                            ctx.fillRect(ex - 2, ey, 4, 4);
+                        }
+                    }
+                }
+
+                for (let h of this.hazards) {
+                    if (h.temp) {
+                        ctx.fillStyle = 'rgba(255,0,68,0.5)';
+                        ctx.fillRect(h.x, h.y, h.w, h.h);
+                        continue;
+                    }
+                    if (h.type === 'laser') {
+                        let lx = h.x,
+                            ly = h.y;
+                        for (let l of this.lasers) {
+                            if (l.x === h.x && l.y === h.y) { lx = l.x;
+                                ly = l.y; }
+                        }
+                        ctx.fillStyle = '#ff0044';
+                        ctx.shadowColor = '#ff0044';
+                        ctx.shadowBlur = 25;
+                        ctx.fillRect(lx, ly, h.w || 40, h.h || 6);
+                        ctx.shadowBlur = 0;
+                        ctx.fillStyle = 'rgba(255,0,68,0.15)';
+                        ctx.fillRect(lx - 10, ly - 10, (h.w || 40) + 20, (h.h || 6) + 20);
+                    } else {
+                        ctx.fillStyle = '#ff0044';
+                        ctx.shadowColor = '#ff0044';
+                        ctx.shadowBlur = 16;
+                        ctx.fillRect(h.x, h.y, h.w, h.h);
+                        for (let sx2 = h.x; sx2 < h.x + h.w; sx2 += 7) {
+                            ctx.fillStyle = '#ff6699';
+                            ctx.beginPath();
+                            ctx.moveTo(sx2, h.y);
+                            ctx.lineTo(sx2 + 4, h.y - 10);
+                            ctx.lineTo(sx2 + 7, h.y);
+                            ctx.fill();
+                        }
+                        ctx.shadowBlur = 0;
+                    }
+                }
+
+                for (let e of this.enemies) {
+                    ctx.fillStyle = '#ff3366';
+                    ctx.shadowColor = '#ff3366';
+                    ctx.shadowBlur = 18;
+                    ctx.beginPath();
+                    ctx.arc(e.x + (e.w || 30) / 2, e.y + (e.h || 30) / 2, (e.w || 30) / 2, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '16px "Courier New"';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText('👾', e.x + (e.w || 30) / 2, e.y + (e.h || 30) / 2 + 1);
+                }
+
+                if (this.boss && this.boss.alive) {
+                    const b = this.boss;
+                    ctx.fillStyle = '#ff0044';
+                    ctx.shadowColor = '#ff0044';
+                    ctx.shadowBlur = 30;
+                    ctx.fillRect(b.x, b.y, b.w, b.h);
+                    ctx.shadowBlur = 0;
+                    ctx.strokeStyle = '#ff44aa';
+                    ctx.lineWidth = 3;
+                    ctx.strokeRect(b.x, b.y, b.w, b.h);
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 28px "Courier New"';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText('👹', b.x + b.w / 2, b.y + b.h / 2 + 2);
+                    const hpW = b.w;
+                    ctx.fillStyle = 'rgba(0,0,0,0.7)';
+                    ctx.fillRect(b.x, b.y - 14, hpW, 10);
+                    ctx.fillStyle = '#ff0044';
+                    ctx.fillRect(b.x + 2, b.y - 12, (hpW - 4) * (b.health / b.maxHealth), 6);
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '8px "Courier New"';
+                    ctx.fillText(`HP ${b.health}/${b.maxHealth}`, b.x + hpW / 2, b.y - 6);
+                }
+
+                this.particles.draw(ctx);
+
+                this.drawPlayer(ctx);
+
+                for (let ft of this.floatingTexts) {
+                    const a = Math.max(0, ft.life / 2.5);
+                    ctx.globalAlpha = a;
+                    ctx.fillStyle = ft.color;
+                    ctx.font = 'bold 16px "Courier New"';
+                    ctx.textAlign = 'center';
+                    ctx.shadowColor = ft.color;
+                    ctx.shadowBlur = 10;
+                    ctx.fillText(ft.text, ft.x, ft.y - (2.5 - ft.life) * 20);
+                    ctx.shadowBlur = 0;
+                }
+                ctx.globalAlpha = 1;
+
+                if (this.crossAlpha > 0.02) {
+                    ctx.globalAlpha = Math.min(1, this.crossAlpha);
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 4;
+                    ctx.shadowColor = '#ffffff';
+                    ctx.shadowBlur = 20;
+                    ctx.beginPath();
+                    ctx.moveTo(W / 2 - 50, H / 2 - 50);
+                    ctx.lineTo(W / 2 + 50, H / 2 + 50);
+                    ctx.moveTo(W / 2 + 50, H / 2 - 50);
+                    ctx.lineTo(W / 2 - 50, H / 2 + 50);
+                    ctx.stroke();
+                    ctx.shadowBlur = 0;
+                    ctx.globalAlpha = 1;
+                }
+
+                if (this.flashAlpha > 0.02) {
+                    ctx.fillStyle = `rgba(255,255,255,${this.flashAlpha})`;
+                    ctx.fillRect(0, 0, W, H);
+                }
+
+                const lvl = LEVEL_DATA[this.currentLevel];
+                if (lvl) {
+                    const tp = this.flipAccum / (G.FLIP_INTERVAL + (lvl.flipDelay || 0));
+                    const tcx = W / 2,
+                        tcy = 28,
+                        rad = 20;
+                    ctx.beginPath();
+                    ctx.arc(tcx, tcy, rad, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * Math.min(tp, 1));
+                    ctx.strokeStyle = tp > 0.85 ? '#ff0044' : '#00ffff';
+                    ctx.lineWidth = 4;
+                    ctx.shadowColor = ctx.strokeStyle;
+                    ctx.shadowBlur = 14;
+                    ctx.stroke();
+                    ctx.shadowBlur = 0;
+                    ctx.beginPath();
+                    ctx.arc(tcx, tcy, rad, 0, Math.PI * 2);
+                    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+                    ctx.lineWidth = 1.5;
+                    ctx.stroke();
+
+                    if (this.warningActive) {
+                        const pulse = Math.sin(performance.now() / 60) * 0.3 + 0.7;
+                        ctx.fillStyle = `rgba(255,0,0,${pulse})`;
+                        ctx.shadowColor = '#ff0000';
+                        ctx.shadowBlur = 24;
+                        ctx.font = 'bold 14px "Courier New"';
+                        ctx.textAlign = 'center';
+                        ctx.fillText('⚠ تحذير ⚠', tcx, tcy - 30);
+                        ctx.shadowBlur = 0;
+                    }
+                }
+
+                if (this.screenTransition > 0.01) {
+                    ctx.fillStyle = `rgba(0,0,0,${this.screenTransition})`;
+                    ctx.fillRect(0, 0, W, H);
+                    this.screenTransition *= 0.85;
+                    if (this.screenTransition < 0.01) this.screenTransition = 0;
+                }
+
+                ctx.restore();
+            }
+
+            // ===== DRAW PLAYER =====
+            drawPlayer(ctx) {
+                const p = this.player;
+                const cx = p.x + p.width / 2,
+                    cy = p.y + p.height / 2,
+                    sz = p.width;
+
+                ctx.save();
+                if (p.alpha < 1) ctx.globalAlpha = p.alpha;
+
+                for (let t of p.trail) {
+                    const a = Math.max(0, t.life / 0.2);
+                    ctx.globalAlpha = a * (p.alpha < 1 ? p.alpha : 1);
+                    ctx.fillStyle = t.color;
+                    ctx.shadowColor = t.color;
+                    ctx.shadowBlur = t.type === 'stars' ? 20 : t.type === 'electric' ? 18 : 12;
+                    const ts = t.type === 'stars' ? 6 : t.type === 'electric' ? 7 : sz * 0.6;
+                    ctx.fillRect(t.x - ts / 2, t.y - ts / 2, ts, ts);
+                }
+
+                ctx.globalAlpha = p.alpha < 1 ? p.alpha : 1;
+                ctx.shadowBlur = 0;
+                ctx.shadowColor = p.color;
+                ctx.shadowBlur = 26;
+                ctx.fillStyle = p.color;
+                ctx.fillRect(p.x, p.y, sz, sz);
+                ctx.shadowBlur = 0;
+
+                ctx.fillStyle = 'rgba(255,255,255,0.1)';
+                ctx.fillRect(p.x + 2, p.y + 2, sz - 4, sz - 4);
+
+                const eyeY = cy - 4,
+                    es = 8;
+                ctx.fillStyle = '#000';
+                if (p.eyeBlink > 0.1) {
+                    ctx.fillRect(cx - es - 3, eyeY, 6, 2);
+                    ctx.fillRect(cx + es - 3, eyeY, 6, 2);
+                } else {
+                    ctx.beginPath();
+                    ctx.arc(cx - es, eyeY, 3.5, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.arc(cx + es, eyeY, 3.5, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.fillStyle = '#fff';
+                    ctx.beginPath();
+                    ctx.arc(cx - es + 1.5, eyeY - 1, 1.2, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.arc(cx + es + 1.5, eyeY - 1, 1.2, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(cx, eyeY + 8, 5, 0.1, Math.PI - 0.1);
+                ctx.stroke();
+
+                p.eyeBlink -= 0.02;
+                if (p.eyeBlink < 0) p.eyeBlink = 0;
+                if (Math.random() < 0.004) p.eyeBlink = 0.18;
+
+                ctx.restore();
+            }
+
+            // ===== GAME LOOP =====
+            gameLoop(ts) {
+                if (!this.lastTime) this.lastTime = ts;
+                let dt = (ts - this.lastTime) / 1000;
+                if (dt <= 0) dt = 0.016;
+                if (dt > 0.1) dt = 0.1;
+                this.lastTime = ts;
+
+                this.update(dt);
+                this.draw();
+
+                requestAnimationFrame((t) => this.gameLoop(t));
+            }
+        }
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('gameCanvas');
+            if (canvas) {
+                const game = new FlipPanic();
+                window._game = game;
+            }
+        });
+    </script>
+</body>
+</html>
