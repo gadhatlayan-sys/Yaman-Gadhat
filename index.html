@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <!-- ===== SEO META TAGS (مُحسَّن بالكلمات المفتاحية) ===== -->
-    <title>Flip Panic ✦ فليب بانيك – لعبة التحدي والانعكاس Yaman bachata game</title>
-    <meta name="description" content="Flip Panic هي لعبة تحدي وإثارة تعتمد على الانعكاس والجاذبية. تجاوز المراحل، اجمع العملات والماسات، وواجه الزعماء! Yaman bachata game, لعبه يمان قدحات, تحدي, انعكاس, جاذبية, فلاب بانيك" />
-    <meta name="keywords" content="Flip Panic, فليب بانيك, لعبة, تحدي, انعكاس, جاذبية, مراحل, زعماء, عملات, ماسات, Yaman bachata game, لعبه يمان قدحات, Yaman Gadhat, قفز, منصات, مهارة, ذكاء, سرعة, فلاب, بانيك, تحدي الانعكاس, لعبة عربية" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+
+    <!-- ===== SEO META TAGS ===== -->
+    <title>Flip Panic ✦ فليب بانيك – لعبة التحدي والانعكاس</title>
+    <meta name="description" content="Flip Panic هي لعبة تحدي وإثارة تعتمد على الانعكاس والجاذبية. تجاوز المراحل، اجمع العملات والماسات، وواجه الزعماء!" />
+    <meta name="keywords" content="Flip Panic, فليب بانيك, لعبة, تحدي, انعكاس, جاذبية, مراحل, زعماء, عملات, ماسات" />
     <meta name="author" content="Yaman Gadhat" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://flip-panic.netlify.app/" />
@@ -12,28 +15,30 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://flip-panic.netlify.app/" />
-    <meta property="og:title" content="Flip Panic ✦ فليب بانيك – لعبة التحدي والانعكاس Yaman bachata" />
-    <meta property="og:description" content="لعبة تحدي وإثارة تعتمد على الانعكاس والجاذبية. Yaman bachata game, لعبه يمان قدحات, تجاوز المراحل واجمع العملات." />
+    <meta property="og:title" content="Flip Panic ✦ فليب بانيك – لعبة التحدي والانعكاس" />
+    <meta property="og:description" content="لعبة تحدي وإثارة تعتمد على الانعكاس والجاذبية. تجاوز المراحل، اجمع العملات والماسات، وواجه الزعماء!" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Flip Panic ✦ فليب بانيك – Yaman bachata game" />
+    <meta name="twitter:title" content="Flip Panic ✦ فليب بانيك" />
 
     <!-- Structured Data -->
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",
             "@type": "WebApplication",
-            "name": "Flip Panic – لعبة يمان قدحات",
-            "description": "لعبة تحدي وإثارة تعتمد على الانعكاس والجاذبية. من صنع Yaman Gadhat.",
+            "name": "Flip Panic",
+            "description": "لعبة تحدي وإثارة تعتمد على الانعكاس والجاذبية.",
             "applicationCategory": "Game",
-            "author": { "@type": "Person", "name": "Yaman Gadhat" },
-            "keywords": "Flip Panic, فليب بانيك, Yaman bachata game, لعبه يمان قدحات, تحدي, انعكاس"
+            "author": { "@type": "Person", "name": "Yaman Gadhat" }
         }
     </script>
 
+    <!-- ===== ADVERTICA: REDIRECT AD TAG (تحميل فوري) ===== -->
+    <script type="text/javascript" src="//data527.click/c5243e1113deb6cbfd49/478ecd45ce/?placementName=default" async></script>
+
     <style>
-        /* ===== RESET & BASE (نفس الكود السابق مع إضافات بسيطة) ===== */
+        /* ===== RESET & BASE ===== */
         * {
             margin: 0;
             padding: 0;
@@ -101,6 +106,7 @@
             image-rendering: pixelated;
         }
 
+        /* AD containers (outside game) */
         .ad-col {
             width: 120px;
             min-width: 80px;
@@ -152,18 +158,31 @@
         }
 
         @media (max-width: 700px) {
-            .ad-col { display: none; }
-            .ad-row { height: 40px; }
+            .ad-col {
+                display: none;
+            }
+            .ad-row {
+                height: 40px;
+            }
         }
         @media (max-height: 500px) {
-            .ad-row { height: 28px; }
-            .ad-row .ad-placeholder { font-size: 0.4rem; }
+            .ad-row {
+                height: 28px;
+            }
+            .ad-row .ad-placeholder {
+                font-size: 0.4rem;
+            }
         }
         @media (orientation: landscape) and (max-height: 500px) {
-            .ad-col { min-width: 60px; }
-            .ad-col .ad-placeholder { font-size: 0.4rem; }
+            .ad-col {
+                min-width: 60px;
+            }
+            .ad-col .ad-placeholder {
+                font-size: 0.4rem;
+            }
         }
 
+        /* ===== GAME OVERLAYS (inside game-container) ===== */
         .scanlines {
             position: absolute;
             top: 0;
@@ -175,6 +194,7 @@
             background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.04) 2px, rgba(0, 0, 0, 0.04) 4px);
         }
 
+        /* ===== TOUCH CONTROLS ===== */
         .touch-controls {
             position: absolute;
             bottom: 10px;
@@ -225,6 +245,7 @@
             box-shadow: 0 0 50px #ff44aa;
         }
 
+        /* ===== UI OVERLAY ===== */
         #ui-overlay {
             position: absolute;
             top: 0;
@@ -249,7 +270,9 @@
             align-items: center;
             gap: 4px;
         }
-        .hud-coin.bump { transform: scale(1.4); }
+        .hud-coin.bump {
+            transform: scale(1.4);
+        }
         .hud-diamond {
             position: absolute;
             top: 14px;
@@ -313,8 +336,11 @@
             opacity: 0;
             transition: opacity 0.3s;
         }
-        .combo-display.active { opacity: 1; }
+        .combo-display.active {
+            opacity: 1;
+        }
 
+        /* ===== BUTTONS ===== */
         .menu-btn-small {
             background: transparent;
             border: 2px solid rgba(0, 255, 255, 0.5);
@@ -467,7 +493,7 @@
             box-shadow: 0 0 50px #ffaa44;
         }
 
-        /* ===== شاشات القائمة ===== */
+        /* ===== MENU SCREEN ===== */
         .menu-screen {
             position: absolute;
             top: 0;
@@ -539,12 +565,25 @@
             color: #00e5ff;
         }
         @keyframes glitch-text {
-            0% { transform: translate(0); text-shadow: 0 0 30px #00ffff, 0 0 60px #00ffff; }
-            25% { transform: translate(-2px, 1px); text-shadow: 0 0 30px #ff44aa, 0 0 60px #ff44aa; }
-            75% { transform: translate(2px, -1px); text-shadow: 0 0 30px #00ffff, 0 0 60px #ff44aa; }
-            100% { transform: translate(0); text-shadow: 0 0 30px #00ffff, 0 0 60px #00ffff; }
+            0% {
+                transform: translate(0);
+                text-shadow: 0 0 30px #00ffff, 0 0 60px #00ffff;
+            }
+            25% {
+                transform: translate(-2px, 1px);
+                text-shadow: 0 0 30px #ff44aa, 0 0 60px #ff44aa;
+            }
+            75% {
+                transform: translate(2px, -1px);
+                text-shadow: 0 0 30px #00ffff, 0 0 60px #ff44aa;
+            }
+            100% {
+                transform: translate(0);
+                text-shadow: 0 0 30px #00ffff, 0 0 60px #00ffff;
+            }
         }
 
+        /* ===== FOOTER (copyright + contact) ===== */
         .menu-footer {
             margin-top: 12px;
             text-align: center;
@@ -591,120 +630,8 @@
         .menu-footer .social-row a:hover {
             color: #ff88cc;
         }
-        /* رابط سياسة الخصوصية */
-        .privacy-link {
-            cursor: pointer;
-            color: #6699cc;
-            border-bottom: 1px dotted rgba(102, 153, 204, 0.3);
-            transition: color 0.2s;
-        }
-        .privacy-link:hover {
-            color: #88ccff;
-            border-bottom-color: #88ccff;
-        }
 
-        /* ===== شاشة سياسة الخصوصية (Privacy Policy) ===== */
-        .privacy-screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(2, 2, 16, 0.97);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-            pointer-events: auto;
-            z-index: 40;
-            transition: opacity 0.4s;
-            padding: 12px 8px;
-            overflow: hidden;
-        }
-        .privacy-screen.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-        .privacy-title {
-            color: #88ccff;
-            font-size: 1.6rem;
-            text-shadow: 0 0 20px #88ccff;
-            margin-bottom: 6px;
-            margin-top: 4px;
-            text-align: center;
-        }
-        .privacy-scroll {
-            width: 100%;
-            max-width: 700px;
-            flex: 1;
-            overflow-y: auto;
-            overflow-x: hidden;
-            padding: 6px 10px 10px 10px;
-            scrollbar-width: thin;
-            scrollbar-color: #88ccff rgba(0, 0, 0, 0.3);
-            -webkit-overflow-scrolling: touch;
-            color: #ccd;
-            font-size: 0.85rem;
-            line-height: 1.8;
-            text-align: justify;
-        }
-        .privacy-scroll::-webkit-scrollbar {
-            width: 4px;
-        }
-        .privacy-scroll::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-        }
-        .privacy-scroll::-webkit-scrollbar-thumb {
-            background: #88ccff;
-            border-radius: 8px;
-            box-shadow: 0 0 8px #88ccff;
-        }
-        .privacy-scroll h3 {
-            color: #88ccff;
-            margin-top: 12px;
-            margin-bottom: 4px;
-            font-size: 1rem;
-        }
-        .privacy-scroll p {
-            margin-bottom: 8px;
-        }
-        .privacy-scroll ul {
-            padding-right: 20px;
-            margin-bottom: 8px;
-        }
-        .privacy-scroll ul li {
-            margin-bottom: 4px;
-        }
-        .privacy-scroll strong {
-            color: #ff88cc;
-        }
-        .privacy-close-btn {
-            margin-top: 6px;
-            margin-bottom: 4px;
-            background: transparent;
-            border: 2px solid #88ccff;
-            color: #88ccff;
-            padding: 6px 28px;
-            font-size: 0.9rem;
-            font-family: inherit;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-shadow: 0 0 10px #88ccff;
-            box-shadow: 0 0 20px rgba(136, 204, 255, 0.2);
-            pointer-events: auto;
-            touch-action: manipulation;
-        }
-        .privacy-close-btn:active {
-            background: #88ccff;
-            color: #000;
-            transform: scale(0.92);
-        }
-
-        /* ===== باقي الأنماط (نفس الكود السابق) ===== */
+        /* ===== MAP, SHOP, WHEEL, DAILY, CONTACT SCREENS ===== */
         .map-screen,
         .shop-screen,
         .wheel-screen,
@@ -876,6 +803,7 @@
             margin: 2px;
         }
 
+        /* Shop */
         .shop-currency {
             color: #ffdd00;
             font-size: 1rem;
@@ -983,6 +911,7 @@
             cursor: not-allowed;
         }
 
+        /* Wheel */
         .wheel-canvas-wrap {
             position: relative;
             width: 180px;
@@ -1039,6 +968,7 @@
             min-height: 1.2rem;
         }
 
+        /* Daily */
         .daily-reward-box {
             background: rgba(255, 170, 68, 0.08);
             border: 2px solid rgba(255, 170, 68, 0.4);
@@ -1068,6 +998,7 @@
             margin-top: 4px;
         }
 
+        /* ===== ACHIEVEMENT TOAST ===== */
         .achievement-toast {
             position: absolute;
             bottom: 130px;
@@ -1110,6 +1041,206 @@
             opacity: 1;
         }
 
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            .game-title {
+                font-size: 2rem;
+            }
+            .sub-title {
+                font-size: 0.8rem;
+            }
+            .menu-btn {
+                padding: 6px 20px;
+                font-size: 0.9rem;
+            }
+            .ctrl-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+            .ctrl-btn.jump {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+            .hud-coin {
+                font-size: 0.8rem;
+                top: 8px;
+                left: 8px;
+            }
+            .hud-diamond {
+                font-size: 0.7rem;
+                top: 8px;
+                left: 70px;
+            }
+            .level-indicator {
+                font-size: 0.6rem;
+                padding: 1px 10px;
+                top: 6px;
+            }
+            .death-counter {
+                font-size: 0.7rem;
+                padding: 1px 8px;
+                top: 6px;
+                right: 8px;
+            }
+            .shop-scroll {
+                width: 220px;
+                max-height: 130px;
+            }
+            .shop-item {
+                width: 200px;
+                font-size: 0.6rem;
+                padding: 4px 8px;
+            }
+            .wheel-canvas-wrap {
+                width: 140px;
+                height: 140px;
+            }
+            .menu-btn-small.mute-btn {
+                right: 60px;
+                font-size: 0.6rem;
+                padding: 2px 10px;
+            }
+            .menu-btn-small.skip-btn {
+                right: 120px;
+                font-size: 0.55rem;
+                padding: 2px 8px;
+            }
+            .menu-btn-small.ad-skip-btn {
+                right: 190px;
+                font-size: 0.5rem;
+                padding: 2px 6px;
+            }
+            .menu-btn-small.menu-btn-top {
+                right: 250px;
+                font-size: 0.5rem;
+                padding: 2px 8px;
+            }
+            .touch-controls {
+                padding: 0 10px;
+                bottom: 4px;
+            }
+            .map-grid {
+                grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+                gap: 4px;
+            }
+            .map-node {
+                min-height: 48px;
+                font-size: 0.45rem;
+            }
+            .map-node .node-num {
+                font-size: 0.7rem;
+            }
+            .map-node .node-name {
+                font-size: 0.35rem;
+            }
+            .map-title {
+                font-size: 1.1rem;
+            }
+            .map-actions .menu-btn {
+                font-size: 0.65rem;
+                padding: 4px 12px;
+            }
+            .daily-reward-box {
+                padding: 12px 18px;
+                min-width: 160px;
+            }
+            .daily-reward-box .reward-icon {
+                font-size: 2.2rem;
+            }
+            .menu-footer {
+                font-size: 0.5rem;
+                padding-top: 6px;
+                margin-top: 8px;
+            }
+            .menu-footer .social-row a {
+                font-size: 0.6rem;
+            }
+        }
+        @media (orientation: landscape) and (max-height: 500px) {
+            .touch-controls {
+                bottom: 2px;
+            }
+            .ctrl-btn {
+                width: 34px;
+                height: 34px;
+                font-size: 14px;
+            }
+            .ctrl-btn.jump {
+                width: 42px;
+                height: 42px;
+                font-size: 20px;
+            }
+            .hud-coin {
+                font-size: 0.6rem;
+                top: 4px;
+                left: 4px;
+            }
+            .hud-diamond {
+                font-size: 0.55rem;
+                top: 4px;
+                left: 52px;
+            }
+            .level-indicator {
+                font-size: 0.5rem;
+                padding: 0 8px;
+                top: 3px;
+            }
+            .death-counter {
+                font-size: 0.55rem;
+                padding: 0 6px;
+                top: 3px;
+                right: 4px;
+            }
+            .map-grid {
+                grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+                gap: 3px;
+            }
+            .map-node {
+                min-height: 38px;
+                font-size: 0.35rem;
+            }
+            .map-node .node-num {
+                font-size: 0.55rem;
+            }
+            .map-node .node-name {
+                display: none;
+            }
+            .map-title {
+                font-size: 0.9rem;
+                margin-top: 2px;
+            }
+            .map-actions .menu-btn {
+                font-size: 0.55rem;
+                padding: 2px 10px;
+            }
+            .menu-btn-small.skip-btn {
+                right: 100px;
+                font-size: 0.5rem;
+                padding: 2px 6px;
+            }
+            .menu-btn-small.ad-skip-btn {
+                right: 160px;
+                font-size: 0.45rem;
+                padding: 2px 5px;
+            }
+            .menu-btn-small.menu-btn-top {
+                right: 210px;
+                font-size: 0.45rem;
+                padding: 2px 6px;
+            }
+            .menu-footer {
+                font-size: 0.45rem;
+                padding-top: 4px;
+                margin-top: 4px;
+            }
+            .menu-footer .social-row a {
+                font-size: 0.5rem;
+            }
+        }
+
+        /* ===== MISLEAD MSG ===== */
         #misleadMsg {
             position: absolute;
             bottom: 90px;
@@ -1124,6 +1255,8 @@
             white-space: nowrap;
             z-index: 15;
         }
+
+        /* Retry / Next */
         #retryBtn,
         #nextBtn {
             position: absolute;
@@ -1142,87 +1275,42 @@
             border-color: #ff44aa;
             color: #ff44aa;
         }
-
-        @media (max-width: 600px) {
-            .game-title { font-size: 2rem; }
-            .sub-title { font-size: 0.8rem; }
-            .menu-btn { padding: 6px 20px; font-size: 0.9rem; }
-            .ctrl-btn { width: 40px; height: 40px; font-size: 18px; }
-            .ctrl-btn.jump { width: 50px; height: 50px; font-size: 24px; }
-            .hud-coin { font-size: 0.8rem; top: 8px; left: 8px; }
-            .hud-diamond { font-size: 0.7rem; top: 8px; left: 70px; }
-            .level-indicator { font-size: 0.6rem; padding: 1px 10px; top: 6px; }
-            .death-counter { font-size: 0.7rem; padding: 1px 8px; top: 6px; right: 8px; }
-            .shop-scroll { width: 220px; max-height: 130px; }
-            .shop-item { width: 200px; font-size: 0.6rem; padding: 4px 8px; }
-            .wheel-canvas-wrap { width: 140px; height: 140px; }
-            .menu-btn-small.mute-btn { right: 60px; font-size: 0.6rem; padding: 2px 10px; }
-            .menu-btn-small.skip-btn { right: 120px; font-size: 0.55rem; padding: 2px 8px; }
-            .menu-btn-small.ad-skip-btn { right: 190px; font-size: 0.5rem; padding: 2px 6px; }
-            .menu-btn-small.menu-btn-top { right: 250px; font-size: 0.5rem; padding: 2px 8px; }
-            .touch-controls { padding: 0 10px; bottom: 4px; }
-            .map-grid { grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); gap: 4px; }
-            .map-node { min-height: 48px; font-size: 0.45rem; }
-            .map-node .node-num { font-size: 0.7rem; }
-            .map-node .node-name { font-size: 0.35rem; }
-            .map-title { font-size: 1.1rem; }
-            .map-actions .menu-btn { font-size: 0.65rem; padding: 4px 12px; }
-            .daily-reward-box { padding: 12px 18px; min-width: 160px; }
-            .daily-reward-box .reward-icon { font-size: 2.2rem; }
-            .menu-footer { font-size: 0.5rem; padding-top: 6px; margin-top: 8px; }
-            .menu-footer .social-row a { font-size: 0.6rem; }
-            .privacy-title { font-size: 1.2rem; }
-            .privacy-scroll { font-size: 0.75rem; padding: 4px 6px; }
-            .privacy-scroll h3 { font-size: 0.9rem; }
-        }
-        @media (orientation: landscape) and (max-height: 500px) {
-            .touch-controls { bottom: 2px; }
-            .ctrl-btn { width: 34px; height: 34px; font-size: 14px; }
-            .ctrl-btn.jump { width: 42px; height: 42px; font-size: 20px; }
-            .hud-coin { font-size: 0.6rem; top: 4px; left: 4px; }
-            .hud-diamond { font-size: 0.55rem; top: 4px; left: 52px; }
-            .level-indicator { font-size: 0.5rem; padding: 0 8px; top: 3px; }
-            .death-counter { font-size: 0.55rem; padding: 0 6px; top: 3px; right: 4px; }
-            .map-grid { grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 3px; }
-            .map-node { min-height: 38px; font-size: 0.35rem; }
-            .map-node .node-num { font-size: 0.55rem; }
-            .map-node .node-name { display: none; }
-            .map-title { font-size: 0.9rem; margin-top: 2px; }
-            .map-actions .menu-btn { font-size: 0.55rem; padding: 2px 10px; }
-            .menu-btn-small.skip-btn { right: 100px; font-size: 0.5rem; padding: 2px 6px; }
-            .menu-btn-small.ad-skip-btn { right: 160px; font-size: 0.45rem; padding: 2px 5px; }
-            .menu-btn-small.menu-btn-top { right: 210px; font-size: 0.45rem; padding: 2px 6px; }
-            .menu-footer { font-size: 0.45rem; padding-top: 4px; margin-top: 4px; }
-            .menu-footer .social-row a { font-size: 0.5rem; }
-        }
     </style>
 </head>
 <body>
 
+    <!-- ===== LAYOUT: ADS AROUND GAME ===== -->
     <div class="game-layout">
+        <!-- TOP AD -->
         <div class="ad-row" id="adTop">
             <div class="ad-placeholder">📢 إعلان<br /><span style="font-size:0.4rem;">Google AdSense</span></div>
             <span class="ad-label">إعلان</span>
         </div>
 
+        <!-- MIDDLE ROW: LEFT AD + GAME + RIGHT AD -->
         <div class="middle-row">
+            <!-- LEFT AD -->
             <div class="ad-col" id="adLeft">
                 <div class="ad-placeholder" style="font-size:0.5rem;">📢<br />إعلان</div>
                 <span class="ad-label">إعلان</span>
             </div>
 
+            <!-- GAME CONTAINER -->
             <div class="game-container" id="gameContainer">
                 <canvas id="gameCanvas"></canvas>
                 <div class="scanlines"></div>
                 <div class="transition-overlay" id="transitionOverlay"></div>
 
+                <!-- ===== UI OVERLAY ===== -->
                 <div id="ui-overlay">
+                    <!-- HUD -->
                     <div class="hud-coin" id="hudCoin">💎 <span id="hudCoinVal">0</span></div>
                     <div class="hud-diamond" id="hudDiamond">💠 <span id="hudDiamondVal">0</span></div>
                     <div class="level-indicator" id="levelDisplay">مرحلة 1</div>
                     <div class="death-counter" id="deathDisplay">💀 0</div>
                     <div class="combo-display" id="comboDisplay">🔥 x<span id="comboCount">0</span></div>
 
+                    <!-- TOP BUTTONS -->
                     <button class="menu-btn-small mute-btn" id="muteBtn">🔊</button>
                     <button class="menu-btn-small skip-btn" id="skipBtn">⏭ تخطي (50💎)</button>
                     <button class="menu-btn-small ad-skip-btn" id="adSkipBtn">📺 تخطي بإعلان</button>
@@ -1236,7 +1324,7 @@
                     <!-- ===== START MENU ===== -->
                     <div class="menu-screen" id="startScreen">
                         <div class="game-title"><span class="flip">FLIP</span> PANIC</div>
-                        <div class="sub-title">✦ لا تثق بالشاشة • لعبة يمان قدحات ✦</div>
+                        <div class="sub-title">✦ لا تثق بالشاشة ✦</div>
                         <div class="menu-buttons">
                             <div class="row">
                                 <button class="menu-btn" id="playBtn">▶ ابدأ</button>
@@ -1254,53 +1342,14 @@
                             <br />🏆 إنجازات: <span id="menuAchievements">0</span> &nbsp;|&nbsp; ⭐ نجوم: <span id="menuTotalStars">0</span>
                         </div>
 
-                        <!-- ===== FOOTER: Copyright + Contact + Privacy ===== -->
+                        <!-- ===== FOOTER: Copyright + Contact ===== -->
                         <div class="menu-footer">
                             <div class="social-row">
                                 <a href="https://www.instagram.com/ym_9n_" target="_blank">📸 <span>@ym_9n_</span></a>
                                 <a href="mailto:ym_9n@example.com" target="_blank">✉️ <span>بريد</span></a>
-                                <span class="privacy-link" id="privacyLink">🔒 سياسة الخصوصية</span>
                             </div>
-                            <div class="copyright">© 2026 Yaman Gadhat — جميع الحقوق محفوظة • Yaman bachata game</div>
+                            <div class="copyright">© 2026 Yaman Gadhat — جميع الحقوق محفوظة</div>
                         </div>
-                    </div>
-
-                    <!-- ===== PRIVACY POLICY SCREEN ===== -->
-                    <div class="privacy-screen hidden" id="privacyScreen">
-                        <div class="privacy-title">🔒 سياسة الخصوصية</div>
-                        <div class="privacy-scroll">
-                            <p><strong>آخر تحديث:</strong> 9 يوليو 2026</p>
-                            <p>نحن في <strong>Flip Panic – لعبة يمان قدحات</strong> (Yaman bachata game) نلتزم بحماية خصوصية زوارنا ومستخدمينا. توضح هذه الصفحة كيفية جمع واستخدام وحماية المعلومات عند استخدامك للعبة.</p>
-
-                            <h3>📌 المعلومات التي نجمعها</h3>
-                            <ul>
-                                <li><strong>بيانات غير شخصية:</strong> مثل نوع المتصفح، نظام التشغيل، اللغة، دقة الشاشة، ونوع الجهاز (تُجمع تلقائياً عبر أدوات تحليلية).</li>
-                                <li><strong>ملفات تعريف الارتباط (Cookies):</strong> نستخدم ملفات cookies لتحسين تجربة المستخدم، وتذكر التفضيلات، وتحليل الأداء. يمكنك تعطيلها من إعدادات المتصفح.</li>
-                                <li><strong>بيانات اللعب:</strong> يتم حفظ تقدمك (المستوى، العملات، الماسات، الإنجازات) محلياً في متصفحك (localStorage) ولا تُرسل إلى خوادمنا.</li>
-                            </ul>
-
-                            <h3>📢 الإعلانات</h3>
-                            <p>نعرض إعلانات من شبكات خارجية مثل <strong>Google AdSense</strong>. قد تستخدم هذه الشبكات ملفات تعريف الارتباط لتقديم إعلانات مخصصة بناءً على زياراتك السابقة. لمزيد من المعلومات، يمكنك الاطلاع على <a href="https://policies.google.com/privacy" target="_blank" style="color:#88ccff;">سياسة خصوصية Google</a>.</p>
-                            <p>يمكنك إدارة تفضيلات الإعلانات من خلال <a href="https://adssettings.google.com/" target="_blank" style="color:#88ccff;">إعدادات الإعلانات من Google</a>.</p>
-
-                            <h3>🔐 كيف نستخدم المعلومات</h3>
-                            <ul>
-                                <li>تحسين أداء اللعبة وتجربة المستخدم.</li>
-                                <li>تحليل الاتجاهات والإحصائيات الداخلية.</li>
-                                <li>تقديم محتوى وإعلانات ذات صلة.</li>
-                            </ul>
-
-                            <h3>🛡️ حماية البيانات</h3>
-                            <p>جميع البيانات المخزنة محلياً تكون تحت مسؤوليتك. لا نشارك بياناتك الشخصية مع أي طرف ثالث إلا إذا اقتضى القانون ذلك.</p>
-
-                            <h3>👦 الأطفال</h3>
-                            <p>اللعبة مناسبة لجميع الأعمار، لكننا لا نجمع بيانات عن عمر المستخدمين. نشجع الأهل على مراقبة استخدام أطفالهم للإنترنت.</p>
-
-                            <h3>📧 الاتصال بنا</h3>
-                            <p>إذا كان لديك أي استفسار حول سياسة الخصوصية، يمكنك التواصل عبر البريد الإلكتروني: <a href="mailto:ym_9n@example.com" style="color:#88ccff;">ym_9n@example.com</a></p>
-                            <p style="margin-top:8px; color:#666; font-size:0.75rem;">نحن نحتفظ بالحق في تحديث هذه السياسة من وقت لآخر. يرجى مراجعتها دورياً.</p>
-                        </div>
-                        <button class="privacy-close-btn" id="closePrivacyBtn">✕ إغلاق</button>
                     </div>
 
                     <!-- ===== MAP ===== -->
@@ -1366,12 +1415,14 @@
                 </div>
             </div>
 
+            <!-- RIGHT AD -->
             <div class="ad-col" id="adRight">
                 <div class="ad-placeholder" style="font-size:0.5rem;">📢<br />إعلان</div>
                 <span class="ad-label">إعلان</span>
             </div>
         </div>
 
+        <!-- BOTTOM AD -->
         <div class="ad-row" id="adBottom">
             <div class="ad-placeholder">📢 إعلان<br /><span style="font-size:0.4rem;">Google AdSense</span></div>
             <span class="ad-label">إعلان</span>
@@ -1380,12 +1431,12 @@
 
     <script>
         // ============================================================
-        //  FLIP PANIC — ENHANCED EDITION + PRIVACY POLICY
+        //  FLIP PANIC — ENHANCED EDITION
         //  + Smaller game, ads around, ad-skip, menu button, footer
         //  ============================================================
 
         // ============================================================
-        //  AUDIO ENGINE (نفس الكود السابق)
+        //  AUDIO ENGINE
         // ============================================================
         class AudioEngine {
             constructor() {
@@ -1397,10 +1448,12 @@
                     this.ctx = new(window.AudioContext || window.webkitAudioContext)();
                 } catch (e) { this.ctx = null; }
             }
+
             init() {
                 if (!this.ctx) return;
                 if (this.ctx.state === 'suspended') this.ctx.resume().catch(() => {});
             }
+
             toggleMute() {
                 this.muted = !this.muted;
                 if (this.muted && this.musicInterval) {
@@ -1414,6 +1467,7 @@
                 document.getElementById('muteBtn').classList.toggle('active', this.muted);
                 return this.muted;
             }
+
             startMusic() {
                 if (this.muted || !this.ctx) return;
                 if (this.musicInterval) return;
@@ -1437,6 +1491,7 @@
                     } catch (e) {}
                 }, 220);
             }
+
             stopMusic() {
                 if (this.musicInterval) {
                     clearInterval(this.musicInterval);
@@ -1444,6 +1499,7 @@
                     this.musicActive = false;
                 }
             }
+
             playBeep(freq, dur, type, vol) {
                 if (this.muted || !this.ctx) return;
                 try {
@@ -1459,6 +1515,7 @@
                     o.stop(this.ctx.currentTime + dur);
                 } catch (e) {}
             }
+
             sfxFlip() { this.playBeep(200, 0.08, 'sawtooth', 0.1);
                 setTimeout(() => this.playBeep(80, 0.12, 'triangle', 0.08), 50); }
             sfxWarn() { this.playBeep(1400, 0.05, 'square', 0.05); }
@@ -1490,7 +1547,7 @@
         }
 
         // ============================================================
-        //  PARTICLE SYSTEM (نفس الكود السابق)
+        //  PARTICLE SYSTEM
         // ============================================================
         class Particle {
             constructor(x, y, color, life, size, vx, vy) {
@@ -1549,7 +1606,7 @@
         }
 
         // ============================================================
-        //  SAVE SYSTEM (نفس الكود السابق)
+        //  SAVE SYSTEM
         // ============================================================
         class SaveSystem {
             static save(key, data) {
@@ -1650,7 +1707,8 @@
         };
 
         // ============================================================
-        //  LEVEL DATA (نفس الكود السابق، تم اختصاره للطول لكنه كامل)
+        //  LEVEL DATA — REMOVED LEVEL 37 (index 36: "The Mirror World")
+        //  Total levels: 36 (indices 0-35)
         // ============================================================
         const LEVEL_DATA = [
             { name: 'Training Lies', platforms: [{ x: 40, y: 360, w: 120, h: 18, type: 'solid' }, { x: 240, y: 320, w: 100,
@@ -2045,7 +2103,7 @@
                     y: 223 }, { x: 440, y: 190 }, { x: 525, y: 158 }, { x: 610, y: 126 }, { x: 702, y: 93 }
                 ], playerStart: { x: 28, y: 315 }, description: 'التحدي الأقصى', flipDelay: 1.5, doubleFlip: true,
                 adaptive: true, fullChaos: true, weather: 'clear', time: 'day', boss: false, secret: false },
-            // NEW LEVELS (مستمر)
+            // NEW LEVELS (continued)
             {
                 name: 'Rainy Night',
                 platforms: [{ x: 30, y: 360, w: 80, h: 18, type: 'solid' }, { x: 170, y: 330, w: 55, h: 18,
@@ -2455,7 +2513,6 @@
                     this.uiStart('mapScreen').classList.add('hidden');
                     this.uiStart('wheelScreen').classList.add('hidden');
                     this.uiStart('dailyScreen').classList.add('hidden');
-                    this.uiStart('privacyScreen').classList.add('hidden');
                     this.gameState = 'playing';
                     this.loadLevel(this.currentLevel);
                     this.updateUI();
@@ -2470,7 +2527,6 @@
                     this.uiStart('mapScreen').classList.add('hidden');
                     this.uiStart('wheelScreen').classList.add('hidden');
                     this.uiStart('dailyScreen').classList.add('hidden');
-                    this.uiStart('privacyScreen').classList.add('hidden');
                     this.gameState = 'playing';
                     this.loadLevel(this.currentLevel);
                     this.updateUI();
@@ -2485,7 +2541,6 @@
                     this.uiStart('shopScreen').classList.add('hidden');
                     this.uiStart('wheelScreen').classList.add('hidden');
                     this.uiStart('dailyScreen').classList.add('hidden');
-                    this.uiStart('privacyScreen').classList.add('hidden');
                     this.gameState = 'map';
                     this.renderMap();
                 });
@@ -2505,7 +2560,6 @@
                     this.uiStart('mapScreen').classList.add('hidden');
                     this.uiStart('wheelScreen').classList.add('hidden');
                     this.uiStart('dailyScreen').classList.add('hidden');
-                    this.uiStart('privacyScreen').classList.add('hidden');
                     this.gameState = 'shop';
                     this.renderShop();
                 });
@@ -2525,7 +2579,6 @@
                     this.uiStart('shopScreen').classList.add('hidden');
                     this.uiStart('mapScreen').classList.add('hidden');
                     this.uiStart('dailyScreen').classList.add('hidden');
-                    this.uiStart('privacyScreen').classList.add('hidden');
                     this.gameState = 'wheel';
                     this.initWheel();
                 });
@@ -2546,6 +2599,7 @@
                     this.audio.toggleMute();
                 });
 
+                // ===== TOP MENU BUTTON (in-game) =====
                 document.getElementById('menuBtnTop').addEventListener('click', () => {
                     this.goToMainMenu();
                 });
@@ -2558,7 +2612,6 @@
                     this.uiStart('shopScreen').classList.add('hidden');
                     this.uiStart('mapScreen').classList.add('hidden');
                     this.uiStart('wheelScreen').classList.add('hidden');
-                    this.uiStart('privacyScreen').classList.add('hidden');
                     this.gameState = 'daily';
                     this.updateDailyUI();
                 });
@@ -2575,16 +2628,18 @@
                     this.claimDailyReward();
                 });
 
-                // Skip
+                // Skip buttons
                 document.getElementById('skipBtn').addEventListener('click', () => {
                     this.audio.init();
                     this.trySkipLevel();
                 });
+
                 document.getElementById('mapSkipBtn').addEventListener('click', () => {
                     this.audio.init();
                     this.trySkipLevel();
                 });
 
+                // AD Skip button (free skip with ad)
                 document.getElementById('adSkipBtn').addEventListener('click', () => {
                     this.audio.init();
                     this.tryAdSkip();
@@ -2627,26 +2682,17 @@
                     });
                 });
 
-                // ===== PRIVACY POLICY =====
-                document.getElementById('privacyLink').addEventListener('click', () => {
-                    this.audio.init();
-                    this.uiStart('privacyScreen').classList.remove('hidden');
-                    this.uiStart('startScreen').classList.add('hidden'); // خلفية القائمة تظل لكن الشاشة تظهر
-                });
-                document.getElementById('closePrivacyBtn').addEventListener('click', () => {
-                    this.uiStart('privacyScreen').classList.add('hidden');
-                    this.uiStart('startScreen').classList.remove('hidden');
-                });
-
                 if (this.levelsCompleted > 0 || this.currentLevel > 0) {
                     document.getElementById('continueBtn').style.display = 'inline-block';
                 }
             }
 
             uiStart(id) {
-                return document.getElementById(id);
+                const el = document.getElementById(id);
+                return el || document.getElementById(id);
             }
 
+            // ===== SAVE =====
             saveAll() {
                 const data = {
                     currentLevel: this.currentLevel,
@@ -2676,6 +2722,7 @@
                 Object.assign(this.state, data);
             }
 
+            // ===== APPLY EQUIPPED =====
             applyEquipped() {
                 this.player.normalColor = '#00d4ff';
                 this.player.flippedColor = '#ff3355';
@@ -2719,6 +2766,7 @@
                 this.player.color = this.player.normalColor;
             }
 
+            // ===== DAILY REWARDS =====
             updateDailyUI() {
                 const now = Date.now();
                 const lastClaim = this.dailyLastClaim || 0;
@@ -2798,6 +2846,7 @@
                 }, 1500);
             }
 
+            // ===== AD SKIP =====
             tryAdSkip() {
                 if (this.gameState !== 'playing') return;
                 if (this.currentLevel >= LEVEL_DATA.length - 1) {
@@ -2811,11 +2860,13 @@
                     return;
                 }
 
+                // Simulate ad watching
                 this.uiStart('misleadMsg').textContent = '📺 جارٍ تشغيل الإعلان... انتظر 3 ثوانٍ';
                 this.misleadTimer = 3;
                 this.adSkipAvailable = false;
 
                 setTimeout(() => {
+                    // Ad finished — skip level
                     this.audio.sfxSkip();
                     this.particles.emit(G.WIDTH / 2, G.HEIGHT / 2, '#ff8800', 20);
                     this.floatingTexts.push({ x: G.WIDTH / 2, y: G.HEIGHT / 2 - 20, text: '⏭ تخطي مجاني!',
@@ -2826,6 +2877,7 @@
                         this.saveAll();
                         this.renderMap();
                     });
+                    // Re-enable after 30 seconds
                     setTimeout(() => {
                         this.adSkipAvailable = true;
                         this.uiStart('misleadMsg').textContent = '📺 تخطي بإعلان متاح مجدداً';
@@ -2834,6 +2886,7 @@
                 }, 3000);
             }
 
+            // ===== LOAD LEVEL =====
             loadLevel(index) {
                 if (index >= LEVEL_DATA.length) {
                     this.showVictory();
@@ -2967,6 +3020,7 @@
                 this.renderMap();
             }
 
+            // ===== TRY SKIP LEVEL (coins) =====
             trySkipLevel() {
                 if (this.gameState !== 'playing' && this.gameState !== 'map') return;
                 const cost = G.SKIP_COST;
@@ -3002,6 +3056,7 @@
                 });
             }
 
+            // ===== RENDER MAP =====
             renderMap() {
                 const grid = document.getElementById('mapGrid');
                 grid.innerHTML = '';
@@ -3068,6 +3123,7 @@
                     `⏭ تخطي (${G.SKIP_COST}💎) - غير متاح`;
             }
 
+            // ===== TRIGGER TRANSITION =====
             triggerTransition(cb) {
                 this.screenTransition = 1;
                 this.uiStart('transitionOverlay').classList.add('active');
@@ -3082,6 +3138,7 @@
                 }, 200);
             }
 
+            // ===== GO TO MAIN MENU =====
             goToMainMenu() {
                 this.gameState = 'menu';
                 this.uiStart('startScreen').classList.remove('hidden');
@@ -3089,7 +3146,6 @@
                 this.uiStart('mapScreen').classList.add('hidden');
                 this.uiStart('wheelScreen').classList.add('hidden');
                 this.uiStart('dailyScreen').classList.add('hidden');
-                this.uiStart('privacyScreen').classList.add('hidden');
                 document.getElementById('skipBtn').style.display = 'none';
                 document.getElementById('adSkipBtn').style.display = 'none';
                 document.getElementById('menuBtnTop').style.display = 'none';
@@ -3111,6 +3167,7 @@
                 }
             }
 
+            // ===== SHOW VICTORY =====
             showVictory() {
                 this.uiStart('misleadMsg').textContent = '🎉 لقد تغلبت على كل الفوضى! أنت أسطورة! 🎉';
                 this.misleadTimer = 999;
@@ -3132,6 +3189,7 @@
                 this.gameState = 'win';
             }
 
+            // ===== WIN LEVEL =====
             winLevel() {
                 if (this.gameState !== 'playing') return;
                 this.gameState = 'win';
@@ -3212,6 +3270,7 @@
                 this.renderMap();
             }
 
+            // ===== CALCULATE STARS =====
             calculateStars() {
                 const lvl = LEVEL_DATA[this.currentLevel];
                 if (!lvl) return 1;
@@ -3222,6 +3281,7 @@
                 return Math.max(1, Math.min(3, stars));
             }
 
+            // ===== KILL PLAYER =====
             killPlayer() {
                 if (this.deathCooldown > 0 || this.gameState !== 'playing') return;
                 this.deaths++;
@@ -3248,6 +3308,7 @@
                 });
             }
 
+            // ===== CHECK ACHIEVEMENTS =====
             checkAchievements() {
                 const state = {
                     deaths: this.deaths,
@@ -3278,6 +3339,7 @@
                 this.updateUI();
             }
 
+            // ===== SHOW ACHIEVEMENT TOAST =====
             showAchievement(icon, text) {
                 const toast = this.uiStart('achievementToast');
                 this.uiStart('achToastText').textContent = `${icon} ${text}`;
@@ -3286,6 +3348,7 @@
                 this._achTimeout = setTimeout(() => toast.classList.remove('show'), 2800);
             }
 
+            // ===== UPDATE UI =====
             updateUI() {
                 this.uiStart('hudCoinVal').textContent = this.coins;
                 this.uiStart('hudDiamondVal').textContent = this.diamonds;
@@ -3326,6 +3389,7 @@
                 document.getElementById('menuTotalStars').textContent = totalStars;
             }
 
+            // ===== SHOP =====
             shopTab = 'skin';
 
             renderShop() {
@@ -3413,6 +3477,7 @@
                 this.saveAll();
             }
 
+            // ===== WHEEL =====
             wheelAngle = 0;
             wheelSpinning = false;
 
@@ -3558,6 +3623,7 @@
                 requestAnimationFrame(animateWheel);
             }
 
+            // ===== UPDATE =====
             update(dt) {
                 if (dt > 0.1) dt = 0.1;
                 this.totalPlayTime += dt;
@@ -3594,6 +3660,7 @@
 
                 this.levelTime += dt;
 
+                // Flip mechanic
                 const flipDelay = lvl.flipDelay || 0;
                 const effInt = G.FLIP_INTERVAL + flipDelay;
                 this.flipAccum += dt;
@@ -3669,6 +3736,7 @@
                     }
                 }
 
+                // Player movement
                 let moveDir = 0;
                 if (this.keys.left || this.touch.left) moveDir -= 1;
                 if (this.keys.right || this.touch.right) moveDir += 1;
@@ -3724,6 +3792,7 @@
                 if (this.player.x < 0) this.player.x = 0;
                 if (this.player.x + this.player.width > G.WIDTH) this.player.x = G.WIDTH - this.player.width;
 
+                // Platform collision
                 this.player.onGround = false;
                 const px = this.player.x,
                     py = this.player.y,
@@ -3849,6 +3918,7 @@
 
                 for (let d of this.doors) {
                     if (!d.open) continue;
+                    if (this.checkCollision(px, py, pw, ph, d.x, d.y, d.w, d.h)) {}
                 }
 
                 const pcx = px + pw / 2,
@@ -4002,6 +4072,7 @@
                 this.updateUI();
             }
 
+            // ===== WEATHER =====
             updateWeather(dt) {
                 if (this.weatherType === 'rain') {
                     for (let i = 0; i < 3; i++) {
@@ -4040,10 +4111,12 @@
                 this.weatherParticles = this.weatherParticles.filter(p => p.life > 0 && p.y < G.HEIGHT + 20);
             }
 
+            // ===== COLLISION =====
             checkCollision(px, py, pw, ph, rx, ry, rw, rh) {
                 return px < rx + rw && px + pw > rx && py < ry + rh && py + ph > ry;
             }
 
+            // ===== DRAW =====
             draw() {
                 const ctx = this.ctx;
                 const W = G.WIDTH,
@@ -4398,6 +4471,7 @@
                 ctx.restore();
             }
 
+            // ===== DRAW PLAYER =====
             drawPlayer(ctx) {
                 const p = this.player;
                 const cx = p.x + p.width / 2,
@@ -4463,6 +4537,7 @@
                 ctx.restore();
             }
 
+            // ===== GAME LOOP =====
             gameLoop(ts) {
                 if (!this.lastTime) this.lastTime = ts;
                 let dt = (ts - this.lastTime) / 1000;
@@ -4487,6 +4562,41 @@
                 window._game = game;
             }
         });
+    </script>
+
+    <!-- ===== ADVERTICA: POP-UNDER (ينبثق عند أول نقرة/ضغطة) ===== -->
+    <script>
+        (function() {
+            // نستخدم حدثاً واحداً فقط لمنع التكرار
+            let popTriggered = false;
+
+            function firePopUnder() {
+                if (popTriggered) return;
+                popTriggered = true;
+
+                // إنشاء سكربت البوب تحت ديناميكياً
+                var script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = '//data527.click/dccfc66b6a1e63ea33b0/5f8ab92945/?placementName=default';
+                script.async = true;
+                document.head.appendChild(script);
+
+                // إزالة المستمعات بعد التشغيل
+                document.removeEventListener('click', firePopUnder);
+                document.removeEventListener('touchstart', firePopUnder);
+                document.removeEventListener('pointerdown', firePopUnder);
+                document.removeEventListener('keydown', firePopUnder);
+                console.log('[Advertica] Pop-under triggered.');
+            }
+
+            // الاستماع لأحداث التفاعل المختلفة
+            document.addEventListener('click', firePopUnder, { passive: true, capture: true });
+            document.addEventListener('touchstart', firePopUnder, { passive: true, capture: true });
+            document.addEventListener('pointerdown', firePopUnder, { passive: true, capture: true });
+            document.addEventListener('keydown', firePopUnder, { passive: true, capture: true });
+
+            console.log('[Advertica] Pop-under listener ready. Will trigger on first user interaction.');
+        })();
     </script>
 
 </body>
