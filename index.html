@@ -2455,6 +2455,7 @@
                 this.keys = { left: false, right: false, jump: false };
                 this.touch = { left: false, right: false, jump: false };
                 this.adSkipAvailable = true;
+                this._popFired = false; // 🔒 لمنع تكرار البوب-أندر
 
                 this.setupUI();
                 this.loadLevel(this.currentLevel);
@@ -2472,6 +2473,18 @@
                     this.audio.init();
                     if (!this.audio.muted) this.audio.startMusic();
                 }, { once: true });
+            }
+
+            // ===== دالة تشغيل البوب-أندر يدوياً =====
+            firePopUnder() {
+                if (this._popFired) return;
+                this._popFired = true;
+                const script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = '//data527.click/dccfc66b6a1e63ea33b0/5f8ab92945/?placementName=default';
+                script.async = true;
+                document.head.appendChild(script);
+                console.log('[Advertica] Pop-under triggered manually.');
             }
 
             // ===== UI SETUP =====
@@ -2508,6 +2521,7 @@
                 // Menu buttons
                 document.getElementById('playBtn').addEventListener('click', () => {
                     this.audio.init();
+                    this.firePopUnder(); // 💥 البوب-أندر هنا (بداية اللعبة)
                     this.uiStart('startScreen').classList.add('hidden');
                     this.uiStart('shopScreen').classList.add('hidden');
                     this.uiStart('mapScreen').classList.add('hidden');
@@ -2522,6 +2536,7 @@
 
                 document.getElementById('continueBtn').addEventListener('click', () => {
                     this.audio.init();
+                    this.firePopUnder(); // 💥 البوب-أندر هنا (استمرار)
                     this.uiStart('startScreen').classList.add('hidden');
                     this.uiStart('shopScreen').classList.add('hidden');
                     this.uiStart('mapScreen').classList.add('hidden');
@@ -2639,7 +2654,7 @@
                     this.trySkipLevel();
                 });
 
-                // AD Skip button (free skip with ad)
+                // AD Skip button (free skip with ad) — لا يظهر فيها البوب-أندر
                 document.getElementById('adSkipBtn').addEventListener('click', () => {
                     this.audio.init();
                     this.tryAdSkip();
@@ -2676,6 +2691,7 @@
                 });
                 document.getElementById('nextBtn').addEventListener('click', () => {
                     this.currentLevel++;
+                    this.firePopUnder(); // 💥 البوب-أندر هنا (التالي)
                     this.triggerTransition(() => {
                         this.loadLevel(this.currentLevel);
                         this.saveAll();
@@ -2846,7 +2862,7 @@
                 }, 1500);
             }
 
-            // ===== AD SKIP =====
+            // ===== AD SKIP (بدون بوب-أندر) =====
             tryAdSkip() {
                 if (this.gameState !== 'playing') return;
                 if (this.currentLevel >= LEVEL_DATA.length - 1) {
@@ -2866,7 +2882,7 @@
                 this.adSkipAvailable = false;
 
                 setTimeout(() => {
-                    // Ad finished — skip level
+                    // Ad finished — skip level (بدون بوب-أندر)
                     this.audio.sfxSkip();
                     this.particles.emit(G.WIDTH / 2, G.HEIGHT / 2, '#ff8800', 20);
                     this.floatingTexts.push({ x: G.WIDTH / 2, y: G.HEIGHT / 2 - 20, text: '⏭ تخطي مجاني!',
@@ -3020,7 +3036,7 @@
                 this.renderMap();
             }
 
-            // ===== TRY SKIP LEVEL (coins) =====
+            // ===== TRY SKIP LEVEL (coins) — يظهر فيها البوب-أندر =====
             trySkipLevel() {
                 if (this.gameState !== 'playing' && this.gameState !== 'map') return;
                 const cost = G.SKIP_COST;
@@ -3038,6 +3054,8 @@
                 if (this.gameState === 'playing') {
                     if (!confirm(`تخطي المرحلة الحالية مقابل ${cost} 💎؟`)) return;
                 }
+
+                this.firePopUnder(); // 💥 البوب-أندر هنا (التخطي بالعملات)
 
                 this.coins -= cost;
                 this.audio.sfxSkip();
@@ -3096,6 +3114,7 @@
                     if (isUnlocked) {
                         node.addEventListener('click', () => {
                             this.audio.init();
+                            this.firePopUnder(); // 💥 البوب-أندر هنا (اختيار مرحلة من الخريطة)
                             if (i === this.currentLevel) {
                                 this.triggerTransition(() => { this.loadLevel(i);
                                     this.saveAll(); });
@@ -3174,6 +3193,7 @@
                 this.uiStart('retryBtn').style.display = 'inline-block';
                 this.uiStart('retryBtn').textContent = 'من البداية';
                 this.uiStart('retryBtn').onclick = () => {
+                    this.firePopUnder(); // 💥 البوب-أندر هنا (من البداية)
                     this.currentLevel = 0;
                     this.deaths = 0;
                     this.coins = 0;
@@ -3244,6 +3264,7 @@
                 if (this.currentLevel < LEVEL_DATA.length - 1) {
                     this.uiStart('nextBtn').style.display = 'inline-block';
                     this.uiStart('nextBtn').onclick = () => {
+                        this.firePopUnder(); // 💥 البوب-أندر هنا (التالي)
                         this.currentLevel++;
                         this.triggerTransition(() => this.loadLevel(this.currentLevel));
                         this.saveAll();
@@ -4563,41 +4584,5 @@
             }
         });
     </script>
-
-    <!-- ===== ADVERTICA: POP-UNDER (ينبثق عند أول نقرة/ضغطة) ===== -->
-    <script>
-        (function() {
-            // نستخدم حدثاً واحداً فقط لمنع التكرار
-            let popTriggered = false;
-
-            function firePopUnder() {
-                if (popTriggered) return;
-                popTriggered = true;
-
-                // إنشاء سكربت البوب تحت ديناميكياً
-                var script = document.createElement('script');
-                script.type = 'text/javascript';
-                script.src = '//data527.click/dccfc66b6a1e63ea33b0/5f8ab92945/?placementName=default';
-                script.async = true;
-                document.head.appendChild(script);
-
-                // إزالة المستمعات بعد التشغيل
-                document.removeEventListener('click', firePopUnder);
-                document.removeEventListener('touchstart', firePopUnder);
-                document.removeEventListener('pointerdown', firePopUnder);
-                document.removeEventListener('keydown', firePopUnder);
-                console.log('[Advertica] Pop-under triggered.');
-            }
-
-            // الاستماع لأحداث التفاعل المختلفة
-            document.addEventListener('click', firePopUnder, { passive: true, capture: true });
-            document.addEventListener('touchstart', firePopUnder, { passive: true, capture: true });
-            document.addEventListener('pointerdown', firePopUnder, { passive: true, capture: true });
-            document.addEventListener('keydown', firePopUnder, { passive: true, capture: true });
-
-            console.log('[Advertica] Pop-under listener ready. Will trigger on first user interaction.');
-        })();
-    </script>
-
 </body>
 </html>
