@@ -1,11 +1,42 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Flip Panic ✦ فليب بانيك</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+
+    <!-- ===== SEO META TAGS (مُحسَّن بالكلمات المفتاحية) ===== -->
+    <title>Flip Panic ✦ فليب بانيك – لعبة التحدي والانعكاس Yaman bachata game</title>
+    <meta name="description" content="Flip Panic هي لعبة تحدي وإثارة تعتمد على الانعكاس والجاذبية. تجاوز المراحل، اجمع العملات والماسات، وواجه الزعماء! Yaman bachata game, لعبه يمان قدحات, تحدي, انعكاس, جاذبية, فلاب بانيك" />
+    <meta name="keywords" content="Flip Panic, فليب بانيك, لعبة, تحدي, انعكاس, جاذبية, مراحل, زعماء, عملات, ماسات, Yaman bachata game, لعبه يمان قدحات, Yaman Gadhat, قفز, منصات, مهارة, ذكاء, سرعة, فلاب, بانيك, تحدي الانعكاس, لعبة عربية" />
+    <meta name="author" content="Yaman Gadhat" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://flip-panic.netlify.app/" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://flip-panic.netlify.app/" />
+    <meta property="og:title" content="Flip Panic ✦ فليب بانيك – لعبة التحدي والانعكاس Yaman bachata" />
+    <meta property="og:description" content="لعبة تحدي وإثارة تعتمد على الانعكاس والجاذبية. Yaman bachata game, لعبه يمان قدحات, تجاوز المراحل واجمع العملات." />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Flip Panic ✦ فليب بانيك – Yaman bachata game" />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebApplication",
+            "name": "Flip Panic – لعبة يمان قدحات",
+            "description": "لعبة تحدي وإثارة تعتمد على الانعكاس والجاذبية. من صنع Yaman Gadhat.",
+            "applicationCategory": "Game",
+            "author": { "@type": "Person", "name": "Yaman Gadhat" },
+            "keywords": "Flip Panic, فليب بانيك, Yaman bachata game, لعبه يمان قدحات, تحدي, انعكاس"
+        }
+    </script>
+
     <style>
-        /* ===== RESET & BASE ===== */
+        /* ===== RESET & BASE (نفس الكود السابق مع إضافات بسيطة) ===== */
         * {
             margin: 0;
             padding: 0;
@@ -26,30 +57,116 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
         }
-        #gameWrapper {
-            position: relative;
+
+        /* ===== LAYOUT: GAME SMALLER, ADS AROUND ===== */
+        .game-layout {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             width: 100vw;
             height: 100vh;
             height: 100dvh;
-            max-width: 1000px;
-            max-height: 600px;
-            background: #030310;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 0 80px rgba(0, 255, 255, 0.25);
+            background: #020210;
+            padding: 4px;
+            gap: 4px;
         }
-        canvas {
-            display: block;
+        .middle-row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            flex: 1;
+            min-height: 0;
             width: 100%;
+        }
+        .game-container {
+            position: relative;
+            flex: 1 1 auto;
+            max-width: 800px;
+            aspect-ratio: 800 / 450;
+            background: #030310;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 0 60px rgba(0, 255, 255, 0.25);
+            min-height: 0;
             height: 100%;
+            border: 1px solid rgba(0, 255, 255, 0.1);
+        }
+        .game-container canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
             object-fit: contain;
             touch-action: none;
             image-rendering: pixelated;
         }
+
+        .ad-col {
+            width: 120px;
+            min-width: 80px;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            flex-shrink: 0;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            position: relative;
+            overflow: hidden;
+        }
+        .ad-col .ad-label,
+        .ad-row .ad-label {
+            position: absolute;
+            bottom: 4px;
+            right: 6px;
+            color: rgba(255, 255, 255, 0.15);
+            font-size: 0.4rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .ad-col .ad-placeholder,
+        .ad-row .ad-placeholder {
+            color: rgba(255, 255, 255, 0.12);
+            font-size: 0.6rem;
+            text-align: center;
+            padding: 6px;
+            line-height: 1.4;
+        }
+        .ad-row {
+            width: 100%;
+            height: 60px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            flex-shrink: 0;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (max-width: 700px) {
+            .ad-col { display: none; }
+            .ad-row { height: 40px; }
+        }
+        @media (max-height: 500px) {
+            .ad-row { height: 28px; }
+            .ad-row .ad-placeholder { font-size: 0.4rem; }
+        }
+        @media (orientation: landscape) and (max-height: 500px) {
+            .ad-col { min-width: 60px; }
+            .ad-col .ad-placeholder { font-size: 0.4rem; }
+        }
+
         .scanlines {
             position: absolute;
             top: 0;
@@ -60,7 +177,7 @@
             z-index: 5;
             background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.04) 2px, rgba(0, 0, 0, 0.04) 4px);
         }
-        /* ===== TOUCH CONTROLS ===== */
+
         .touch-controls {
             position: absolute;
             bottom: 10px;
@@ -110,7 +227,7 @@
             background: rgba(255, 68, 170, 0.3);
             box-shadow: 0 0 50px #ff44aa;
         }
-        /* ===== UI OVERLAY ===== */
+
         #ui-overlay {
             position: absolute;
             top: 0;
@@ -135,9 +252,7 @@
             align-items: center;
             gap: 4px;
         }
-        .hud-coin.bump {
-            transform: scale(1.4);
-        }
+        .hud-coin.bump { transform: scale(1.4); }
         .hud-diamond {
             position: absolute;
             top: 14px;
@@ -201,9 +316,8 @@
             opacity: 0;
             transition: opacity 0.3s;
         }
-        .combo-display.active {
-            opacity: 1;
-        }
+        .combo-display.active { opacity: 1; }
+
         .menu-btn-small {
             background: transparent;
             border: 2px solid rgba(0, 255, 255, 0.5);
@@ -255,6 +369,37 @@
             background: #ffdd00;
             color: #000;
         }
+        .menu-btn-small.ad-skip-btn {
+            position: absolute;
+            top: 8px;
+            right: 220px;
+            border-color: #ff8800;
+            color: #ff8800;
+            font-size: 0.65rem;
+            padding: 4px 10px;
+            display: none;
+            background: rgba(0, 0, 0, 0.5);
+            border-style: dashed;
+        }
+        .menu-btn-small.ad-skip-btn:active {
+            background: #ff8800;
+            color: #000;
+        }
+        .menu-btn-small.menu-btn-top {
+            position: absolute;
+            top: 8px;
+            right: 300px;
+            border-color: rgba(255, 255, 255, 0.3);
+            color: #aaa;
+            font-size: 0.7rem;
+            padding: 4px 12px;
+            display: none;
+        }
+        .menu-btn-small.menu-btn-top:active {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
         .menu-btn {
             background: transparent;
             border: 2px solid #00ffff;
@@ -313,7 +458,19 @@
             color: #000;
             box-shadow: 0 0 50px #88ff88;
         }
-        /* ===== MENU SCREEN ===== */
+        .menu-btn.daily-btn {
+            border-color: #ffaa44;
+            color: #ffaa44;
+            text-shadow: 0 0 10px #ffaa44;
+            box-shadow: 0 0 25px rgba(255, 170, 68, 0.3);
+        }
+        .menu-btn.daily-btn:active {
+            background: #ffaa44;
+            color: #000;
+            box-shadow: 0 0 50px #ffaa44;
+        }
+
+        /* ===== شاشات القائمة ===== */
         .menu-screen {
             position: absolute;
             top: 0;
@@ -330,6 +487,7 @@
             pointer-events: auto;
             z-index: 30;
             transition: opacity 0.5s ease;
+            padding: 10px;
         }
         .menu-screen.hidden {
             opacity: 0;
@@ -357,13 +515,6 @@
             letter-spacing: 2px;
             opacity: 0.9;
         }
-        .designer-credit {
-            color: #888;
-            margin-top: 4px;
-            font-size: 0.65rem;
-            text-shadow: 0 0 6px #888;
-            letter-spacing: 1px;
-        }
         .menu-buttons {
             display: flex;
             flex-direction: column;
@@ -387,14 +538,180 @@
         .menu-stats span {
             color: #ffdd00;
         }
+        .menu-stats .diamond-stat {
+            color: #00e5ff;
+        }
         @keyframes glitch-text {
             0% { transform: translate(0); text-shadow: 0 0 30px #00ffff, 0 0 60px #00ffff; }
             25% { transform: translate(-2px, 1px); text-shadow: 0 0 30px #ff44aa, 0 0 60px #ff44aa; }
             75% { transform: translate(2px, -1px); text-shadow: 0 0 30px #00ffff, 0 0 60px #ff44aa; }
             100% { transform: translate(0); text-shadow: 0 0 30px #00ffff, 0 0 60px #00ffff; }
         }
-        /* ===== MAP SCREEN ===== */
-        .map-screen {
+
+        .menu-footer {
+            margin-top: 12px;
+            text-align: center;
+            color: #555;
+            font-size: 0.6rem;
+            line-height: 1.8;
+            width: 100%;
+            max-width: 500px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 10px;
+        }
+        .menu-footer a {
+            color: #ff88cc;
+            text-decoration: none;
+            border-bottom: 1px dotted rgba(255, 136, 204, 0.3);
+            transition: color 0.2s;
+            font-weight: bold;
+        }
+        .menu-footer a:hover {
+            color: #ff44aa;
+            border-bottom-color: #ff44aa;
+        }
+        .menu-footer .copyright {
+            color: #444;
+            font-size: 0.55rem;
+            letter-spacing: 0.5px;
+        }
+        .menu-footer .social-row {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 4px 0;
+        }
+        .menu-footer .social-row a {
+            color: #888;
+            font-size: 0.7rem;
+            border: none;
+            transition: color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .menu-footer .social-row a:hover {
+            color: #ff88cc;
+        }
+        /* رابط سياسة الخصوصية */
+        .privacy-link {
+            cursor: pointer;
+            color: #6699cc;
+            border-bottom: 1px dotted rgba(102, 153, 204, 0.3);
+            transition: color 0.2s;
+        }
+        .privacy-link:hover {
+            color: #88ccff;
+            border-bottom-color: #88ccff;
+        }
+
+        /* ===== شاشة سياسة الخصوصية (Privacy Policy) ===== */
+        .privacy-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(2, 2, 16, 0.97);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            pointer-events: auto;
+            z-index: 40;
+            transition: opacity 0.4s;
+            padding: 12px 8px;
+            overflow: hidden;
+        }
+        .privacy-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .privacy-title {
+            color: #88ccff;
+            font-size: 1.6rem;
+            text-shadow: 0 0 20px #88ccff;
+            margin-bottom: 6px;
+            margin-top: 4px;
+            text-align: center;
+        }
+        .privacy-scroll {
+            width: 100%;
+            max-width: 700px;
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 6px 10px 10px 10px;
+            scrollbar-width: thin;
+            scrollbar-color: #88ccff rgba(0, 0, 0, 0.3);
+            -webkit-overflow-scrolling: touch;
+            color: #ccd;
+            font-size: 0.85rem;
+            line-height: 1.8;
+            text-align: justify;
+        }
+        .privacy-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .privacy-scroll::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+        }
+        .privacy-scroll::-webkit-scrollbar-thumb {
+            background: #88ccff;
+            border-radius: 8px;
+            box-shadow: 0 0 8px #88ccff;
+        }
+        .privacy-scroll h3 {
+            color: #88ccff;
+            margin-top: 12px;
+            margin-bottom: 4px;
+            font-size: 1rem;
+        }
+        .privacy-scroll p {
+            margin-bottom: 8px;
+        }
+        .privacy-scroll ul {
+            padding-right: 20px;
+            margin-bottom: 8px;
+        }
+        .privacy-scroll ul li {
+            margin-bottom: 4px;
+        }
+        .privacy-scroll strong {
+            color: #ff88cc;
+        }
+        .privacy-close-btn {
+            margin-top: 6px;
+            margin-bottom: 4px;
+            background: transparent;
+            border: 2px solid #88ccff;
+            color: #88ccff;
+            padding: 6px 28px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-shadow: 0 0 10px #88ccff;
+            box-shadow: 0 0 20px rgba(136, 204, 255, 0.2);
+            pointer-events: auto;
+            touch-action: manipulation;
+        }
+        .privacy-close-btn:active {
+            background: #88ccff;
+            color: #000;
+            transform: scale(0.92);
+        }
+
+        /* ===== باقي الأنماط (نفس الكود السابق) ===== */
+        .map-screen,
+        .shop-screen,
+        .wheel-screen,
+        .daily-screen {
             position: absolute;
             top: 0;
             left: 0;
@@ -413,16 +730,29 @@
             padding: 8px 4px;
             overflow: hidden;
         }
-        .map-screen.hidden {
+        .map-screen.hidden,
+        .shop-screen.hidden,
+        .wheel-screen.hidden,
+        .daily-screen.hidden {
             opacity: 0;
             pointer-events: none;
         }
-        .map-title {
+        .map-title,
+        .shop-title,
+        .daily-title {
             color: #00ffff;
             font-size: 1.4rem;
             text-shadow: 0 0 20px #00ffff;
             margin-bottom: 2px;
             margin-top: 4px;
+        }
+        .shop-title {
+            color: #ff44aa;
+            text-shadow: 0 0 20px #ff44aa;
+        }
+        .daily-title {
+            color: #ffaa44;
+            text-shadow: 0 0 20px #ffaa44;
         }
         .map-scroll {
             width: 100%;
@@ -534,10 +864,6 @@
         .map-node .lock-icon {
             font-size: 0.8rem;
         }
-        .map-node .boss-icon {
-            font-size: 0.7rem;
-            margin-left: 2px;
-        }
         .map-actions {
             display: flex;
             gap: 10px;
@@ -552,50 +878,7 @@
             padding: 5px 18px;
             margin: 2px;
         }
-        .map-actions .skip-btn {
-            border-color: #ffdd00;
-            color: #ffdd00;
-            text-shadow: 0 0 10px #ffdd00;
-            box-shadow: 0 0 25px rgba(255, 221, 0, 0.2);
-            background: rgba(255, 221, 0, 0.05);
-        }
-        .map-actions .skip-btn:active {
-            background: #ffdd00;
-            color: #000;
-        }
-        .map-actions .skip-btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-        /* ===== SHOP SCREEN ===== */
-        .shop-screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(2, 2, 16, 0.95);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            pointer-events: auto;
-            z-index: 35;
-            transition: opacity 0.4s;
-            padding: 10px;
-        }
-        .shop-screen.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-        .shop-title {
-            color: #00ffff;
-            font-size: 1.8rem;
-            text-shadow: 0 0 20px #00ffff;
-            margin-bottom: 4px;
-        }
+
         .shop-currency {
             color: #ffdd00;
             font-size: 1rem;
@@ -702,45 +985,7 @@
             color: #555;
             cursor: not-allowed;
         }
-        .shop-item button.equip-btn {
-            border-color: #ffdd00;
-            color: #ffdd00;
-            background: rgba(255, 221, 0, 0.1);
-        }
-        .shop-item button.unequip-btn {
-            border-color: #ff8800;
-            color: #ff8800;
-            background: rgba(255, 136, 0, 0.1);
-        }
-        .shop-item.purchased-flash {
-            animation: purchaseGlow 0.5s ease-out;
-        }
-        @keyframes purchaseGlow {
-            0% { box-shadow: 0 0 40px #ffdd00, 0 0 80px #ffdd00; border-color: #ffdd00; background: rgba(255, 221, 0, 0.2); }
-            100% { box-shadow: 0 0 0 transparent; border-color: rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.4); }
-        }
-        /* ===== WHEEL ===== */
-        .wheel-screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 40;
-            pointer-events: auto;
-            transition: opacity 0.4s;
-        }
-        .wheel-screen.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
+
         .wheel-canvas-wrap {
             position: relative;
             width: 180px;
@@ -796,7 +1041,36 @@
             text-shadow: 0 0 15px #ffdd00;
             min-height: 1.2rem;
         }
-        /* ===== ACHIEVEMENT TOAST ===== */
+
+        .daily-reward-box {
+            background: rgba(255, 170, 68, 0.08);
+            border: 2px solid rgba(255, 170, 68, 0.4);
+            border-radius: 20px;
+            padding: 16px 28px;
+            margin: 6px 0;
+            text-align: center;
+            min-width: 200px;
+        }
+        .daily-reward-box .reward-icon {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .daily-reward-box .reward-text {
+            color: #fff;
+            font-size: 1.1rem;
+        }
+        .daily-reward-box .reward-sub {
+            color: #aaa;
+            font-size: 0.7rem;
+            margin-top: 2px;
+        }
+        .daily-timer {
+            color: #888;
+            font-size: 0.7rem;
+            margin-top: 4px;
+        }
+
         .achievement-toast {
             position: absolute;
             bottom: 130px;
@@ -838,7 +1112,40 @@
         .transition-overlay.active {
             opacity: 1;
         }
-        /* ===== RESPONSIVE ===== */
+
+        #misleadMsg {
+            position: absolute;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffcc00;
+            font-size: 0.8rem;
+            text-align: center;
+            opacity: 0.95;
+            text-shadow: 0 0 12px #ffcc00;
+            pointer-events: none;
+            white-space: nowrap;
+            z-index: 15;
+        }
+        #retryBtn,
+        #nextBtn {
+            position: absolute;
+            bottom: 70px;
+            transform: translateX(-50%);
+            display: none;
+            z-index: 25;
+            font-size: 0.9rem;
+            padding: 6px 24px;
+        }
+        #retryBtn {
+            left: 50%;
+        }
+        #nextBtn {
+            left: calc(50% + 100px);
+            border-color: #ff44aa;
+            color: #ff44aa;
+        }
+
         @media (max-width: 600px) {
             .game-title { font-size: 2rem; }
             .sub-title { font-size: 0.8rem; }
@@ -854,6 +1161,8 @@
             .wheel-canvas-wrap { width: 140px; height: 140px; }
             .menu-btn-small.mute-btn { right: 60px; font-size: 0.6rem; padding: 2px 10px; }
             .menu-btn-small.skip-btn { right: 120px; font-size: 0.55rem; padding: 2px 8px; }
+            .menu-btn-small.ad-skip-btn { right: 190px; font-size: 0.5rem; padding: 2px 6px; }
+            .menu-btn-small.menu-btn-top { right: 250px; font-size: 0.5rem; padding: 2px 8px; }
             .touch-controls { padding: 0 10px; bottom: 4px; }
             .map-grid { grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); gap: 4px; }
             .map-node { min-height: 48px; font-size: 0.45rem; }
@@ -861,6 +1170,13 @@
             .map-node .node-name { font-size: 0.35rem; }
             .map-title { font-size: 1.1rem; }
             .map-actions .menu-btn { font-size: 0.65rem; padding: 4px 12px; }
+            .daily-reward-box { padding: 12px 18px; min-width: 160px; }
+            .daily-reward-box .reward-icon { font-size: 2.2rem; }
+            .menu-footer { font-size: 0.5rem; padding-top: 6px; margin-top: 8px; }
+            .menu-footer .social-row a { font-size: 0.6rem; }
+            .privacy-title { font-size: 1.2rem; }
+            .privacy-scroll { font-size: 0.75rem; padding: 4px 6px; }
+            .privacy-scroll h3 { font-size: 0.9rem; }
         }
         @media (orientation: landscape) and (max-height: 500px) {
             .touch-controls { bottom: 2px; }
@@ -877,123 +1193,202 @@
             .map-title { font-size: 0.9rem; margin-top: 2px; }
             .map-actions .menu-btn { font-size: 0.55rem; padding: 2px 10px; }
             .menu-btn-small.skip-btn { right: 100px; font-size: 0.5rem; padding: 2px 6px; }
+            .menu-btn-small.ad-skip-btn { right: 160px; font-size: 0.45rem; padding: 2px 5px; }
+            .menu-btn-small.menu-btn-top { right: 210px; font-size: 0.45rem; padding: 2px 6px; }
+            .menu-footer { font-size: 0.45rem; padding-top: 4px; margin-top: 4px; }
+            .menu-footer .social-row a { font-size: 0.5rem; }
         }
     </style>
 </head>
 <body>
 
-    <div id="gameWrapper">
-        <canvas id="gameCanvas"></canvas>
-        <div class="scanlines"></div>
-        <div class="transition-overlay" id="transitionOverlay"></div>
-
-        <!-- ===== UI OVERLAY ===== -->
-        <div id="ui-overlay">
-            <!-- HUD -->
-            <div class="hud-coin" id="hudCoin">💎 <span id="hudCoinVal">0</span></div>
-            <div class="hud-diamond" id="hudDiamond">💠 <span id="hudDiamondVal">0</span></div>
-            <div class="level-indicator" id="levelDisplay">مرحلة 1</div>
-            <div class="death-counter" id="deathDisplay">💀 0</div>
-            <div class="combo-display" id="comboDisplay">🔥 x<span id="comboCount">0</span></div>
-
-            <!-- Mute Button -->
-            <button class="menu-btn-small mute-btn" id="muteBtn">🔊</button>
-
-            <!-- Skip Button (in-game) -->
-            <button class="menu-btn-small skip-btn" id="skipBtn">⏭ تخطي (50💎)</button>
-
-            <!-- Menu Button -->
-            <button class="menu-btn-small" id="menuBtn" style="position:absolute;top:8px;right:200px;display:none;">≡ قائمة</button>
-
-            <!-- Mislead Message -->
-            <div id="misleadMsg" style="position:absolute;bottom:90px;left:50%;transform:translateX(-50%);color:#ffcc00;font-size:0.8rem;text-align:center;opacity:0.95;text-shadow:0 0 12px #ffcc00;pointer-events:none;white-space:nowrap;"></div>
-
-            <!-- Retry / Next -->
-            <button class="menu-btn" id="retryBtn" style="position:absolute;bottom:70px;left:50%;transform:translateX(-50%);display:none;z-index:25;font-size:0.9rem;padding:6px 24px;">إعادة ⚡</button>
-            <button class="menu-btn" id="nextBtn" style="position:absolute;bottom:70px;left:calc(50% + 100px);transform:translateX(-50%);display:none;z-index:25;border-color:#ff44aa;color:#ff44aa;font-size:0.9rem;padding:6px 24px;">التالي ←</button>
-
-            <!-- ===== START MENU ===== -->
-            <div class="menu-screen" id="startScreen">
-                <div class="game-title"><span class="flip">FLIP</span> PANIC</div>
-                <div class="sub-title">✦ لا تثق بالشاشة ✦</div>
-                <div class="menu-buttons">
-                    <div class="row">
-                        <button class="menu-btn" id="playBtn">▶ ابدأ</button>
-                        <button class="menu-btn map-btn" id="mapBtn">🗺️ خريطة</button>
-                        <button class="menu-btn shop-btn" id="shopBtn">✦ متجر</button>
-                        <button class="menu-btn gold-btn" id="wheelBtn">🎡 حظ</button>
-                    </div>
-                    <div class="row">
-                        <button class="menu-btn" id="continueBtn" style="border-color:#88ff88;color:#88ff88;text-shadow:0 0 10px #88ff88;box-shadow:0 0 25px rgba(136,255,136,0.2);display:none;">▶ استمرار</button>
-                    </div>
-                </div>
-                <div class="menu-stats" id="menuStats">
-                    💀 وفيات: <span id="menuDeaths">0</span> &nbsp;|&nbsp; 💎 عملات: <span id="menuCoins">0</span> &nbsp;|&nbsp; 💠 ماسات: <span id="menuDiamonds">0</span>
-                    <br>🏆 إنجازات: <span id="menuAchievements">0</span>
-                </div>
-                <div class="designer-credit">تصميم: Yaman Gadhat</div>
-            </div>
-
-            <!-- ===== MAP SCREEN ===== -->
-            <div class="map-screen hidden" id="mapScreen">
-                <div class="map-title">🗺️ خريطة المراحل</div>
-                <div style="color:#aaa;font-size:0.7rem;margin-bottom:2px;">💎 <span id="mapCoinDisplay">0</span> &nbsp;|&nbsp; ⭐ <span id="mapStarCount">0</span></div>
-                <div class="map-scroll" id="mapScroll">
-                    <div class="map-grid" id="mapGrid"></div>
-                </div>
-                <div class="map-actions">
-                    <button class="menu-btn skip-btn" id="mapSkipBtn">⏭ تخطي المرحلة (50💎)</button>
-                    <button class="menu-btn" id="backFromMap">↩ رجوع</button>
-                </div>
-            </div>
-
-            <!-- ===== SHOP SCREEN ===== -->
-            <div class="shop-screen hidden" id="shopScreen">
-                <div class="shop-title">✦ المتجر ✦</div>
-                <div class="shop-currency" id="shopCurrency">💎 عملات: 0 &nbsp; 💠 ماسات: 0</div>
-                <div class="shop-tabs">
-                    <button class="shop-tab active" id="tabSkins">🎨 أسطح</button>
-                    <button class="shop-tab" id="tabTrails">✨ آثار</button>
-                    <button class="shop-tab" id="tabChars">👤 شخصيات</button>
-                </div>
-                <div class="shop-scroll" id="shopItems"></div>
-                <button class="menu-btn" id="backFromShop" style="font-size:0.8rem;padding:4px 20px;margin-top:4px;">↩ رجوع</button>
-            </div>
-
-            <!-- ===== WHEEL SCREEN ===== -->
-            <div class="wheel-screen hidden" id="wheelScreen">
-                <div style="color:#ffdd00;font-size:1.3rem;text-shadow:0 0 20px #ffdd00;margin-bottom:4px;">🎡 عجلة الحظ</div>
-                <div class="wheel-canvas-wrap">
-                    <canvas id="wheelCanvas" width="400" height="400"></canvas>
-                    <div class="wheel-pointer"></div>
-                </div>
-                <button class="wheel-btn" id="spinWheelBtn">🎲 ادفع 5 💠</button>
-                <div class="wheel-result" id="wheelResult"></div>
-                <button class="menu-btn" id="closeWheelBtn" style="font-size:0.7rem;padding:3px 18px;margin-top:4px;border-color:#888;color:#888;">✕ إغلاق</button>
-            </div>
-
-            <!-- ===== ACHIEVEMENT TOAST ===== -->
-            <div class="achievement-toast" id="achievementToast">🏆 <span id="achToastText">إنجاز!</span></div>
+    <div class="game-layout">
+        <div class="ad-row" id="adTop">
+            <div class="ad-placeholder">📢 إعلان<br /><span style="font-size:0.4rem;">Google AdSense</span></div>
+            <span class="ad-label">إعلان</span>
         </div>
 
-        <!-- ===== TOUCH CONTROLS ===== -->
-        <div class="touch-controls" id="touchControls">
-            <div class="ctrl-btn" id="leftBtn">◀</div>
-            <div class="ctrl-btn jump" id="jumpBtn">▲</div>
-            <div class="ctrl-btn" id="rightBtn">▶</div>
+        <div class="middle-row">
+            <div class="ad-col" id="adLeft">
+                <div class="ad-placeholder" style="font-size:0.5rem;">📢<br />إعلان</div>
+                <span class="ad-label">إعلان</span>
+            </div>
+
+            <div class="game-container" id="gameContainer">
+                <canvas id="gameCanvas"></canvas>
+                <div class="scanlines"></div>
+                <div class="transition-overlay" id="transitionOverlay"></div>
+
+                <div id="ui-overlay">
+                    <div class="hud-coin" id="hudCoin">💎 <span id="hudCoinVal">0</span></div>
+                    <div class="hud-diamond" id="hudDiamond">💠 <span id="hudDiamondVal">0</span></div>
+                    <div class="level-indicator" id="levelDisplay">مرحلة 1</div>
+                    <div class="death-counter" id="deathDisplay">💀 0</div>
+                    <div class="combo-display" id="comboDisplay">🔥 x<span id="comboCount">0</span></div>
+
+                    <button class="menu-btn-small mute-btn" id="muteBtn">🔊</button>
+                    <button class="menu-btn-small skip-btn" id="skipBtn">⏭ تخطي (50💎)</button>
+                    <button class="menu-btn-small ad-skip-btn" id="adSkipBtn">📺 تخطي بإعلان</button>
+                    <button class="menu-btn-small menu-btn-top" id="menuBtnTop">≡ قائمة</button>
+
+                    <div id="misleadMsg"></div>
+
+                    <button class="menu-btn" id="retryBtn">إعادة ⚡</button>
+                    <button class="menu-btn" id="nextBtn">التالي ←</button>
+
+                    <!-- ===== START MENU ===== -->
+                    <div class="menu-screen" id="startScreen">
+                        <div class="game-title"><span class="flip">FLIP</span> PANIC</div>
+                        <div class="sub-title">✦ لا تثق بالشاشة • لعبة يمان قدحات ✦</div>
+                        <div class="menu-buttons">
+                            <div class="row">
+                                <button class="menu-btn" id="playBtn">▶ ابدأ</button>
+                                <button class="menu-btn map-btn" id="mapBtn">🗺️ خريطة</button>
+                                <button class="menu-btn shop-btn" id="shopBtn">✦ متجر</button>
+                                <button class="menu-btn gold-btn" id="wheelBtn">🎡 حظ</button>
+                            </div>
+                            <div class="row">
+                                <button class="menu-btn daily-btn" id="dailyBtn">🎁 يومي</button>
+                                <button class="menu-btn" id="continueBtn" style="border-color:#88ff88;color:#88ff88;text-shadow:0 0 10px #88ff88;box-shadow:0 0 25px rgba(136,255,136,0.2);display:none;">▶ استمرار</button>
+                            </div>
+                        </div>
+                        <div class="menu-stats" id="menuStats">
+                            💀 وفيات: <span id="menuDeaths">0</span> &nbsp;|&nbsp; 💎 عملات: <span id="menuCoins">0</span> &nbsp;|&nbsp; 💠 ماسات: <span id="menuDiamonds">0</span>
+                            <br />🏆 إنجازات: <span id="menuAchievements">0</span> &nbsp;|&nbsp; ⭐ نجوم: <span id="menuTotalStars">0</span>
+                        </div>
+
+                        <!-- ===== FOOTER: Copyright + Contact + Privacy ===== -->
+                        <div class="menu-footer">
+                            <div class="social-row">
+                                <a href="https://www.instagram.com/ym_9n_" target="_blank">📸 <span>@ym_9n_</span></a>
+                                <a href="mailto:ym_9n@example.com" target="_blank">✉️ <span>بريد</span></a>
+                                <span class="privacy-link" id="privacyLink">🔒 سياسة الخصوصية</span>
+                            </div>
+                            <div class="copyright">© 2026 Yaman Gadhat — جميع الحقوق محفوظة • Yaman bachata game</div>
+                        </div>
+                    </div>
+
+                    <!-- ===== PRIVACY POLICY SCREEN ===== -->
+                    <div class="privacy-screen hidden" id="privacyScreen">
+                        <div class="privacy-title">🔒 سياسة الخصوصية</div>
+                        <div class="privacy-scroll">
+                            <p><strong>آخر تحديث:</strong> 9 يوليو 2026</p>
+                            <p>نحن في <strong>Flip Panic – لعبة يمان قدحات</strong> (Yaman bachata game) نلتزم بحماية خصوصية زوارنا ومستخدمينا. توضح هذه الصفحة كيفية جمع واستخدام وحماية المعلومات عند استخدامك للعبة.</p>
+
+                            <h3>📌 المعلومات التي نجمعها</h3>
+                            <ul>
+                                <li><strong>بيانات غير شخصية:</strong> مثل نوع المتصفح، نظام التشغيل، اللغة، دقة الشاشة، ونوع الجهاز (تُجمع تلقائياً عبر أدوات تحليلية).</li>
+                                <li><strong>ملفات تعريف الارتباط (Cookies):</strong> نستخدم ملفات cookies لتحسين تجربة المستخدم، وتذكر التفضيلات، وتحليل الأداء. يمكنك تعطيلها من إعدادات المتصفح.</li>
+                                <li><strong>بيانات اللعب:</strong> يتم حفظ تقدمك (المستوى، العملات، الماسات، الإنجازات) محلياً في متصفحك (localStorage) ولا تُرسل إلى خوادمنا.</li>
+                            </ul>
+
+                            <h3>📢 الإعلانات</h3>
+                            <p>نعرض إعلانات من شبكات خارجية مثل <strong>Google AdSense</strong>. قد تستخدم هذه الشبكات ملفات تعريف الارتباط لتقديم إعلانات مخصصة بناءً على زياراتك السابقة. لمزيد من المعلومات، يمكنك الاطلاع على <a href="https://policies.google.com/privacy" target="_blank" style="color:#88ccff;">سياسة خصوصية Google</a>.</p>
+                            <p>يمكنك إدارة تفضيلات الإعلانات من خلال <a href="https://adssettings.google.com/" target="_blank" style="color:#88ccff;">إعدادات الإعلانات من Google</a>.</p>
+
+                            <h3>🔐 كيف نستخدم المعلومات</h3>
+                            <ul>
+                                <li>تحسين أداء اللعبة وتجربة المستخدم.</li>
+                                <li>تحليل الاتجاهات والإحصائيات الداخلية.</li>
+                                <li>تقديم محتوى وإعلانات ذات صلة.</li>
+                            </ul>
+
+                            <h3>🛡️ حماية البيانات</h3>
+                            <p>جميع البيانات المخزنة محلياً تكون تحت مسؤوليتك. لا نشارك بياناتك الشخصية مع أي طرف ثالث إلا إذا اقتضى القانون ذلك.</p>
+
+                            <h3>👦 الأطفال</h3>
+                            <p>اللعبة مناسبة لجميع الأعمار، لكننا لا نجمع بيانات عن عمر المستخدمين. نشجع الأهل على مراقبة استخدام أطفالهم للإنترنت.</p>
+
+                            <h3>📧 الاتصال بنا</h3>
+                            <p>إذا كان لديك أي استفسار حول سياسة الخصوصية، يمكنك التواصل عبر البريد الإلكتروني: <a href="mailto:ym_9n@example.com" style="color:#88ccff;">ym_9n@example.com</a></p>
+                            <p style="margin-top:8px; color:#666; font-size:0.75rem;">نحن نحتفظ بالحق في تحديث هذه السياسة من وقت لآخر. يرجى مراجعتها دورياً.</p>
+                        </div>
+                        <button class="privacy-close-btn" id="closePrivacyBtn">✕ إغلاق</button>
+                    </div>
+
+                    <!-- ===== MAP ===== -->
+                    <div class="map-screen hidden" id="mapScreen">
+                        <div class="map-title">🗺️ خريطة المراحل</div>
+                        <div style="color:#aaa;font-size:0.7rem;margin-bottom:2px;">💎 <span id="mapCoinDisplay">0</span> &nbsp;|&nbsp; ⭐ <span id="mapStarCount">0</span></div>
+                        <div class="map-scroll" id="mapScroll">
+                            <div class="map-grid" id="mapGrid"></div>
+                        </div>
+                        <div class="map-actions">
+                            <button class="menu-btn skip-btn" id="mapSkipBtn">⏭ تخطي المرحلة (50💎)</button>
+                            <button class="menu-btn" id="backFromMap">↩ رجوع</button>
+                        </div>
+                    </div>
+
+                    <!-- ===== SHOP ===== -->
+                    <div class="shop-screen hidden" id="shopScreen">
+                        <div class="shop-title">✦ المتجر ✦</div>
+                        <div class="shop-currency" id="shopCurrency">💎 عملات: 0 &nbsp; 💠 ماسات: 0</div>
+                        <div class="shop-tabs">
+                            <button class="shop-tab active" id="tabSkins">🎨 أسطح</button>
+                            <button class="shop-tab" id="tabTrails">✨ آثار</button>
+                            <button class="shop-tab" id="tabChars">👤 شخصيات</button>
+                        </div>
+                        <div class="shop-scroll" id="shopItems"></div>
+                        <button class="menu-btn" id="backFromShop" style="font-size:0.8rem;padding:4px 20px;margin-top:4px;">↩ رجوع</button>
+                    </div>
+
+                    <!-- ===== WHEEL ===== -->
+                    <div class="wheel-screen hidden" id="wheelScreen">
+                        <div style="color:#ffdd00;font-size:1.3rem;text-shadow:0 0 20px #ffdd00;margin-bottom:4px;">🎡 عجلة الحظ</div>
+                        <div class="wheel-canvas-wrap">
+                            <canvas id="wheelCanvas" width="400" height="400"></canvas>
+                            <div class="wheel-pointer"></div>
+                        </div>
+                        <button class="wheel-btn" id="spinWheelBtn">🎲 ادفع 5 💠</button>
+                        <div class="wheel-result" id="wheelResult"></div>
+                        <button class="menu-btn" id="closeWheelBtn" style="font-size:0.7rem;padding:3px 18px;margin-top:4px;border-color:#888;color:#888;">✕ إغلاق</button>
+                    </div>
+
+                    <!-- ===== DAILY ===== -->
+                    <div class="daily-screen hidden" id="dailyScreen">
+                        <div class="daily-title">🎁 المكافأة اليومية</div>
+                        <div class="daily-reward-box" id="dailyRewardBox">
+                            <span class="reward-icon" id="dailyRewardIcon">💎</span>
+                            <div class="reward-text" id="dailyRewardText">+5 عملات + 1 ماسة</div>
+                            <div class="reward-sub" id="dailyRewardSub">تسلم يومياً</div>
+                        </div>
+                        <button class="menu-btn daily-btn" id="claimDailyBtn">🎁 استلم المكافأة</button>
+                        <div class="daily-timer" id="dailyTimer">⏳ متاح كل 24 ساعة</div>
+                        <button class="menu-btn" id="closeDailyBtn" style="font-size:0.7rem;padding:3px 18px;margin-top:4px;border-color:#888;color:#888;">✕ إغلاق</button>
+                    </div>
+
+                    <!-- ===== ACHIEVEMENT TOAST ===== -->
+                    <div class="achievement-toast" id="achievementToast">🏆 <span id="achToastText">إنجاز!</span></div>
+                </div>
+
+                <!-- ===== TOUCH CONTROLS ===== -->
+                <div class="touch-controls" id="touchControls">
+                    <div class="ctrl-btn" id="leftBtn">◀</div>
+                    <div class="ctrl-btn jump" id="jumpBtn">▲</div>
+                    <div class="ctrl-btn" id="rightBtn">▶</div>
+                </div>
+            </div>
+
+            <div class="ad-col" id="adRight">
+                <div class="ad-placeholder" style="font-size:0.5rem;">📢<br />إعلان</div>
+                <span class="ad-label">إعلان</span>
+            </div>
+        </div>
+
+        <div class="ad-row" id="adBottom">
+            <div class="ad-placeholder">📢 إعلان<br /><span style="font-size:0.4rem;">Google AdSense</span></div>
+            <span class="ad-label">إعلان</span>
         </div>
     </div>
 
     <script>
         // ============================================================
-        //  FLIP PANIC — MAP + SKIP EDITION
-        //  Removed level 37 (index 36: "The Mirror World")
-        //  Added Map view with level selection
-        //  Added Skip level (50 coins per level)
-        // ============================================================
+        //  FLIP PANIC — ENHANCED EDITION + PRIVACY POLICY
+        //  + Smaller game, ads around, ad-skip, menu button, footer
+        //  ============================================================
 
         // ============================================================
-        //  AUDIO ENGINE
+        //  AUDIO ENGINE (نفس الكود السابق)
         // ============================================================
         class AudioEngine {
             constructor() {
@@ -1005,12 +1400,10 @@
                     this.ctx = new(window.AudioContext || window.webkitAudioContext)();
                 } catch (e) { this.ctx = null; }
             }
-
             init() {
                 if (!this.ctx) return;
                 if (this.ctx.state === 'suspended') this.ctx.resume().catch(() => {});
             }
-
             toggleMute() {
                 this.muted = !this.muted;
                 if (this.muted && this.musicInterval) {
@@ -1024,7 +1417,6 @@
                 document.getElementById('muteBtn').classList.toggle('active', this.muted);
                 return this.muted;
             }
-
             startMusic() {
                 if (this.muted || !this.ctx) return;
                 if (this.musicInterval) return;
@@ -1048,7 +1440,6 @@
                     } catch (e) {}
                 }, 220);
             }
-
             stopMusic() {
                 if (this.musicInterval) {
                     clearInterval(this.musicInterval);
@@ -1056,7 +1447,6 @@
                     this.musicActive = false;
                 }
             }
-
             playBeep(freq, dur, type, vol) {
                 if (this.muted || !this.ctx) return;
                 try {
@@ -1072,7 +1462,6 @@
                     o.stop(this.ctx.currentTime + dur);
                 } catch (e) {}
             }
-
             sfxFlip() { this.playBeep(200, 0.08, 'sawtooth', 0.1);
                 setTimeout(() => this.playBeep(80, 0.12, 'triangle', 0.08), 50); }
             sfxWarn() { this.playBeep(1400, 0.05, 'square', 0.05); }
@@ -1094,14 +1483,17 @@
                 setTimeout(() => this.playBeep(120, 0.4, 'sawtooth', 0.1), 120); }
             sfxDoor() { this.playBeep(300, 0.1, 'sine', 0.07);
                 setTimeout(() => this.playBeep(500, 0.12, 'sine', 0.06), 60); }
-            sfxLaser() { this.playBeep(800, 0.04, 'square', 0.04);
-                setTimeout(() => this.playBeep(400, 0.06, 'square', 0.03), 30); }
             sfxSkip() { this.playBeep(1000, 0.06, 'sine', 0.08);
                 setTimeout(() => this.playBeep(1300, 0.08, 'sine', 0.07), 50); }
+            sfxDaily() { this.playBeep(800, 0.06, 'sine', 0.09);
+                setTimeout(() => this.playBeep(1000, 0.08, 'sine', 0.08), 50);
+                setTimeout(() => this.playBeep(1200, 0.1, 'sine', 0.07), 100); }
+            sfxDiamond() { this.playBeep(1400, 0.05, 'sine', 0.08);
+                setTimeout(() => this.playBeep(1800, 0.06, 'sine', 0.07), 40); }
         }
 
         // ============================================================
-        //  PARTICLE SYSTEM
+        //  PARTICLE SYSTEM (نفس الكود السابق)
         // ============================================================
         class Particle {
             constructor(x, y, color, life, size, vx, vy) {
@@ -1160,7 +1552,7 @@
         }
 
         // ============================================================
-        //  SAVE SYSTEM
+        //  SAVE SYSTEM (نفس الكود السابق)
         // ============================================================
         class SaveSystem {
             static save(key, data) {
@@ -1180,6 +1572,7 @@
                     levelStars: state.levelStars,
                     achievements: state.achievements,
                     dailyClaimed: state.dailyClaimed,
+                    dailyLastClaim: state.dailyLastClaim,
                     wheelLastSpin: state.wheelLastSpin,
                     purchased: state.purchased,
                     equippedSkin: state.equippedSkin,
@@ -1206,6 +1599,7 @@
                     levelStars: d.levelStars || {},
                     achievements: d.achievements || {},
                     dailyClaimed: d.dailyClaimed || 0,
+                    dailyLastClaim: d.dailyLastClaim || 0,
                     wheelLastSpin: d.wheelLastSpin || 0,
                     purchased: d.purchased || {},
                     equippedSkin: d.equippedSkin || null,
@@ -1224,7 +1618,7 @@
         }
 
         // ============================================================
-        //  GAME CONSTANTS
+        //  CONSTANTS
         // ============================================================
         const G = {
             WIDTH: 800,
@@ -1236,6 +1630,8 @@
             PLAYER_SIZE: 28,
             FLIP_INTERVAL: 3.5,
             SKIP_COST: 50,
+            DIAMOND_REWARD_BASE: 1,
+            DIAMOND_REWARD_BONUS: 2,
         };
 
         // ============================================================
@@ -1257,11 +1653,9 @@
         };
 
         // ============================================================
-        //  LEVEL DATA — REMOVED LEVEL 37 (index 36: "The Mirror World")
-        //  Total levels: 36 (indices 0-35)
+        //  LEVEL DATA (نفس الكود السابق، تم اختصاره للطول لكنه كامل)
         // ============================================================
         const LEVEL_DATA = [
-            // Original levels 1-30 preserved
             { name: 'Training Lies', platforms: [{ x: 40, y: 360, w: 120, h: 18, type: 'solid' }, { x: 240, y: 320, w: 100,
                         h: 18, type: 'solid' }, { x: 420, y: 280, w: 80, h: 18, type: 'goal' }], hazards: [], arrows: [
                     { x: 160, y: 275, dir: 'right', text: '→ اذهب يمين' }
@@ -1654,7 +2048,7 @@
                     y: 223 }, { x: 440, y: 190 }, { x: 525, y: 158 }, { x: 610, y: 126 }, { x: 702, y: 93 }
                 ], playerStart: { x: 28, y: 315 }, description: 'التحدي الأقصى', flipDelay: 1.5, doubleFlip: true,
                 adaptive: true, fullChaos: true, weather: 'clear', time: 'day', boss: false, secret: false },
-            // ===== NEW LEVELS (continued, without the removed "The Mirror World") =====
+            // NEW LEVELS (مستمر)
             {
                 name: 'Rainy Night',
                 platforms: [{ x: 30, y: 360, w: 80, h: 18, type: 'solid' }, { x: 170, y: 330, w: 55, h: 18,
@@ -1844,7 +2238,6 @@
                 boss: false,
                 secret: false
             }
-            // NOTE: Level 37 (index 36: "The Mirror World") has been REMOVED.
         ];
 
         // ============================================================
@@ -1892,11 +2285,17 @@
             coins_500: { name: 'المليونير', desc: 'اجمع 500 💎', icon: '💎', check: s => s.totalCoinsCollected >= 500 },
             diamonds_10: { name: 'صياد الماسات', desc: 'اجمع 10 💠', icon: '💠', check: s => s.totalDiamondsCollected >=
                     10 },
+            diamonds_50: { name: 'ملك الماسات', desc: 'اجمع 50 💠', icon: '👑', check: s => s.totalDiamondsCollected >=
+                    50 },
             boss_1: { name: 'قاتل الزعماء', desc: 'اهزم زعيماً واحداً', icon: '⚡', check: s => s.bossDefeated >= 1 },
             boss_3: { name: 'صياد الزعماء', desc: 'اهزم 3 زعماء', icon: '🔥', check: s => s.bossDefeated >= 3 },
             secret_1: { name: 'المستكشف', desc: 'افتح مرحلة سرية', icon: '🗝️', check: s => s.secretLevelsUnlocked >= 1 },
             combo_10: { name: 'سلسلة ذهبية', desc: 'احصل على كومبو 10', icon: '🔥', check: s => s.comboCount >= 10 },
             combo_25: { name: 'سلسلة أسطورية', desc: 'احصل على كومبو 25', icon: '🌟', check: s => s.comboCount >= 25 },
+            diamond_hoarder: { name: 'كنز الماسات', desc: 'امتلك 20 ماسة في المحفظة', icon: '💠', check: s => s
+                    .diamonds >= 20 },
+            daily_7: { name: 'المكافأة اليومية', desc: 'طالب بالمكافأة اليومية 7 مرات', icon: '📅', check: s => s
+                    .dailyClaimed >= 7 },
         };
 
         // ============================================================
@@ -1933,6 +2332,7 @@
                 this.bossDefeated = this.state.bossDefeated || 0;
                 this.secretLevelsUnlocked = this.state.secretLevelsUnlocked || 0;
                 this.dailyClaimed = this.state.dailyClaimed || 0;
+                this.dailyLastClaim = this.state.dailyLastClaim || 0;
                 this.wheelLastSpin = this.state.wheelLastSpin || 0;
 
                 // Player
@@ -1999,6 +2399,7 @@
 
                 this.keys = { left: false, right: false, jump: false };
                 this.touch = { left: false, right: false, jump: false };
+                this.adSkipAvailable = true;
 
                 this.setupUI();
                 this.loadLevel(this.currentLevel);
@@ -2007,6 +2408,7 @@
                 this.renderShop();
                 this.updateMenuStats();
                 this.renderMap();
+                this.updateDailyUI();
 
                 this.lastTime = performance.now();
                 this.gameLoop(this.lastTime);
@@ -2048,16 +2450,20 @@
                     if (e.key === 'ArrowRight' || e.key === 'd') this.keys.right = false;
                 });
 
+                // Menu buttons
                 document.getElementById('playBtn').addEventListener('click', () => {
                     this.audio.init();
                     this.uiStart('startScreen').classList.add('hidden');
                     this.uiStart('shopScreen').classList.add('hidden');
                     this.uiStart('mapScreen').classList.add('hidden');
                     this.uiStart('wheelScreen').classList.add('hidden');
+                    this.uiStart('dailyScreen').classList.add('hidden');
+                    this.uiStart('privacyScreen').classList.add('hidden');
                     this.gameState = 'playing';
                     this.loadLevel(this.currentLevel);
                     this.updateUI();
                     this.saveAll();
+                    document.getElementById('menuBtnTop').style.display = 'inline-block';
                 });
 
                 document.getElementById('continueBtn').addEventListener('click', () => {
@@ -2066,10 +2472,13 @@
                     this.uiStart('shopScreen').classList.add('hidden');
                     this.uiStart('mapScreen').classList.add('hidden');
                     this.uiStart('wheelScreen').classList.add('hidden');
+                    this.uiStart('dailyScreen').classList.add('hidden');
+                    this.uiStart('privacyScreen').classList.add('hidden');
                     this.gameState = 'playing';
                     this.loadLevel(this.currentLevel);
                     this.updateUI();
                     this.saveAll();
+                    document.getElementById('menuBtnTop').style.display = 'inline-block';
                 });
 
                 document.getElementById('mapBtn').addEventListener('click', () => {
@@ -2078,6 +2487,8 @@
                     this.uiStart('mapScreen').classList.remove('hidden');
                     this.uiStart('shopScreen').classList.add('hidden');
                     this.uiStart('wheelScreen').classList.add('hidden');
+                    this.uiStart('dailyScreen').classList.add('hidden');
+                    this.uiStart('privacyScreen').classList.add('hidden');
                     this.gameState = 'map';
                     this.renderMap();
                 });
@@ -2087,6 +2498,7 @@
                     this.uiStart('startScreen').classList.remove('hidden');
                     this.gameState = 'menu';
                     this.updateMenuStats();
+                    this.updateDailyUI();
                 });
 
                 document.getElementById('shopBtn').addEventListener('click', () => {
@@ -2095,8 +2507,9 @@
                     this.uiStart('shopScreen').classList.remove('hidden');
                     this.uiStart('mapScreen').classList.add('hidden');
                     this.uiStart('wheelScreen').classList.add('hidden');
+                    this.uiStart('dailyScreen').classList.add('hidden');
+                    this.uiStart('privacyScreen').classList.add('hidden');
                     this.gameState = 'shop';
-                    this.uiStart('menuBtn').style.display = 'none';
                     this.renderShop();
                 });
 
@@ -2104,8 +2517,8 @@
                     this.uiStart('shopScreen').classList.add('hidden');
                     this.uiStart('startScreen').classList.remove('hidden');
                     this.gameState = 'menu';
-                    this.uiStart('menuBtn').style.display = 'none';
                     this.updateMenuStats();
+                    this.updateDailyUI();
                 });
 
                 document.getElementById('wheelBtn').addEventListener('click', () => {
@@ -2114,6 +2527,8 @@
                     this.uiStart('wheelScreen').classList.remove('hidden');
                     this.uiStart('shopScreen').classList.add('hidden');
                     this.uiStart('mapScreen').classList.add('hidden');
+                    this.uiStart('dailyScreen').classList.add('hidden');
+                    this.uiStart('privacyScreen').classList.add('hidden');
                     this.gameState = 'wheel';
                     this.initWheel();
                 });
@@ -2123,6 +2538,7 @@
                     this.uiStart('startScreen').classList.remove('hidden');
                     this.gameState = 'menu';
                     this.updateMenuStats();
+                    this.updateDailyUI();
                 });
 
                 document.getElementById('spinWheelBtn').addEventListener('click', () => {
@@ -2133,22 +2549,51 @@
                     this.audio.toggleMute();
                 });
 
-                document.getElementById('menuBtn').addEventListener('click', () => {
+                document.getElementById('menuBtnTop').addEventListener('click', () => {
                     this.goToMainMenu();
                 });
 
-                // Skip button (in-game)
+                // Daily
+                document.getElementById('dailyBtn').addEventListener('click', () => {
+                    this.audio.init();
+                    this.uiStart('startScreen').classList.add('hidden');
+                    this.uiStart('dailyScreen').classList.remove('hidden');
+                    this.uiStart('shopScreen').classList.add('hidden');
+                    this.uiStart('mapScreen').classList.add('hidden');
+                    this.uiStart('wheelScreen').classList.add('hidden');
+                    this.uiStart('privacyScreen').classList.add('hidden');
+                    this.gameState = 'daily';
+                    this.updateDailyUI();
+                });
+
+                document.getElementById('closeDailyBtn').addEventListener('click', () => {
+                    this.uiStart('dailyScreen').classList.add('hidden');
+                    this.uiStart('startScreen').classList.remove('hidden');
+                    this.gameState = 'menu';
+                    this.updateMenuStats();
+                    this.updateDailyUI();
+                });
+
+                document.getElementById('claimDailyBtn').addEventListener('click', () => {
+                    this.claimDailyReward();
+                });
+
+                // Skip
                 document.getElementById('skipBtn').addEventListener('click', () => {
                     this.audio.init();
                     this.trySkipLevel();
                 });
-
-                // Map skip button
                 document.getElementById('mapSkipBtn').addEventListener('click', () => {
                     this.audio.init();
                     this.trySkipLevel();
                 });
 
+                document.getElementById('adSkipBtn').addEventListener('click', () => {
+                    this.audio.init();
+                    this.tryAdSkip();
+                });
+
+                // Shop tabs
                 document.getElementById('tabSkins').addEventListener('click', () => {
                     this.shopTab = 'skin';
                     document.getElementById('tabSkins').classList.add('active');
@@ -2185,18 +2630,26 @@
                     });
                 });
 
+                // ===== PRIVACY POLICY =====
+                document.getElementById('privacyLink').addEventListener('click', () => {
+                    this.audio.init();
+                    this.uiStart('privacyScreen').classList.remove('hidden');
+                    this.uiStart('startScreen').classList.add('hidden'); // خلفية القائمة تظل لكن الشاشة تظهر
+                });
+                document.getElementById('closePrivacyBtn').addEventListener('click', () => {
+                    this.uiStart('privacyScreen').classList.add('hidden');
+                    this.uiStart('startScreen').classList.remove('hidden');
+                });
+
                 if (this.levelsCompleted > 0 || this.currentLevel > 0) {
                     document.getElementById('continueBtn').style.display = 'inline-block';
                 }
             }
 
             uiStart(id) {
-                if (id.startsWith('#')) return document.querySelector(id);
-                const el = document.getElementById(id);
-                return el || document.getElementById(id);
+                return document.getElementById(id);
             }
 
-            // ===== SAVE =====
             saveAll() {
                 const data = {
                     currentLevel: this.currentLevel,
@@ -2207,6 +2660,7 @@
                     levelStars: this.levelStars,
                     achievements: this.achievements,
                     dailyClaimed: this.dailyClaimed,
+                    dailyLastClaim: this.dailyLastClaim,
                     wheelLastSpin: this.wheelLastSpin,
                     purchased: this.purchased,
                     equippedSkin: this.equippedSkin,
@@ -2225,7 +2679,6 @@
                 Object.assign(this.state, data);
             }
 
-            // ===== APPLY EQUIPPED =====
             applyEquipped() {
                 this.player.normalColor = '#00d4ff';
                 this.player.flippedColor = '#ff3355';
@@ -2269,7 +2722,121 @@
                 this.player.color = this.player.normalColor;
             }
 
-            // ===== LOAD LEVEL =====
+            updateDailyUI() {
+                const now = Date.now();
+                const lastClaim = this.dailyLastClaim || 0;
+                const canClaim = (now - lastClaim) > 24 * 60 * 60 * 1000;
+
+                const btn = document.getElementById('claimDailyBtn');
+                const timerEl = document.getElementById('dailyTimer');
+                const iconEl = document.getElementById('dailyRewardIcon');
+                const textEl = document.getElementById('dailyRewardText');
+                const subEl = document.getElementById('dailyRewardSub');
+
+                if (canClaim) {
+                    btn.disabled = false;
+                    btn.textContent = '🎁 استلم المكافأة';
+                    btn.classList.remove('claimed');
+                    timerEl.textContent = '⏳ متاح الآن!';
+                    timerEl.style.color = '#44ff88';
+                    iconEl.textContent = '💎';
+                    textEl.textContent = '+5 عملات + 1 ماسة 💠';
+                    subEl.textContent = 'تسلم يومياً';
+                } else {
+                    btn.disabled = true;
+                    btn.textContent = '⏳ انتظر';
+                    btn.classList.add('claimed');
+                    const remaining = 24 * 60 * 60 * 1000 - (now - lastClaim);
+                    const hours = Math.floor(remaining / (60 * 60 * 1000));
+                    const mins = Math.floor((remaining % (60 * 60 * 1000)) / (60 * 1000));
+                    timerEl.textContent = `⏳ متاح بعد ${hours}h ${mins}m`;
+                    timerEl.style.color = '#888';
+                    iconEl.textContent = '⏳';
+                    textEl.textContent = 'تم الاستلام';
+                    subEl.textContent = 'ارجع غداً';
+                }
+            }
+
+            claimDailyReward() {
+                const now = Date.now();
+                const lastClaim = this.dailyLastClaim || 0;
+                if ((now - lastClaim) < 24 * 60 * 60 * 1000) {
+                    this.showAchievement('⏳', 'لا يزال متاحاً غداً!');
+                    return;
+                }
+
+                const coinsReward = 5;
+                const diamondsReward = 1;
+                this.coins += coinsReward;
+                this.diamonds += diamondsReward;
+                this.totalCoinsCollected += coinsReward;
+                this.totalDiamondsCollected += diamondsReward;
+                this.dailyClaimed = (this.dailyClaimed || 0) + 1;
+                this.dailyLastClaim = now;
+
+                this.audio.sfxDaily();
+                this.particles.emit(G.WIDTH / 2, G.HEIGHT / 2 - 40, '#ffaa44', 30);
+                this.particles.emit(G.WIDTH / 2, G.HEIGHT / 2 - 40, '#00e5ff', 15);
+                this.floatingTexts.push({
+                    x: G.WIDTH / 2,
+                    y: G.HEIGHT / 2 - 60,
+                    text: `🎁 يومي! +${coinsReward}💎 +${diamondsReward}💠`,
+                    life: 3,
+                    color: '#ffaa44'
+                });
+
+                this.saveAll();
+                this.updateUI();
+                this.updateMenuStats();
+                this.updateDailyUI();
+                this.renderMap();
+                this.showAchievement('🎁', 'تم استلام المكافأة اليومية!');
+
+                setTimeout(() => {
+                    this.uiStart('dailyScreen').classList.add('hidden');
+                    this.uiStart('startScreen').classList.remove('hidden');
+                    this.gameState = 'menu';
+                    this.updateMenuStats();
+                    this.updateDailyUI();
+                }, 1500);
+            }
+
+            tryAdSkip() {
+                if (this.gameState !== 'playing') return;
+                if (this.currentLevel >= LEVEL_DATA.length - 1) {
+                    this.uiStart('misleadMsg').textContent = '⚠️ هذه آخر مرحلة!';
+                    this.misleadTimer = 2;
+                    return;
+                }
+                if (!this.adSkipAvailable) {
+                    this.uiStart('misleadMsg').textContent = '⏳ انتظر قليلاً قبل المحاولة مرة أخرى';
+                    this.misleadTimer = 2;
+                    return;
+                }
+
+                this.uiStart('misleadMsg').textContent = '📺 جارٍ تشغيل الإعلان... انتظر 3 ثوانٍ';
+                this.misleadTimer = 3;
+                this.adSkipAvailable = false;
+
+                setTimeout(() => {
+                    this.audio.sfxSkip();
+                    this.particles.emit(G.WIDTH / 2, G.HEIGHT / 2, '#ff8800', 20);
+                    this.floatingTexts.push({ x: G.WIDTH / 2, y: G.HEIGHT / 2 - 20, text: '⏭ تخطي مجاني!',
+                        life: 2, color: '#ff8800' });
+                    this.currentLevel++;
+                    this.triggerTransition(() => {
+                        this.loadLevel(this.currentLevel);
+                        this.saveAll();
+                        this.renderMap();
+                    });
+                    setTimeout(() => {
+                        this.adSkipAvailable = true;
+                        this.uiStart('misleadMsg').textContent = '📺 تخطي بإعلان متاح مجدداً';
+                        this.misleadTimer = 2;
+                    }, 30000);
+                }, 3000);
+            }
+
             loadLevel(index) {
                 if (index >= LEVEL_DATA.length) {
                     this.showVictory();
@@ -2388,8 +2955,9 @@
                 this.gameState = 'playing';
                 this.uiStart('retryBtn').style.display = 'none';
                 this.uiStart('nextBtn').style.display = 'none';
-                this.uiStart('menuBtn').style.display = 'inline-block';
-                this.uiStart('skipBtn').style.display = 'inline-block';
+                document.getElementById('skipBtn').style.display = 'inline-block';
+                document.getElementById('adSkipBtn').style.display = 'inline-block';
+                document.getElementById('menuBtnTop').style.display = 'inline-block';
                 this.uiStart('misleadMsg').textContent = '';
 
                 if (lvl.secret && !this.secretLevelsUnlocked) {
@@ -2402,7 +2970,6 @@
                 this.renderMap();
             }
 
-            // ===== TRY SKIP LEVEL =====
             trySkipLevel() {
                 if (this.gameState !== 'playing' && this.gameState !== 'map') return;
                 const cost = G.SKIP_COST;
@@ -2417,7 +2984,6 @@
                     return;
                 }
 
-                // Confirm skip
                 if (this.gameState === 'playing') {
                     if (!confirm(`تخطي المرحلة الحالية مقابل ${cost} 💎؟`)) return;
                 }
@@ -2431,7 +2997,6 @@
                 this.updateUI();
                 this.updateMenuStats();
 
-                // Advance to next level
                 this.currentLevel++;
                 this.triggerTransition(() => {
                     this.loadLevel(this.currentLevel);
@@ -2440,7 +3005,6 @@
                 });
             }
 
-            // ===== RENDER MAP =====
             renderMap() {
                 const grid = document.getElementById('mapGrid');
                 grid.innerHTML = '';
@@ -2474,42 +3038,32 @@
                     if (lvl.boss) nameDisplay = '👹 ' + nameDisplay;
                     if (lvl.secret) nameDisplay = '🔮 ' + nameDisplay;
 
-                    node.innerHTML = `
-                        <div class="node-num">${i+1}</div>
-                        <div class="node-name">${nameDisplay}</div>
-                        <div class="node-stars">${starStr}</div>
-                        ${!isUnlocked ? '<div class="lock-icon">🔒</div>' : ''}
-                    `;
+                    node.innerHTML =
+                        `<div class="node-num">${i+1}</div><div class="node-name">${nameDisplay}</div><div class="node-stars">${starStr}</div>${!isUnlocked ? '<div class="lock-icon">🔒</div>' : ''}`;
 
                     if (isUnlocked) {
                         node.addEventListener('click', () => {
                             this.audio.init();
                             if (i === this.currentLevel) {
-                                // reload current
-                                this.triggerTransition(() => {
-                                    this.loadLevel(i);
-                                    this.saveAll();
-                                });
+                                this.triggerTransition(() => { this.loadLevel(i);
+                                    this.saveAll(); });
                             } else {
                                 this.currentLevel = i;
-                                this.triggerTransition(() => {
-                                    this.loadLevel(i);
-                                    this.saveAll();
-                                });
+                                this.triggerTransition(() => { this.loadLevel(i);
+                                    this.saveAll(); });
                             }
-                            // Close map
                             this.uiStart('mapScreen').classList.add('hidden');
                             this.gameState = 'playing';
                             this.uiStart('startScreen').classList.add('hidden');
-                            this.uiStart('menuBtn').style.display = 'inline-block';
-                            this.uiStart('skipBtn').style.display = 'inline-block';
+                            document.getElementById('skipBtn').style.display = 'inline-block';
+                            document.getElementById('adSkipBtn').style.display = 'inline-block';
+                            document.getElementById('menuBtnTop').style.display = 'inline-block';
                         });
                     }
 
                     grid.appendChild(node);
                 }
 
-                // Update skip button state
                 const canSkip = this.coins >= G.SKIP_COST && this.currentLevel < LEVEL_DATA.length - 1;
                 document.getElementById('mapSkipBtn').disabled = !canSkip;
                 document.getElementById('mapSkipBtn').textContent = canSkip ?
@@ -2517,7 +3071,6 @@
                     `⏭ تخطي (${G.SKIP_COST}💎) - غير متاح`;
             }
 
-            // ===== TRIGGER TRANSITION =====
             triggerTransition(cb) {
                 this.screenTransition = 1;
                 this.uiStart('transitionOverlay').classList.add('active');
@@ -2532,15 +3085,17 @@
                 }, 200);
             }
 
-            // ===== GO TO MAIN MENU =====
             goToMainMenu() {
                 this.gameState = 'menu';
                 this.uiStart('startScreen').classList.remove('hidden');
                 this.uiStart('shopScreen').classList.add('hidden');
                 this.uiStart('mapScreen').classList.add('hidden');
                 this.uiStart('wheelScreen').classList.add('hidden');
-                this.uiStart('menuBtn').style.display = 'none';
-                this.uiStart('skipBtn').style.display = 'none';
+                this.uiStart('dailyScreen').classList.add('hidden');
+                this.uiStart('privacyScreen').classList.add('hidden');
+                document.getElementById('skipBtn').style.display = 'none';
+                document.getElementById('adSkipBtn').style.display = 'none';
+                document.getElementById('menuBtnTop').style.display = 'none';
                 this.uiStart('retryBtn').style.display = 'none';
                 this.uiStart('nextBtn').style.display = 'none';
                 this.uiStart('misleadMsg').textContent = '';
@@ -2549,6 +3104,7 @@
                 this.floatingTexts = [];
                 this.updateUI();
                 this.updateMenuStats();
+                this.updateDailyUI();
                 this.saveAll();
                 this.renderMap();
                 if (this.levelsCompleted > 0 || this.currentLevel > 0) {
@@ -2558,7 +3114,6 @@
                 }
             }
 
-            // ===== SHOW VICTORY =====
             showVictory() {
                 this.uiStart('misleadMsg').textContent = '🎉 لقد تغلبت على كل الفوضى! أنت أسطورة! 🎉';
                 this.misleadTimer = 999;
@@ -2573,13 +3128,13 @@
                     this.saveAll();
                 };
                 this.uiStart('nextBtn').style.display = 'none';
-                this.uiStart('menuBtn').style.display = 'inline-block';
-                this.uiStart('skipBtn').style.display = 'none';
+                document.getElementById('skipBtn').style.display = 'none';
+                document.getElementById('adSkipBtn').style.display = 'none';
+                document.getElementById('menuBtnTop').style.display = 'inline-block';
                 this.audio.sfxWin();
                 this.gameState = 'win';
             }
 
-            // ===== WIN LEVEL =====
             winLevel() {
                 if (this.gameState !== 'playing') return;
                 this.gameState = 'win';
@@ -2589,25 +3144,31 @@
                 this.totalCoinsCollected += reward;
                 this.levelsCompleted++;
 
+                const diamondReward = G.DIAMOND_REWARD_BASE + Math.floor(Math.random() * G.DIAMOND_REWARD_BONUS);
+                this.diamonds += diamondReward;
+                this.totalDiamondsCollected += diamondReward;
+                this.audio.sfxDiamond();
+
                 if (this.boss && this.boss.alive === false) {
                     this.bossDefeated++;
-                    this.diamonds += 3;
-                    this.totalDiamondsCollected += 3;
+                    const bossDiamonds = 3;
+                    this.diamonds += bossDiamonds;
+                    this.totalDiamondsCollected += bossDiamonds;
                     this.audio.sfxBoss();
-                    this.floatingTexts.push({ x: G.WIDTH / 2, y: G.HEIGHT / 2 - 40, text: '⚔️ زعيم مهزوم! +3 💠',
-                        life: 3, color: '#ff44aa' });
+                    this.floatingTexts.push({ x: G.WIDTH / 2, y: G.HEIGHT / 2 - 40,
+                        text: `⚔️ زعيم مهزوم! +${bossDiamonds} 💠`, life: 3, color: '#ff44aa' });
                 }
 
                 this.audio.sfxWin();
                 this.particles.emit(this.player.x + this.player.width / 2, this.player.y + this.player.height / 2,
                     '#ffdd00', 30);
                 this.particles.emit(this.player.x + this.player.width / 2, this.player.y + this.player.height / 2,
-                    '#ffffff', 12);
+                    '#00e5ff', 20);
 
                 this.floatingTexts.push({
                     x: this.player.x + this.player.width / 2,
                     y: this.player.y - 20,
-                    text: `+${reward} 💎`,
+                    text: `+${reward}💎 +${diamondReward}💠`,
                     life: 2.5,
                     color: '#ffdd00'
                 });
@@ -2619,7 +3180,8 @@
                     this.bestTimes[this.currentLevel] = this.levelTime;
                 }
 
-                this.uiStart('misleadMsg').textContent = `✅ نجحت! +${reward} 💎 ⭐${'⭐'.repeat(stars)}`;
+                this.uiStart('misleadMsg').textContent =
+                    `✅ نجحت! +${reward}💎 +${diamondReward}💠 ⭐${'⭐'.repeat(stars)}`;
                 this.misleadTimer = 3;
 
                 this.checkAchievements();
@@ -2644,15 +3206,15 @@
                     this.saveAll();
                     this.renderMap();
                 };
-                this.uiStart('menuBtn').style.display = 'inline-block';
-                this.uiStart('skipBtn').style.display = 'none';
+                document.getElementById('skipBtn').style.display = 'none';
+                document.getElementById('adSkipBtn').style.display = 'none';
+                document.getElementById('menuBtnTop').style.display = 'inline-block';
 
                 this.updateUI();
                 this.saveAll();
                 this.renderMap();
             }
 
-            // ===== CALCULATE STARS =====
             calculateStars() {
                 const lvl = LEVEL_DATA[this.currentLevel];
                 if (!lvl) return 1;
@@ -2663,7 +3225,6 @@
                 return Math.max(1, Math.min(3, stars));
             }
 
-            // ===== KILL PLAYER =====
             killPlayer() {
                 if (this.deathCooldown > 0 || this.gameState !== 'playing') return;
                 this.deaths++;
@@ -2690,7 +3251,6 @@
                 });
             }
 
-            // ===== CHECK ACHIEVEMENTS =====
             checkAchievements() {
                 const state = {
                     deaths: this.deaths,
@@ -2700,19 +3260,27 @@
                     bossDefeated: this.bossDefeated,
                     secretLevelsUnlocked: this.secretLevelsUnlocked,
                     comboCount: this.comboActive,
+                    diamonds: this.diamonds,
+                    dailyClaimed: this.dailyClaimed,
                 };
                 for (const [id, ach] of Object.entries(ACHIEVEMENTS)) {
                     if (!this.achievements[id] && ach.check(state)) {
                         this.achievements[id] = true;
                         this.showAchievement(ach.icon, `${ach.name}: ${ach.desc}`);
                         this.audio.sfxBuy();
+                        if (id !== 'first_death' && id !== 'ten_deaths') {
+                            this.diamonds += 1;
+                            this.totalDiamondsCollected += 1;
+                            this.floatingTexts.push({ x: G.WIDTH / 2 + 40, y: G.HEIGHT / 2 - 20, text: '+1💠 إنجاز!',
+                                life: 2, color: '#00e5ff' });
+                        }
                     }
                 }
                 this.saveAll();
                 this.updateMenuStats();
+                this.updateUI();
             }
 
-            // ===== SHOW ACHIEVEMENT TOAST =====
             showAchievement(icon, text) {
                 const toast = this.uiStart('achievementToast');
                 this.uiStart('achToastText').textContent = `${icon} ${text}`;
@@ -2721,7 +3289,6 @@
                 this._achTimeout = setTimeout(() => toast.classList.remove('show'), 2800);
             }
 
-            // ===== UPDATE UI =====
             updateUI() {
                 this.uiStart('hudCoinVal').textContent = this.coins;
                 this.uiStart('hudDiamondVal').textContent = this.diamonds;
@@ -2738,12 +3305,15 @@
                 hc.classList.add('bump');
                 setTimeout(() => hc.classList.remove('bump'), 150);
 
-                // Update skip button
                 const canSkip = this.coins >= G.SKIP_COST && this.currentLevel < LEVEL_DATA.length - 1;
-                const skipBtn = this.uiStart('skipBtn');
+                const skipBtn = document.getElementById('skipBtn');
                 skipBtn.style.display = (this.gameState === 'playing') ? 'inline-block' : 'none';
                 skipBtn.textContent = canSkip ? `⏭ تخطي (${G.SKIP_COST}💎)` : `⏭ تخطي (${G.SKIP_COST}💎)`;
                 skipBtn.style.opacity = canSkip ? '1' : '0.5';
+
+                const adBtn = document.getElementById('adSkipBtn');
+                adBtn.style.display = (this.gameState === 'playing' && this.currentLevel < LEVEL_DATA.length - 1) ?
+                    'inline-block' : 'none';
             }
 
             updateMenuStats() {
@@ -2752,9 +3322,13 @@
                 document.getElementById('menuDiamonds').textContent = this.diamonds;
                 const achCount = Object.values(this.achievements).filter(v => v).length;
                 document.getElementById('menuAchievements').textContent = achCount;
+                let totalStars = 0;
+                for (let i = 0; i < LEVEL_DATA.length; i++) {
+                    totalStars += (this.levelStars[i] || 0);
+                }
+                document.getElementById('menuTotalStars').textContent = totalStars;
             }
 
-            // ===== SHOP =====
             shopTab = 'skin';
 
             renderShop() {
@@ -2781,7 +3355,8 @@
                     } else {
                         const cost = item.cost || 0;
                         const canAfford = (cost <= this.coins) || (item.category === 'char' && cost <= this.diamonds);
-                        btnHTML = `<button ${canAfford?'':'disabled'}>شراء ${cost}${item.category==='char'?'💠':'💎'}</button>`;
+                        btnHTML =
+                        `<button ${canAfford?'':'disabled'}>شراء ${cost}${item.category==='char'?'💠':'💎'}</button>`;
                     }
 
                     const icon = item.category === 'skin' ? '🎨' : item.category === 'trail' ? '✨' : '👤';
@@ -2841,7 +3416,6 @@
                 this.saveAll();
             }
 
-            // ===== WHEEL =====
             wheelAngle = 0;
             wheelSpinning = false;
 
@@ -2987,7 +3561,6 @@
                 requestAnimationFrame(animateWheel);
             }
 
-            // ===== UPDATE =====
             update(dt) {
                 if (dt > 0.1) dt = 0.1;
                 this.totalPlayTime += dt;
@@ -3024,7 +3597,6 @@
 
                 this.levelTime += dt;
 
-                // Flip mechanic
                 const flipDelay = lvl.flipDelay || 0;
                 const effInt = G.FLIP_INTERVAL + flipDelay;
                 this.flipAccum += dt;
@@ -3100,7 +3672,6 @@
                     }
                 }
 
-                // Player movement
                 let moveDir = 0;
                 if (this.keys.left || this.touch.left) moveDir -= 1;
                 if (this.keys.right || this.touch.right) moveDir += 1;
@@ -3156,7 +3727,6 @@
                 if (this.player.x < 0) this.player.x = 0;
                 if (this.player.x + this.player.width > G.WIDTH) this.player.x = G.WIDTH - this.player.width;
 
-                // Platform collision
                 this.player.onGround = false;
                 const px = this.player.x,
                     py = this.player.y,
@@ -3282,9 +3852,6 @@
 
                 for (let d of this.doors) {
                     if (!d.open) continue;
-                    if (this.checkCollision(px, py, pw, ph, d.x, d.y, d.w, d.h)) {
-                        // pass
-                    }
                 }
 
                 const pcx = px + pw / 2,
@@ -3367,15 +3934,16 @@
                             if (this.boss.health <= 0) {
                                 this.boss.alive = false;
                                 this.bossDefeated++;
-                                this.diamonds += 5;
-                                this.totalDiamondsCollected += 5;
+                                const bd = 5;
+                                this.diamonds += bd;
+                                this.totalDiamondsCollected += bd;
                                 this.audio.sfxWin();
                                 this.particles.emit(this.boss.x + this.boss.w / 2, this.boss.y + this.boss.h / 2,
                                     '#ffdd00', 40);
                                 this.particles.emit(this.boss.x + this.boss.w / 2, this.boss.y + this.boss.h / 2,
                                     '#ffffff', 20);
                                 this.floatingTexts.push({ x: G.WIDTH / 2, y: G.HEIGHT / 2 - 40,
-                                    text: '⚔️ زعيم مهزوم! +5 💠', life: 3, color: '#ff44aa' });
+                                    text: `⚔️ زعيم مهزوم! +${bd} 💠`, life: 3, color: '#ff44aa' });
                                 this.saveAll();
                                 this.updateUI();
                             }
@@ -3437,7 +4005,6 @@
                 this.updateUI();
             }
 
-            // ===== WEATHER =====
             updateWeather(dt) {
                 if (this.weatherType === 'rain') {
                     for (let i = 0; i < 3; i++) {
@@ -3476,12 +4043,10 @@
                 this.weatherParticles = this.weatherParticles.filter(p => p.life > 0 && p.y < G.HEIGHT + 20);
             }
 
-            // ===== COLLISION =====
             checkCollision(px, py, pw, ph, rx, ry, rw, rh) {
                 return px < rx + rw && px + pw > rx && py < ry + rh && py + ph > ry;
             }
 
-            // ===== DRAW =====
             draw() {
                 const ctx = this.ctx;
                 const W = G.WIDTH,
@@ -3836,7 +4401,6 @@
                 ctx.restore();
             }
 
-            // ===== DRAW PLAYER =====
             drawPlayer(ctx) {
                 const p = this.player;
                 const cx = p.x + p.width / 2,
@@ -3902,7 +4466,6 @@
                 ctx.restore();
             }
 
-            // ===== GAME LOOP =====
             gameLoop(ts) {
                 if (!this.lastTime) this.lastTime = ts;
                 let dt = (ts - this.lastTime) / 1000;
@@ -3928,5 +4491,6 @@
             }
         });
     </script>
+
 </body>
 </html>
