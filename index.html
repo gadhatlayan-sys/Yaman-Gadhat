@@ -14,7 +14,6 @@
             --blue: #007aff;
             --purple: #5856d6;
             --dark: #05060b;
-            --glass: rgba(255, 255, 255, 0.03);
             --border: rgba(255, 255, 255, 0.08);
         }
 
@@ -38,7 +37,7 @@
             align-items: center;
         }
 
-        /* محرك المؤثرات البصرية للـ Canvas */
+        /* طبقات الرسوم والتفاعلات */
         #fx-canvas {
             position: fixed;
             top: 0; left: 0;
@@ -67,7 +66,7 @@
             100% { transform: translateY(-120px) scale(1.3); opacity: 0; }
         }
 
-        /* تصميم الشاشات */
+        /* تصميم الشاشات واللوحات الكونية */
         .screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -81,21 +80,19 @@
             overflow-y: auto;
         }
 
-        .hidden {
-            display: none !important;
-        }
+        .hidden { display: none !important; }
 
-        /* تحسين تصميم اللوبي وشاشة البداية */
         .cosmic-panel {
-            background: rgba(13, 17, 39, 0.75);
+            background: rgba(13, 17, 39, 0.8);
             border: 2px solid var(--border);
             border-radius: 24px;
             padding: 25px;
-            width: 90%;
-            max-width: 480px;
+            width: 95%;
+            max-width: 520px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.6);
             backdrop-filter: blur(12px);
             margin-bottom: 15px;
+            text-align: center;
         }
 
         h1 {
@@ -138,53 +135,53 @@
             transition: transform 0.1s, box-shadow 0.2s;
         }
 
-        button:active {
-            transform: scale(0.95);
-        }
-
+        button:active { transform: scale(0.95); }
         .btn-yellow { background: linear-gradient(135deg, var(--yellow), #ff9500); color: black; }
         .btn-red { background: linear-gradient(135deg, var(--red), #ff2d55); }
         .btn-green { background: linear-gradient(135deg, var(--green), #248a3d); }
         .btn-grey { background: #3a3f58; color: #fff; }
 
-        /* دليل القوانين التفاعلي */
+        /* صندوق شرح وقوانين اللعبة */
         .rules-guide {
             text-align: right;
-            max-height: 200px;
+            max-height: 220px;
             overflow-y: auto;
-            background: rgba(0,0,0,0.3);
-            border-radius: 12px;
-            padding: 12px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 14px;
+            padding: 15px;
             margin-top: 15px;
             font-size: 0.85rem;
-            line-height: 1.5;
+            line-height: 1.6;
             border: 1px solid var(--border);
         }
 
         .rules-guide h3 {
             color: var(--yellow);
             margin-bottom: 8px;
-            font-size: 0.95rem;
+            font-size: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 5px;
         }
 
         .rules-guide ul {
             list-style-type: none;
-            padding-right: 10px;
+            padding-right: 5px;
         }
 
         .rules-guide li {
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             position: relative;
+            padding-right: 15px;
         }
 
         .rules-guide li::before {
             content: "✦";
-            color: var(--purple);
+            color: var(--yellow);
             position: absolute;
-            right: -12px;
+            right: 0;
+            top: 0;
         }
 
-        /* لوحة القوانين وتخصيصها */
         .rules-toggles {
             display: grid;
             grid-template-columns: 1fr;
@@ -198,12 +195,13 @@
             justify-content: space-between;
             align-items: center;
             background: rgba(255,255,255,0.02);
-            padding: 8px 12px;
-            border-radius: 10px;
+            padding: 10px 14px;
+            border-radius: 12px;
             font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.03);
         }
 
-        /* واجهة اللعبة */
+        /* واجهة اللعبة الرئيسية */
         #game-board {
             width: 100%;
             height: 100%;
@@ -243,14 +241,8 @@
             top: -5px; right: -5px;
             background: var(--green);
             border-radius: 50%;
-            width: 15px; height: 15px;
+            width: 12px; height: 12px;
             display: none;
-            animation: pulse-glow 1s infinite;
-        }
-
-        @keyframes pulse-glow {
-            from { transform: scale(0.9); opacity: 0.6; }
-            to { transform: scale(1.2); opacity: 1; }
         }
 
         #center-deck-area {
@@ -356,7 +348,7 @@
             margin-left: 5px !important;
         }
 
-        /* مؤشرات ونوافذ تفاعلية */
+        /* مؤشرات التحكم بالدور والمؤقت */
         #turn-indicator {
             position: absolute;
             top: 15px;
@@ -382,7 +374,7 @@
 
         #timer-countdown { color: var(--yellow); font-size: 1.1rem; }
 
-        /* أزرار التحكم والدردشة الصوتية */
+        /* أزرار الإجراءات السريعة */
         #action-controls {
             position: absolute;
             bottom: 180px;
@@ -393,7 +385,6 @@
             z-index: 99;
         }
 
-        /* أزرار الطقطقة والرسائل المستفزة */
         #taunts-panel {
             position: absolute;
             bottom: 180px;
@@ -453,7 +444,7 @@
             z-index: 1001;
         }
 
-        /* نوافذ حوارية للمبادلات واختيارات الكروت */
+        /* نافذة تبادل الأوراق لقانون 7 */
         #swap-selector-modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -478,6 +469,7 @@
             margin: 8px 0;
         }
 
+        /* النوافذ العائمة للإعدادات واختيار الألوان */
         #settings-modal, #color-picker-modal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -541,6 +533,17 @@
         }
 
         #annoyance-banner.show { top: 80px; }
+        .settings-toggle-btn {
+            position: fixed;
+            top: 15px; right: 15px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid var(--border);
+            padding: 10px;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            cursor: pointer;
+            z-index: 1001;
+        }
     </style>
 </head>
 <body>
@@ -550,16 +553,15 @@
 
     <div class="settings-toggle-btn" onclick="toggleSettingsModal()">⚙️</div>
 
-    <!-- أزرار التحكم بالصوت -->
     <div id="voice-btn-container" class="hidden">
         <button id="btn-toggle-voice" class="btn-green">تشغيل الصوت 🎤</button>
     </div>
 
-    <!-- نافذة تبادل الأوراق لقانون 7 -->
+    <!-- نافذة المبادلة لقانون 7 -->
     <div id="swap-selector-modal" class="hidden">
         <div class="swap-box">
             <h2 style="color: var(--yellow); margin-bottom: 15px;">🔄 قانون 7: مبادلة الأوراق</h2>
-            <p style="color: #ccc; margin-bottom: 15px; font-size: 0.9rem;">اختر اللاعب الذي ترغب بمبادلة كروتك معه بالكامل!</p>
+            <p style="color: #ccc; margin-bottom: 15px; font-size: 0.9rem;">اختر الخصم الذي تريد مقايضة كروتك معه بالكامل!</p>
             <div id="swap-options-list" class="swap-options"></div>
         </div>
     </div>
@@ -568,7 +570,7 @@
     <div id="color-picker-modal" class="hidden">
         <div class="color-picker-box">
             <h2 style="color: var(--yellow); margin-bottom: 10px;">🎨 اختر اللون الجديد</h2>
-            <p style="color: #ccc; font-size: 0.9rem; margin-bottom: 20px;">اختر لوناً لتغيير اتجاه اللعب والسيطرة على الجلسة!</p>
+            <p style="color: #ccc; font-size: 0.9rem; margin-bottom: 20px;">اختر اللون الذي تفضله لتغيير مسار اللعب ومفاجأة خصومك!</p>
             <div class="color-options">
                 <button class="color-btn pick-red" onclick="selectColor('red')">الأحمر / Red</button>
                 <button class="color-btn pick-yellow" onclick="selectColor('yellow')">الأصفر / Yellow</button>
@@ -620,7 +622,7 @@
         </div>
     </div>
 
-    <!-- 1. شاشة البداية المحسنة مع القوانين -->
+    <!-- 1. شاشة البداية وقوانين اللعبة المعززة -->
     <div id="start-screen" class="screen">
         <div class="cosmic-panel">
             <h1 id="main-title">🃏 أونو الأسطورية 🃏</h1>
@@ -644,15 +646,15 @@
                 </div>
             </div>
 
-            <!-- دليل وشرح القوانين -->
+            <!-- شرح القوانين التفصيلي المتكامل بالكامل -->
             <div class="rules-guide">
-                <h3>📖 شرح وقوانين اللعب</h3>
+                <h3>📖 شرح قوانين اللعب الكونية</h3>
                 <ul>
-                    <li><strong>اللعب الأساسي:</strong> قم بمطابقة الكرت العلوي باللون أو القيمة البرمجية.</li>
-                    <li><strong>قانون التراكم:</strong> يمكنك الرد على كرت هجوم (+2 أو +4) برمي كرت مماثل لتتحول العقوبة وتتراكم على اللاعب التالي!</li>
-                    <li><strong>قانون الـ 7 والـ 0:</strong> رمي الرقم (0) يُجبر الجميع على تدوير كروتهم مع اتجاه الدور. رمي (7) يعطيك الأحقية بمبادلة كروتك مع أي لاعب تختاره.</li>
-                    <li><strong>القطع الخاطف (Jump-in):</strong> إذا امتلكت كرتًا مطابقًا تمامًا (اللون والرقم معًا) للكرت الموجود في الساحة، يمكنك رميه فورًا لتقطع الدور حتى لو لم يكن دورك!</li>
-                    <li><strong>أونو أو العقاب:</strong> عند بقاء كرت واحد معك، تذكر الضغط على "أونو!" فورًا وإلا ستسحب كرتين كعقوبة!</li>
+                    <li><strong>قانون اللعب الأساسي:</strong> المطابقة تتم برمي كرت متوافق مع الكرت العلوي في الساحة باللون أو بالرقم/النوع.</li>
+                    <li><strong>قانون التراكم (Stacking):</strong> عندما يرمي أحدهم كرت هجوم (+2 أو +4)، يمكنك الرد عليه فوراً برمي كرت مماثل من نفس النوع لتتراكم العقوبة بالكامل على اللاعب الذي يليك لتصبح مضاعفة!</li>
+                    <li><strong>قانون الـ 7 والـ 0 الفضائي:</strong> عند رمي كرت رقم (0)، تدور كروت جميع اللاعبين وتنتقل للشخص التالي حسب اتجاه اللعب. وعند رمي الرقم (7)، تتم تصفية الحسابات؛ حيث تختار أي لاعب وتقايض كروتك معه بالكامل!</li>
+                    <li><strong>القطع الخاطف (Jump-in):</strong> إذا كان معك نفس الكرت الموجود في الساحة تماماً (مطابقة تامة في اللون والقيمة معاً)، يمكنك رميه فوراً لتقطع اللعب وتجعل الدور يبدأ من عندك مباشرة، حتى لو لم يكن دورك!</li>
+                    <li><strong>قول أونو (UNO!):</strong> بمجرد بقاء كرت واحد في يدك، اضغط على زر أونو فوراً، وإلا ستتلقى عقوبة سحب كرتين إضافيين إذا كشفك اللاعبون الآخرون!</li>
                 </ul>
             </div>
 
@@ -689,9 +691,9 @@
             <h3 id="lobby-connected-lbl" style="margin-top: 10px;">اللاعبون المتصلون:</h3>
             <ul id="lobby-players-list" style="list-style: none; margin: 15px 0; font-size: 1.2rem; color: var(--green);"></ul>
 
-            <!-- إعدادات البوتات الإضافية ملء الغرفة -->
+            <!-- إعدادات البوتات الإضافية لملء الغرفة -->
             <div class="toggle-row" style="margin-bottom: 15px;">
-                <span>إضافة كروت لاعبين آليين (Bots) 🤖</span>
+                <span>إضافة لاعبين آليين (Bots) 🤖</span>
                 <button id="btn-add-bot" class="btn-grey" style="font-size: 0.85rem; padding: 4px 10px;">إضافة بوت (+)</button>
             </div>
 
@@ -717,12 +719,10 @@
             <div id="played-card-container"></div>
         </div>
 
-        <!-- أزرار لتمرير الدور وتسهيل الحركة -->
         <div id="action-controls">
             <button id="btn-pass-turn" class="btn-green hidden">تمرير الدور ➡️</button>
         </div>
 
-        <!-- نظام الرسائل الطقطقة والرسائل المستفزة الفورية -->
         <div id="taunts-panel">
             <button class="taunt-btn" onclick="sendTaunt('🤡')">🤡</button>
             <button class="taunt-btn" onclick="sendTaunt('🤫')">🤫</button>
@@ -730,7 +730,6 @@
             <button class="taunt-btn" onclick="sendTaunt('🔥')">🔥</button>
         </div>
 
-        <!-- قائمة الرسائل المستفزة المبرمجة مسبقاً -->
         <div id="annoyance-panel">
             <select id="annoy-msg-select" class="annoyance-select" onchange="sendAnnoyanceMessage(this.value)">
                 <option value="" disabled selected>💬 استفزاز الخصوم...</option>
@@ -751,8 +750,9 @@
 
     <div id="annoyance-banner">تنبيه!</div>
 
+    <!-- كود برمجة اللعبة بالكامل دون أي انقطاع -->
     <script>
-        // --- 1. إدارة الترجمة والأوضاع العامة ---
+        // --- 1. الترجمات والإعدادات العامة ---
         const i18n = {
             ar: {
                 title: "🃏 أونو الأسطورية الكونية 🃏",
@@ -1026,8 +1026,6 @@
         const ctx = canvas.getContext('2d');
         let particles = [];
         let lasers = [];
-        let shields = [];
-        let portals = [];
 
         function resizeCanvas() {
             canvas.width = window.innerWidth;
@@ -1107,7 +1105,7 @@
         }
         animationLoop();
 
-        // --- 4. إدارة الشبكة والاتصال PeerJS مع الدردشة الصوتية ---
+        // --- 4. خوادم وإدارة اتصالات PeerJS ---
         const PEER_CONNECTION_OPTIONS = {
             host: '0.peerjs.com',
             port: 443,
@@ -1116,7 +1114,8 @@
             config: {
                 iceServers: [
                     { urls: 'stun:stun.l.google.com:19302' },
-                    { urls: 'stun:stun1.l.google.com:19302' }
+                    { urls: 'stun:stun1.l.google.com:19302' },
+                    { urls: 'stun:stun2.l.google.com:19302' }
                 ]
             }
         };
@@ -1143,7 +1142,7 @@
             hasDrawnThisTurn: false,
             waitingForColorChoice: false,
             playerChoosingColor: null,
-            penaltyStack: 0, // تجميع تراكم العقوبات (+2 أو +4)
+            penaltyStack: 0,
             waitingForSwapChoice: false
         };
 
@@ -1161,7 +1160,6 @@
             isSoloMode = true;
             isHost = true;
 
-            // تحديث القوانين المخصصة بناءً على مدخلات واجهة المستخدم
             customRules.stacking = document.getElementById('rule-stacking').checked;
             customRules.rule70 = document.getElementById('rule-70').checked;
             customRules.jumpIn = document.getElementById('rule-jumpin').checked;
@@ -1201,7 +1199,7 @@
             syncStateToAll();
         });
 
-        // إضافة البوتات في اللوبي (أونلاين لملء الغرفة)
+        // إضافة البوتات لملء الفراغات داخل اللوبي
         document.getElementById('btn-add-bot').addEventListener('click', () => {
             if (!isHost) return;
             const botId = `lobby-bot-${Math.floor(Math.random() * 1000)}`;
@@ -1221,13 +1219,12 @@
             broadcastLobbyUpdate();
         });
 
-        // --- 6. ميكانيكية الذكاء الاصطناعي للبوتات ---
+        // ذكاء البوتات (Beginner / Expert)
         function executeBotTurn(botPlayer) {
             setTimeout(() => {
                 const topCard = gameState.discardPile[gameState.discardPile.length - 1];
                 let validCards = botPlayer.cards.filter(c => isValidMove(c, topCard));
 
-                // إذا كان هناك عقوبة تراكمية نشطة وقانون التراكم مفعل
                 if (gameState.penaltyStack > 0 && customRules.stacking) {
                     const stackValue = topCard.type === 'draw2' ? '+2' : '+4';
                     validCards = botPlayer.cards.filter(c => c.value === stackValue);
@@ -1236,25 +1233,21 @@
                 if (validCards.length > 0) {
                     let cardToPlay = validCards[0];
 
-                    // استراتيجية البوت المحترف: الاحتفاظ بـ +2 أو +4 حتى تشتد المنافسة
                     if (botPlayer.difficulty === 'expert') {
                         const opponentsWithFewCards = gameState.players.filter(p => p.id !== botPlayer.id && p.cards.length <= 3);
                         const hasAttackCard = validCards.some(c => c.type === 'draw2' || c.type === 'wild4');
 
                         if (hasAttackCard && opponentsWithFewCards.length === 0) {
-                            // تجنب استخدام كروت الهجوم والتركيز على كروت الأرقام أولاً
                             const safeCards = validCards.filter(c => c.type === 'number');
                             if (safeCards.length > 0) cardToPlay = safeCards[0];
                         }
                     }
 
-                    // تفعيل تصريح أونو للبوت تلقائياً
                     if (botPlayer.cards.length === 2) {
                         hasDeclaredUnoThisTurn[botPlayer.id] = true;
                         triggerTauntEffect('📣', botPlayer.name + " صاح أونوووو!");
                     }
 
-                    // لعب الكرت
                     botPlayer.cards = botPlayer.cards.filter(c => c.id !== cardToPlay.id);
                     gameState.discardPile.push(cardToPlay);
                     
@@ -1268,7 +1261,6 @@
                         return;
                     }
 
-                    // معالجة اختيار اللون عشوائياً للبوت عند رمي كرت أسود
                     if (cardToPlay.color === 'black') {
                         const colors = ['red', 'yellow', 'green', 'blue'];
                         const randomColor = colors[Math.floor(Math.random() * colors.length)];
@@ -1282,9 +1274,7 @@
                     nextTurn();
 
                 } else {
-                    // سحب كرت
                     if (gameState.penaltyStack > 0 && customRules.stacking) {
-                        // سحب التراكم بالكامل
                         for (let i = 0; i < gameState.penaltyStack; i++) {
                             drawCardForPlayer(botPlayer.id);
                         }
@@ -1293,7 +1283,6 @@
                     } else {
                         const drawn = drawCardForPlayer(botPlayer.id);
                         if (drawn && isValidMove(drawn, topCard)) {
-                            // لعب الكرت المسحوب مباشرة لمحاكاة تفكير البوت المتقدم
                             botPlayer.cards = botPlayer.cards.filter(c => c.id !== drawn.id);
                             gameState.discardPile.push(drawn);
                             broadcastToAll({ type: 'FX_PLAY', color: drawn.color });
@@ -1310,7 +1299,7 @@
             }, 1500);
         }
 
-        // --- 7. ميكانيكية الدردشة الصوتية الحية عبر WebRTC ---
+        // --- 7. ميكانيكية الدردشة الصوتية الحية WebRTC ---
         document.getElementById('btn-toggle-voice').addEventListener('click', async () => {
             initAudio();
             if (isVoiceMuted) {
@@ -1320,14 +1309,13 @@
                     document.getElementById('btn-toggle-voice').innerText = "كتم المايك 🎤";
                     document.getElementById('btn-toggle-voice').className = "btn-red";
 
-                    // الاتصال صوتياً بجميع الأقران المتصلين
                     connections.forEach(conn => {
                         if (conn.open) {
                             peer.call(conn.peer, localVoiceStream);
                         }
                     });
                 } catch (e) {
-                    alert("يرجى إعطاء صلاحية الوصول للمايكروفون للدردشة الصوتية!");
+                    alert("يرجى تفعيل صلاحيات الميكروفون لاستخدام المحادثة الصوتية!");
                 }
             } else {
                 if (localVoiceStream) {
@@ -1339,7 +1327,6 @@
             }
         });
 
-        // استقبال الاتصال الصوتي عند العملاء
         function handleVoiceCall(call) {
             call.answer(localVoiceStream);
             const audio = document.createElement('audio');
@@ -1349,8 +1336,7 @@
             });
         }
 
-        // --- 8. ميكانيكية وقوانين لعبة الأونو المحدثة ---
-
+        // --- 8. ميكانيكيات اللعب والأكشن المعقدة ---
         function generateDeck() {
             const colors = ['red', 'yellow', 'green', 'blue'];
             let deck = [];
@@ -1384,22 +1370,20 @@
         function resolveCardAction(card) {
             const dict = i18n[localSettings.lang];
             
-            // قانون التراكم النشط
             if (customRules.stacking) {
                 if (card.type === 'draw2') {
                     gameState.penaltyStack += 2;
-                    return; // تمرير العقوبة للاعب التالي
+                    return;
                 } else if (card.type === 'wild4') {
                     gameState.penaltyStack += 4;
                     return;
                 }
             }
 
-            // تطبيق قانون 7-0 للتبديل والتدوير
             if (customRules.rule70) {
                 if (card.value === '0') {
                     rotateHands();
-                    broadcastToAll({ type: 'ANNOY_ALERT', message: "🔄 قانون 0: تم تدوير أوراق جميع اللاعبين!", sound: 'reverse' });
+                    broadcastToAll({ type: 'ANNOY_ALERT', message: "🔄 قانون 0: تم تدوير جميع الأوراق مع اتجاه اللعب!", sound: 'reverse' });
                 } else if (card.value === '7') {
                     triggerSwapSequence();
                 }
@@ -1424,7 +1408,6 @@
             }
         }
 
-        // تدوير الأوراق لقانون 0
         function rotateHands() {
             const size = gameState.players.length;
             if (size <= 1) return;
@@ -1436,13 +1419,11 @@
             }
         }
 
-        // تهيئة مبادلة الأوراق لقانون 7
         function triggerSwapSequence() {
             const activePlayer = gameState.players[gameState.currentTurnIndex];
             gameState.waitingForSwapChoice = true;
 
             if (activePlayer.isBot) {
-                // البوت يختار عشوائياً للاستقرار
                 const humanPlayer = gameState.players.find(p => !p.isBot);
                 if (humanPlayer) executeSwap(activePlayer.id, humanPlayer.id);
             } else if (activePlayer.id === myId) {
@@ -1483,7 +1464,6 @@
             nextTurn();
         }
 
-        // القطع الخاطف الفوري (Jump-in)
         function handleJumpInAttempt(playerId, cardId) {
             if (!customRules.jumpIn) return;
             const player = gameState.players.find(p => p.id === playerId);
@@ -1491,7 +1471,6 @@
             const topCard = gameState.discardPile[gameState.discardPile.length - 1];
 
             if (card && card.color === topCard.color && card.value === topCard.value) {
-                // مطابقة تامة: تفعيل القطع
                 player.cards = player.cards.filter(c => c.id !== cardId);
                 gameState.discardPile.push(card);
                 
@@ -1512,8 +1491,7 @@
             return card.color === topCard.color || card.value === topCard.value;
         }
 
-        // --- 9. تكامل المزامنة التام ونقل العرض للبصريات ---
-
+        // --- 9. التحديث الشامل وتصدير الرسوم والعرض للعملاء ---
         function renderGame(state) {
             const isMyTurn = state.currentTurnId === myId;
             const turnText = document.getElementById('turn-text');
@@ -1542,6 +1520,9 @@
                 turnIndicator.classList.remove('my-turn-active');
                 passBtn.classList.add('hidden');
             }
+
+            const directionBadge = document.getElementById('direction-badge');
+            directionBadge.innerText = state.direction === 1 ? dict.dir_cw : dict.dir_ccw;
 
             const opponentsContainer = document.getElementById('opponents-container');
             opponentsContainer.innerHTML = '';
@@ -1575,7 +1556,6 @@
                 cardDom.style.marginRight = `${overlapMargin}px`;
                 
                 cardDom.addEventListener('click', () => {
-                    // التحقق من صلاحية رمي الكرت بالقطع
                     if (!isMyTurn && customRules.jumpIn) {
                         handleJumpInAttempt(myId, card.id);
                     } else {
@@ -1646,11 +1626,11 @@
             }
         });
 
-        // --- 10. إرسال الرسائل المستفزة والاستهزاء الفوري ---
+        // --- 10. إرسال الرسائل المستفزة وسخرية الخصوم ---
         function sendAnnoyanceMessage(val) {
             const select = document.getElementById('annoy-msg-select');
             const text = select.options[select.selectedIndex].text;
-            select.value = ""; // إرجاع القائمة للوضع الطبيعي
+            select.value = ""; 
 
             if (isHost) {
                 broadcastToAll({ type: 'TAUNT_SPAM_EFFECT', emoji: '💀', name: playerName + `: ${text}` });
@@ -1694,19 +1674,18 @@
             setTimeout(() => banner.classList.remove('show'), 2500);
         }
 
-        // --- 11. إدارة الغرفة والشبكة المحدثة لربط Host/Client ---
+        // --- 11. إدارة الغرفة وربط اللاعبين والتحويل لـ Bot عند الانقطاع ---
         document.getElementById('btn-host').addEventListener('click', () => {
             playSynthSound('click');
             const nameInput = document.getElementById('player-name-input').value.trim();
             if (!nameInput) {
-                alert(localSettings.lang === 'ar' ? "الرجاء إدخل اسمك!" : "Please enter your name!");
+                alert(localSettings.lang === 'ar' ? "الرجاء إدخال اسمك أولاً!" : "Please enter your name first!");
                 return;
             }
             playerName = nameInput;
             isHost = true;
             isSoloMode = false;
 
-            // تحديث خيارات الغرفة من واجهة المستخدم
             customRules.stacking = document.getElementById('rule-stacking').checked;
             customRules.rule70 = document.getElementById('rule-70').checked;
             customRules.jumpIn = document.getElementById('rule-jumpin').checked;
@@ -1743,18 +1722,33 @@
                 });
             });
 
+            peer.on('error', (err) => {
+                console.error(err);
+                alert("حدث خطأ في الاتصال: " + err.message);
+            });
+
             peer.on('call', handleVoiceCall);
         });
 
         document.getElementById('btn-join').addEventListener('click', () => {
+            playSynthSound('click');
             const nameInput = document.getElementById('player-name-input').value.trim();
-            if (!nameInput) return;
+            if (!nameInput) {
+                alert(localSettings.lang === 'ar' ? "الرجاء إدخال اسمك أولاً!" : "Please enter your name first!");
+                return;
+            }
             playerName = nameInput;
             showScreen('join-screen');
         });
 
         document.getElementById('btn-connect').addEventListener('click', () => {
+            playSynthSound('click');
             const codeInput = document.getElementById('room-id-input').value.trim().toLowerCase();
+            if (codeInput.length !== 5) {
+                alert("يرجى إدخال كود صحيح من 5 أحرف.");
+                return;
+            }
+
             peer = new Peer(null, PEER_CONNECTION_OPTIONS);
 
             peer.on('open', (id) => {
@@ -1770,22 +1764,25 @@
                 hostConn.on('close', () => location.reload());
             });
 
+            peer.on('error', (err) => {
+                console.error(err);
+                alert("تعذر الاتصال بالغرفة الفضائية، تأكد من الرمز.");
+            });
+
             peer.on('call', handleVoiceCall);
         });
 
-        // تحويل اللاعب المنقطع إلى "بوت" لإستمرارية الجلسة دون توقف
         function handlePlayerDisconnect(peerId) {
             const player = gameState.players.find(p => p.id === peerId);
             if (player) {
                 player.isBot = true;
                 player.name += " (آلي 🤖)";
-                player.difficulty = 'expert'; // تحويله لبوت ذكي لحفظ نزاهة التحدي
-                broadcastToAll({ type: 'ANNOY_ALERT', message: `🔌 انقطع اتصال ${player.name} وتم تحويله لبوت آلي!`, sound: 'error' });
+                player.difficulty = 'expert';
+                broadcastToAll({ type: 'ANNOY_ALERT', message: `🔌 انقطع اتصال [${player.name}] وتولى البوت اللعب مكانه!`, sound: 'error' });
                 syncStateToAll();
             }
         }
 
-        // إرسال كود الغرفة لبقية اللاعبين
         function updateLobbyUI() {
             const listEl = document.getElementById('lobby-players-list');
             listEl.innerHTML = '';
@@ -1852,7 +1849,6 @@
         }
 
         // --- 12. محاذاة اللعب وتوليد الكروت على السيرفر ---
-
         function handleCardPlayed(playerId, cardId) {
             const activePlayer = gameState.players[gameState.currentTurnIndex];
             const dict = i18n[localSettings.lang];
@@ -1868,11 +1864,10 @@
             const card = activePlayer.cards[cardIndex];
             const topCard = gameState.discardPile[gameState.discardPile.length - 1];
 
-            // التحقق من صحة الحركة مع التراكم النشط
             if (gameState.penaltyStack > 0 && customRules.stacking) {
                 const expectedValue = topCard.type === 'draw2' ? '+2' : '+4';
                 if (card.value !== expectedValue) {
-                    sendDirectAlert(playerId, "يجب عليك رمي كرت تراكمي لمقاومة الهجوم أو سحب الأوراق!", 'error');
+                    sendDirectAlert(playerId, "يجب عليك الرد بكرت هجوم متراكم أو سحب الكروت المتراكمة!", 'error');
                     return;
                 }
             } else if (!isValidMove(card, topCard)) {
@@ -1880,14 +1875,12 @@
                 return;
             }
 
-            // المتابعة لرمي الكرت
             activePlayer.cards.splice(cardIndex, 1);
             gameState.discardPile.push(card);
 
             broadcastToAll({ type: 'FX_PLAY', color: card.color });
             triggerBurst(window.innerWidth / 2, window.innerHeight / 2 - 50, getHexColor(card.color));
 
-            // عقوبة الأونو
             if (activePlayer.cards.length === 1 && !hasDeclaredUnoThisTurn[playerId]) {
                 for (let i = 0; i < 2; i++) drawCardForPlayer(playerId);
                 broadcastToAll({ type: 'ANNOY_ALERT', message: dict.alert_forgot_uno.replace('{name}', activePlayer.name), sound: 'siren' });
@@ -1902,7 +1895,6 @@
                 return;
             }
 
-            // كروت الألوان الفضائية (Wild)
             if (card.color === 'black') {
                 gameState.waitingForColorChoice = true;
                 gameState.playerChoosingColor = playerId;
@@ -1954,7 +1946,6 @@
             if (activePlayer.id !== playerId) return;
 
             if (gameState.penaltyStack > 0 && customRules.stacking) {
-                // سحب التراكم بالكامل وتصفير العقوبة
                 for (let i = 0; i < gameState.penaltyStack; i++) {
                     drawCardForPlayer(playerId);
                 }
@@ -2002,114 +1993,64 @@
             startTurnTimer();
             syncStateToAll();
 
-            // تنفيذ دور البوت إذا جاء دوره
             if (nextPlayer && nextPlayer.isBot) {
                 executeBotTurn(nextPlayer);
             }
         }
 
-        function sendDirectAlert(playerId, msg, sound) {
-            if (playerId === myId) {
-                showAnnoyanceBanner(msg);
-                if (sound) playSynthSound(sound);
-            } else {
-                const conn = connections.find(c => c.peer === playerId);
-                if (conn && conn.open) {
-                    conn.send({ type: 'ANNOY_ALERT', message: msg, sound: sound });
+        function drawCardForPlayer(playerId) {
+            const player = gameState.players.find(p => p.id === playerId);
+            if (gameState.deck.length === 0) {
+                const topCard = gameState.discardPile.pop();
+                gameState.deck = gameState.discardPile;
+                gameState.discardPile = [topCard];
+                for (let i = gameState.deck.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [gameState.deck[i], gameState.deck[j]] = [gameState.deck[j], gameState.deck[i]];
                 }
             }
+            if (gameState.deck.length > 0) {
+                const drawn = gameState.deck.pop();
+                player.cards.push(drawn);
+                return drawn;
+            }
+            return null;
         }
 
-        let turnInterval = null;
-        function startTurnTimer() {
-            clearInterval(turnInterval);
-            document.getElementById('turn-indicator').classList.remove('pulse-warning');
-            gameState.timer = localSettings.timerVal;
-            turnInterval = setInterval(() => {
-                gameState.timer--;
-                
-                if (gameState.timer <= 5) {
-                    document.getElementById('turn-indicator').classList.add('pulse-warning');
-                    playSynthSound('heartbeat');
-                }
-
-                if (gameState.timer <= 0) {
-                    clearInterval(turnInterval);
-                    handleTurnTimeout();
-                } else {
-                    syncStateToAll();
-                }
-            }, 1000);
-        }
-
-        function syncStateToAll() {
-            gameState.players.forEach(player => {
-                const personalizedState = {
-                    discardPileTop: gameState.discardPile[gameState.discardPile.length - 1],
-                    currentTurnId: gameState.players[gameState.currentTurnIndex].id,
-                    direction: gameState.direction,
-                    timer: gameState.timer,
-                    hand: player.cards, 
-                    hasDrawnThisTurn: gameState.hasDrawnThisTurn, 
-                    waitingForColorChoice: gameState.waitingForColorChoice,
-                    opponents: gameState.players.map(p => ({
-                        id: p.id,
-                        name: p.name,
-                        cardCount: p.cards.length,
-                        isTurn: p.id === gameState.players[gameState.currentTurnIndex].id
-                    })).filter(p => p.id !== player.id),
-                    myId: player.id
-                };
-
-                if (player.id === myId) {
-                    renderGame(personalizedState);
-                } else {
-                    const conn = connections.find(c => c.peer === player.id);
-                    if (conn && conn.open) {
-                        conn.send({ type: 'STATE_UPDATE', state: personalizedState });
-                    }
-                }
-            });
-        }
-
-        document.getElementById('btn-start-game').addEventListener('click', () => {
-            if (gameState.players.length < 2) {
-                alert("يجب تواجد لاعبين اثنين على الأقل لبدء الجلسة!");
+        function handleTurnTimeout() {
+            const activePlayer = gameState.players[gameState.currentTurnIndex];
+            
+            if (gameState.waitingForColorChoice && gameState.playerChoosingColor === activePlayer.id) {
+                const colors = ['red', 'yellow', 'green', 'blue'];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                handleColorChosen(activePlayer.id, randomColor);
                 return;
             }
-            playSynthSound('click');
-            
-            gameState.deck = generateDeck();
-            
-            gameState.players.forEach(player => {
-                player.cards = [];
-                for (let i = 0; i < 7; i++) {
-                    player.cards.push(gameState.deck.pop());
+
+            drawCardForPlayer(activePlayer.id);
+            const dict = i18n[localSettings.lang];
+            broadcastToAll({ 
+                type: 'ANNOY_ALERT', 
+                message: dict.alert_time_out.replace('{name}', activePlayer.name), 
+                sound: 'error' 
+            });
+            nextTurn();
+        }
+
+        function getHexColor(color) {
+            if (color === 'red') return '#ff3b30';
+            if (color === 'yellow') return '#ffcc00';
+            if (color === 'green') return '#4cd964';
+            if (color === 'blue') return '#007aff';
+            return '#ffffff';
+        }
+
+        function broadcastToAll(msg) {
+            connections.forEach(conn => {
+                if (conn.open) {
+                    conn.send(msg);
                 }
             });
-
-            let startingCard = gameState.deck.pop();
-            while (startingCard.type !== 'number') {
-                gameState.deck.unshift(startingCard);
-                startingCard = gameState.deck.pop();
-            }
-            gameState.discardPile.push(startingCard);
-
-            gameState.currentTurnIndex = 0;
-            gameState.direction = 1;
-            gameState.gameStarted = true;
-            gameState.hasDrawnThisTurn = false;
-            gameState.timer = localSettings.timerVal;
-
-            broadcastToAll({ type: 'GAME_STARTED' });
-            showScreen('game-board');
-
-            startTurnTimer();
-            syncStateToAll();
-        });
-
-        function generateRoomCode() {
-            return Math.random().toString(36).substring(2, 7).toLowerCase();
         }
 
         function showScreen(screenId) {
@@ -2120,7 +2061,20 @@
             document.getElementById(screenId).classList.remove('hidden');
         }
 
-        // تحضير واجهة المستخدم عند البدء
+        function showColorPicker() {
+            document.getElementById('color-picker-modal').classList.remove('hidden');
+        }
+
+        function selectColor(color) {
+            document.getElementById('color-picker-modal').classList.add('hidden');
+            if (isHost) {
+                handleColorChosen(myId, color);
+            } else {
+                hostConn.send({ type: 'COLOR_CHOSEN', color: color });
+            }
+        }
+
+        // تحضير الترجمة الفورية عند الإطلاق الأول
         translateUI();
     </script>
 </body>
