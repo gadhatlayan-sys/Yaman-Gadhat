@@ -15,6 +15,29 @@
             --purple: #5856d6;
             --dark: #05060b;
             --border: rgba(255, 255, 255, 0.08);
+            --bg-gradient: radial-gradient(circle, #0e122b 0%, #030408 100%);
+        }
+
+        /* قوالب المظهر الكوني المخصصة */
+        body.theme-purple {
+            --purple: #5856d6;
+            --dark: #05060b;
+            --bg-gradient: radial-gradient(circle, #0e122b 0%, #030408 100%);
+        }
+        body.theme-red {
+            --purple: #ff2d55;
+            --dark: #0a0303;
+            --bg-gradient: radial-gradient(circle, #250909 0%, #050101 100%);
+        }
+        body.theme-blue {
+            --purple: #007aff;
+            --dark: #020617;
+            --bg-gradient: radial-gradient(circle, #0f172a 0%, #020617 100%);
+        }
+        body.theme-green {
+            --purple: #4cd964;
+            --dark: #020804;
+            --bg-gradient: radial-gradient(circle, #06200d 0%, #010502 100%);
         }
 
         * {
@@ -27,6 +50,13 @@
 
         body {
             background-color: var(--dark);
+            background-image: 
+                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+                radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px);
+            background-size: 550px 550px, 350px 350px, 250px 250px;
+            background-position: 0 0, 40px 60px, 130px 270px;
+            animation: cosmicBackground 120s linear infinite;
             color: #fff;
             overflow: hidden;
             height: 100vh;
@@ -35,6 +65,12 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            transition: background 0.5s ease;
+        }
+
+        @keyframes cosmicBackground {
+            from { background-position: 0 0, 40px 60px, 130px 270px; }
+            to { background-position: 550px 1100px, 1090px 760px, 1380px 1470px; }
         }
 
         /* طبقات الرسوم والتفاعلات */
@@ -70,7 +106,7 @@
         .screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, #0e122b 0%, #030408 100%);
+            background: var(--bg-gradient);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -83,13 +119,13 @@
         .hidden { display: none !important; }
 
         .cosmic-panel {
-            background: rgba(13, 17, 39, 0.8);
-            border: 2px solid var(--border);
+            background: rgba(13, 17, 39, 0.85);
+            border: 2px solid var(--purple);
             border-radius: 24px;
             padding: 25px;
             width: 95%;
             max-width: 520px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 15px rgba(88, 86, 214, 0.15);
             backdrop-filter: blur(12px);
             margin-bottom: 15px;
             text-align: center;
@@ -119,6 +155,10 @@
             margin-bottom: 15px;
             outline: none;
             box-shadow: 0 0 15px rgba(88, 86, 214, 0.2);
+            transition: box-shadow 0.3s;
+        }
+        input:focus {
+            box-shadow: 0 0 20px var(--purple);
         }
 
         button {
@@ -131,15 +171,23 @@
             font-weight: bold;
             cursor: pointer;
             margin: 6px;
-            box-shadow: 0 5px 12px rgba(0,0,0,0.4);
-            transition: transform 0.1s, box-shadow 0.2s;
+            box-shadow: 0 5px 15px rgba(88, 86, 214, 0.4);
+            transition: transform 0.1s, box-shadow 0.2s, background 0.2s;
         }
 
-        button:active { transform: scale(0.95); }
-        .btn-yellow { background: linear-gradient(135deg, var(--yellow), #ff9500); color: black; }
-        .btn-red { background: linear-gradient(135deg, var(--red), #ff2d55); }
-        .btn-green { background: linear-gradient(135deg, var(--green), #248a3d); }
-        .btn-grey { background: #3a3f58; color: #fff; }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(88, 86, 214, 0.6);
+        }
+
+        button:active { transform: scale(0.95) translateY(1px); }
+        .btn-yellow { background: linear-gradient(135deg, var(--yellow), #ff9500); color: black; box-shadow: 0 5px 15px rgba(255, 204, 0, 0.3); }
+        .btn-yellow:hover { box-shadow: 0 8px 20px rgba(255, 204, 0, 0.5); }
+        .btn-red { background: linear-gradient(135deg, var(--red), #ff2d55); box-shadow: 0 5px 15px rgba(255, 59, 48, 0.3); }
+        .btn-red:hover { box-shadow: 0 8px 20px rgba(255, 59, 48, 0.5); }
+        .btn-green { background: linear-gradient(135deg, var(--green), #248a3d); box-shadow: 0 5px 15px rgba(76, 217, 100, 0.3); }
+        .btn-green:hover { box-shadow: 0 8px 20px rgba(76, 217, 100, 0.5); }
+        .btn-grey { background: #3a3f58; color: #fff; box-shadow: none; }
 
         /* صندوق شرح وقوانين اللعبة */
         .rules-guide {
@@ -252,6 +300,7 @@
             align-items: center;
             gap: 25px;
             position: relative;
+            perspective: 800px;
         }
 
         #direction-badge {
@@ -272,18 +321,23 @@
             border-radius: 12px;
             border: 3px solid white;
             position: relative;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
             user-select: none;
             cursor: pointer;
-            transition: transform 0.2s, top 0.2s;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
         }
 
-        .uno-card.red { background: linear-gradient(135deg, var(--red), #ff2d55); }
-        .uno-card.yellow { background: linear-gradient(135deg, var(--yellow), #ff9500); color: black; }
-        .uno-card.green { background: linear-gradient(135deg, var(--green), #248a3d); }
-        .uno-card.blue { background: linear-gradient(135deg, var(--blue), #5856d6); }
-        .uno-card.black { background: linear-gradient(135deg, #1c1d30 0%, #05060b 100%); border-color: #ffffff; }
-        .uno-card.back { background: radial-gradient(circle, #ff2d55 0%, #1c1d30 100%); border-color: #ffcc00; }
+        /* توهج ملون يتناسب مع لون الكرت */
+        .uno-card.red { background: linear-gradient(135deg, var(--red), #ff2d55); box-shadow: 0 6px 15px rgba(255, 59, 48, 0.4); }
+        .uno-card.yellow { background: linear-gradient(135deg, var(--yellow), #ff9500); color: black; box-shadow: 0 6px 15px rgba(255, 204, 0, 0.4); }
+        .uno-card.green { background: linear-gradient(135deg, var(--green), #248a3d); box-shadow: 0 6px 15px rgba(76, 217, 100, 0.4); }
+        .uno-card.blue { background: linear-gradient(135deg, var(--blue), #5856d6); box-shadow: 0 6px 15px rgba(0, 122, 255, 0.4); }
+        .uno-card.black { background: linear-gradient(135deg, #1c1d30 0%, #05060b 100%); border-color: #ffffff; box-shadow: 0 6px 15px rgba(255, 255, 255, 0.25); }
+        .uno-card.back { background: radial-gradient(circle, #ff2d55 0%, #1c1d30 100%); border-color: #ffcc00; box-shadow: 0 6px 15px rgba(255, 45, 85, 0.4); }
+
+        #draw-pile:hover {
+            transform: translateY(-5px) rotateY(-10deg) scale(1.05);
+            box-shadow: 0 12px 25px rgba(255, 45, 85, 0.6);
+        }
 
         .uno-card::before {
             content: '';
@@ -342,7 +396,7 @@
         }
 
         #my-hand .uno-card:hover, #my-hand .uno-card:active {
-            transform: translateY(-20px) scale(1.15) rotate(0deg) !important;
+            transform: translateY(-25px) scale(1.18) rotate(0deg) !important;
             z-index: 100 !important;
             margin-right: 5px !important;
             margin-left: 5px !important;
@@ -481,6 +535,46 @@
             backdrop-filter: blur(5px);
         }
 
+        .settings-box {
+            background: rgba(13, 17, 39, 0.95);
+            border: 2px solid var(--purple);
+            border-radius: 24px;
+            padding: 30px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 0 30px rgba(88, 86, 214, 0.4);
+            backdrop-filter: blur(20px);
+            color: #fff;
+            text-align: center;
+        }
+
+        .settings-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 12px 16px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.95rem;
+        }
+
+        .settings-select {
+            background: #15182d;
+            color: #fff;
+            border: 1.5px solid var(--purple);
+            padding: 8px 12px;
+            border-radius: 10px;
+            outline: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .settings-select:focus {
+            box-shadow: 0 0 10px var(--purple);
+        }
+
         .color-picker-box {
             background: #111424;
             padding: 30px;
@@ -533,6 +627,7 @@
         }
 
         #annoyance-banner.show { top: 80px; }
+
         .settings-toggle-btn {
             position: fixed;
             top: 15px; right: 15px;
@@ -543,10 +638,32 @@
             font-size: 1.3rem;
             cursor: pointer;
             z-index: 1001;
+            transition: transform 0.3s;
+        }
+        .settings-toggle-btn:hover {
+            transform: rotate(45deg);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* تنسيق قائمة اللوبي الأنيق */
+        #lobby-players-list li {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 10px 20px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
     </style>
 </head>
-<body>
+<body class="theme-purple">
 
     <canvas id="fx-canvas"></canvas>
     <div id="effects-layer"></div>
@@ -599,6 +716,7 @@
                     <option value="10">10 ثواني (جنوني)</option>
                     <option value="15" selected>15 ثانية (عادي)</option>
                     <option value="20">20 ثانية (هادئ)</option>
+                    <option value="30">30 ثانية (سلس)</option>
                 </select>
             </div>
 
@@ -615,6 +733,16 @@
                 <select id="st-music-sel" class="settings-select" onchange="updateSettingsMusic(this.value)">
                     <option value="on">تفعيل</option>
                     <option value="off">إيقاف</option>
+                </select>
+            </div>
+
+            <div class="settings-row">
+                <span id="st-theme-lbl">المظهر الكوني:</span>
+                <select id="st-theme-sel" class="settings-select" onchange="changeTheme(this.value)">
+                    <option value="purple" selected>سديم أرجواني 🌌</option>
+                    <option value="red">وهج شمسي 🌅</option>
+                    <option value="blue">فضاء عميق 🪐</option>
+                    <option value="green">مجرة زمردية ☄️</option>
                 </select>
             </div>
 
@@ -765,7 +893,7 @@
                 lobby_title: "انتظار اللاعبين...",
                 share_code: "شارك هذا الكود مع أصدقائك للعب المشترك:",
                 btn_copy: "نسخ الكود 📋",
-                btn_copied: "تم نسخ الكود!",
+                btn_copied: "تم نسخ الكود! 📋",
                 connected_players: "اللاعبون المتصلون:",
                 btn_start: "ابدأ اللعب الآن! 🔥",
                 wait_host: "بانتظار أن يبدأ الـ Host اللعبة...",
@@ -795,15 +923,12 @@
                 st_timer_lbl: "مؤقت الدور:",
                 st_sound_lbl: "المؤثرات الصوتية:",
                 st_music_lbl: "موسيقى نبض الحماس:",
-                st_effects_lbl: "مستوى الرسوميات:",
+                st_theme_lbl: "المظهر الكوني:",
                 st_close_btn: "حفظ وإغلاق",
-                sec_10: "10 ثواني (جنوني)",
-                sec_15: "15 ثانية (عادي)",
-                sec_20: "20 ثانية (هادئ)",
-                on: "تفعيل",
-                off: "إيقاف",
-                high: "عالٍ",
-                low: "منخفض",
+                theme_purple: "سديم أرجواني 🌌",
+                theme_red: "وهج شمسي 🌅",
+                theme_blue: "فضاء عميق 🪐",
+                theme_green: "مجرة زمردية ☄️",
                 color_red: "الأحمر",
                 color_yellow: "الأصفر",
                 color_green: "الأخضر",
@@ -820,7 +945,7 @@
                 lobby_title: "Waiting for players...",
                 share_code: "Share this code with your friends:",
                 btn_copy: "Copy Code 📋",
-                btn_copied: "Code Copied!",
+                btn_copied: "Code Copied! 📋",
                 connected_players: "Connected Players:",
                 btn_start: "Start Playing! 🔥",
                 wait_host: "Waiting for Host to start...",
@@ -850,15 +975,12 @@
                 st_timer_lbl: "Turn Timer:",
                 st_sound_lbl: "Sound FX:",
                 st_music_lbl: "Dynamic Hype Beat:",
-                st_effects_lbl: "Graphics Quality:",
+                st_theme_lbl: "Cosmic Theme:",
                 st_close_btn: "Save & Close",
-                sec_10: "10s (Crazy)",
-                sec_15: "15s (Normal)",
-                sec_20: "20s (Relaxed)",
-                on: "ON",
-                off: "OFF",
-                high: "High",
-                low: "Low",
+                theme_purple: "Nebula Purple 🌌",
+                theme_red: "Solar Red 🌅",
+                theme_blue: "Deep Space 🪐",
+                theme_green: "Emerald Galaxy ☄️",
                 color_red: "Red",
                 color_yellow: "Yellow",
                 color_green: "Green",
@@ -871,7 +993,8 @@
             timerVal: 15,
             soundOn: true,
             musicOn: true,
-            graphicsHigh: true
+            graphicsHigh: true,
+            theme: 'purple'
         };
 
         let customRules = {
@@ -880,8 +1003,33 @@
             jumpIn: true
         };
 
+        function saveSettingsToStorage() {
+            localStorage.setItem('uno_cosmic_settings', JSON.stringify(localSettings));
+        }
+
+        function loadSettingsFromStorage() {
+            const stored = localStorage.getItem('uno_cosmic_settings');
+            if (stored) {
+                try {
+                    localSettings = JSON.parse(stored);
+                    document.getElementById('st-lang-sel').value = localSettings.lang;
+                    document.getElementById('st-timer-sel').value = localSettings.timerVal.toString();
+                    document.getElementById('st-sound-sel').value = localSettings.soundOn ? 'on' : 'off';
+                    document.getElementById('st-music-sel').value = localSettings.musicOn ? 'on' : 'off';
+                    if (localSettings.theme) {
+                        document.getElementById('st-theme-sel').value = localSettings.theme;
+                        changeTheme(localSettings.theme);
+                    }
+                    translateUI();
+                } catch (e) {
+                    console.error("Failed to load settings", e);
+                }
+            }
+        }
+
         function changeLang(lang) {
             localSettings.lang = lang;
+            saveSettingsToStorage();
             translateUI();
         }
 
@@ -891,14 +1039,33 @@
 
         function updateSettingsTimer(val) {
             localSettings.timerVal = parseInt(val);
+            saveSettingsToStorage();
             if (isHost) {
                 gameState.timer = localSettings.timerVal;
                 syncStateToAll();
             }
         }
 
-        function updateSettingsSound(val) { localSettings.soundOn = (val === 'on'); }
-        function updateSettingsMusic(val) { localSettings.musicOn = (val === 'on'); }
+        function updateSettingsSound(val) { 
+            localSettings.soundOn = (val === 'on'); 
+            saveSettingsToStorage();
+        }
+        
+        function updateSettingsMusic(val) { 
+            localSettings.musicOn = (val === 'on'); 
+            saveSettingsToStorage();
+            if (!localSettings.musicOn) {
+                clearInterval(musicPulseInterval);
+            }
+        }
+
+        function changeTheme(theme) {
+            document.body.className = ''; 
+            document.body.classList.add('theme-' + theme);
+            localSettings.theme = theme;
+            saveSettingsToStorage();
+            playSynthSound('click');
+        }
 
         function translateUI() {
             const dict = i18n[localSettings.lang];
@@ -923,6 +1090,14 @@
             document.getElementById('btn-start-game').innerText = dict.btn_start;
             document.getElementById('client-wait-msg').innerText = dict.wait_host;
             document.getElementById('btn-pass-turn').innerText = dict.btn_pass;
+
+            document.getElementById('st-title').innerText = dict.st_title;
+            document.getElementById('st-lang-lbl').innerText = dict.st_lang_lbl;
+            document.getElementById('st-timer-lbl').innerText = dict.st_timer_lbl;
+            document.getElementById('st-sound-lbl').innerText = dict.st_sound_lbl;
+            document.getElementById('st-music-lbl').innerText = dict.st_music_lbl;
+            document.getElementById('st-theme-lbl').innerText = dict.st_theme_lbl;
+            document.getElementById('st-close-btn').innerText = dict.st_close_btn;
         }
 
         // --- 2. محرك الصوت والمركبات المركبة ---
@@ -1110,6 +1285,8 @@
             host: '0.peerjs.com',
             port: 443,
             secure: true,
+            key: 'peerjs',
+            path: '/',
             debug: 1,
             config: {
                 iceServers: [
@@ -1129,6 +1306,7 @@
         let playerName = "";
         let localVoiceStream = null;
         let isVoiceMuted = true;
+        let turnInterval = null;
 
         let gameState = {
             players: [],
@@ -1148,6 +1326,95 @@
 
         let hasDeclaredUnoThisTurn = {};
 
+        // توليد رمز غرفة عشوائي فريد ومضمون
+        function generateRoomCode() {
+            const chars = 'abcdefghijklmnopqrstuvwxyz';
+            let code = '';
+            for (let i = 0; i < 5; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return code;
+        }
+
+        // --- مؤقت الدور ومزامنته للجميع ---
+        function startTurnTimer() {
+            clearInterval(turnInterval);
+            gameState.timer = localSettings.timerVal;
+            
+            turnInterval = setInterval(() => {
+                if (!gameState.gameStarted || gameState.winner) {
+                    clearInterval(turnInterval);
+                    return;
+                }
+                
+                gameState.timer--;
+                syncStateToAll();
+                
+                if (gameState.timer <= 0) {
+                    clearInterval(turnInterval);
+                    handleTurnTimeout();
+                }
+            }, 1000);
+        }
+
+        // --- إرسال تنبيهات وتأثيرات مباشرة للاعبين ---
+        function sendDirectAlert(playerId, message, sound) {
+            if (playerId === myId) {
+                showAnnoyanceBanner(message);
+                if (sound) playSynthSound(sound);
+            } else {
+                const conn = connections.find(c => c.peer === playerId);
+                if (conn && conn.open) {
+                    conn.send({
+                        type: 'ANNOY_ALERT',
+                        message: message,
+                        sound: sound
+                    });
+                }
+            }
+        }
+
+        // --- مزامنة كامل حالة اللعب وإرسالها لكل لاعب بما يوافق كروته فقط ---
+        function syncStateToAll() {
+            if (!isHost) return;
+
+            gameState.players.forEach(player => {
+                if (player.isBot) return;
+
+                const activePlayer = gameState.players[gameState.currentTurnIndex];
+                if (!activePlayer) return;
+
+                const clientState = {
+                    currentTurnId: activePlayer.id,
+                    timer: gameState.timer,
+                    direction: gameState.direction,
+                    discardPileTop: gameState.discardPile[gameState.discardPile.length - 1],
+                    hasDrawnThisTurn: gameState.hasDrawnThisTurn,
+                    hand: player.cards,
+                    opponents: gameState.players
+                        .filter(p => p.id !== player.id)
+                        .map(p => ({
+                            id: p.id,
+                            name: p.name,
+                            cardCount: p.cards.length,
+                            isTurn: p.id === activePlayer.id
+                        }))
+                };
+
+                if (player.id === myId) {
+                    renderGame(clientState);
+                } else {
+                    const conn = connections.find(c => c.peer === player.id);
+                    if (conn && conn.open) {
+                        conn.send({
+                            type: 'STATE_UPDATE',
+                            state: clientState
+                        });
+                    }
+                }
+            });
+        }
+
         // --- 5. دعم وضع اللعب الفردي (Bots Mode) ---
         document.getElementById('btn-solo').addEventListener('click', () => {
             playSynthSound('click');
@@ -1166,9 +1433,9 @@
 
             gameState.players = [
                 { id: "human", name: playerName, cards: [], isBot: false },
-                { id: "bot-1", name: "بليغ السريع (مبتدئ)", cards: [], isBot: true, difficulty: 'beginner' },
-                { id: "bot-2", name: "ماهر الماكر (محترف)", cards: [], isBot: true, difficulty: 'expert' },
-                { id: "bot-3", name: "شهاب الفلكي (محترف)", cards: [], isBot: true, difficulty: 'expert' }
+                { id: "bot-1", name: "بليغ السريع 🤖", cards: [], isBot: true, difficulty: 'beginner' },
+                { id: "bot-2", name: "ماهر الماكر 🔥", cards: [], isBot: true, difficulty: 'expert' },
+                { id: "bot-3", name: "شهاب الفلكي 🛸", cards: [], isBot: true, difficulty: 'expert' }
             ];
 
             myId = "human";
@@ -1205,7 +1472,7 @@
             const botId = `lobby-bot-${Math.floor(Math.random() * 1000)}`;
             const difficulties = ['beginner', 'expert'];
             const randomDiff = difficulties[Math.floor(Math.random() * difficulties.length)];
-            const names = ["بوت مبتدئ 🤖", "بوت محترف 🔥"];
+            const names = ["آلي مستكشف 🤖", "آلي فضائي محترف 🪐"];
             const selectedName = randomDiff === 'beginner' ? names[0] : names[1];
 
             gameState.players.push({
@@ -1405,6 +1672,13 @@
                 gameState.currentTurnIndex = nextPlayerIdx;
                 broadcastToAll({ type: 'FX_DRAW2' });
                 broadcastToAll({ type: 'ANNOY_ALERT', message: dict.alert_draw2.replace('{name}', victim.name), sound: 'error' });
+            } else if (card.type === 'wild4' && !customRules.stacking) {
+                const nextPlayerIdx = (gameState.currentTurnIndex + gameState.direction + gameState.players.length) % gameState.players.length;
+                const victim = gameState.players[nextPlayerIdx];
+                for (let i = 0; i < 4; i++) drawCardForPlayer(victim.id);
+                gameState.currentTurnIndex = nextPlayerIdx;
+                broadcastToAll({ type: 'FX_DRAW4' });
+                broadcastToAll({ type: 'ANNOY_ALERT', message: dict.alert_draw4.replace('{name}', victim.name), sound: 'error' });
             }
         }
 
@@ -1724,7 +1998,11 @@
 
             peer.on('error', (err) => {
                 console.error(err);
-                alert("حدث خطأ في الاتصال: " + err.message);
+                if (err.type === 'unavailable-id') {
+                    alert(localSettings.lang === 'ar' ? "كود الغرفة هذا مستخدم بالفعل! جرب إنشاء غرفة أخرى." : "This room code is already taken! Try hosting again.");
+                } else {
+                    alert("حدث خطأ في الاتصال: " + err.message);
+                }
             });
 
             peer.on('call', handleVoiceCall);
@@ -1739,6 +2017,19 @@
             }
             playerName = nameInput;
             showScreen('join-screen');
+        });
+
+        document.getElementById('btn-back-to-start').addEventListener('click', () => {
+            playSynthSound('click');
+            showScreen('start-screen');
+        });
+
+        document.getElementById('btn-copy-code').addEventListener('click', () => {
+            playSynthSound('click');
+            const roomCode = document.getElementById('room-code-display').innerText;
+            navigator.clipboard.writeText(roomCode).then(() => {
+                alert(i18n[localSettings.lang].btn_copied || "تم نسخ الكود!");
+            });
         });
 
         document.getElementById('btn-connect').addEventListener('click', () => {
@@ -1770,6 +2061,48 @@
             });
 
             peer.on('call', handleVoiceCall);
+        });
+
+        // تشغيل اللعبة من الـ Host وبدء الجلسة
+        document.getElementById('btn-start-game').addEventListener('click', () => {
+            if (!isHost) return;
+            playSynthSound('click');
+            
+            if (gameState.players.length < 2) {
+                alert(localSettings.lang === 'ar' ? "تحتاج إلى لاعبين اثنين على الأقل لبدء اللعبة!" : "You need at least 2 players to start the game!");
+                return;
+            }
+
+            gameState.deck = generateDeck();
+            
+            gameState.players.forEach(player => {
+                player.cards = [];
+                for (let i = 0; i < 7; i++) {
+                    player.cards.push(gameState.deck.pop());
+                }
+            });
+
+            let startingCard = gameState.deck.pop();
+            while (startingCard.type !== 'number') {
+                gameState.deck.unshift(startingCard);
+                startingCard = gameState.deck.pop();
+            }
+            gameState.discardPile.push(startingCard);
+
+            gameState.currentTurnIndex = 0;
+            gameState.direction = 1;
+            gameState.gameStarted = true;
+            gameState.hasDrawnThisTurn = false;
+            gameState.timer = localSettings.timerVal;
+
+            broadcastToAll({ 
+                type: 'GAME_STARTED',
+                rules: customRules
+            });
+            
+            showScreen('game-board');
+            startTurnTimer();
+            syncStateToAll();
         });
 
         function handlePlayerDisconnect(peerId) {
@@ -1804,6 +2137,7 @@
             if (data.type === 'LOBBY_UPDATE') {
                 renderLobbyPlayers(data.players);
             } else if (data.type === 'GAME_STARTED') {
+                if (data.rules) customRules = data.rules;
                 showScreen('game-board');
             } else if (data.type === 'STATE_UPDATE') {
                 renderGame(data.state);
@@ -1813,7 +2147,12 @@
                 triggerTauntEffect(data.emoji, data.name);
             } else if (data.type === 'ANNOY_ALERT') {
                 showAnnoyanceBanner(data.message);
-                if (data.sound) playSynthSound(data.sound);
+                if (data.sound) {
+                    playSynthSound(data.sound);
+                    if (data.sound === 'reverse') {
+                        triggerBurst(window.innerWidth / 2, window.innerHeight / 2, '#5856d6');
+                    }
+                }
             }
         }
 
@@ -2074,8 +2413,8 @@
             }
         }
 
-        // تحضير الترجمة الفورية عند الإطلاق الأول
-        translateUI();
+        // تحميل الإعدادات المحفوظة مسبقاً
+        loadSettingsFromStorage();
     </script>
 </body>
 </html>
